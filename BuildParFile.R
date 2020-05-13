@@ -9,6 +9,7 @@
 # library(data.table)
 # library(r4ss)
 # MCMCdir = "R:\\Management Strategy Evaluation\\SB\\SB_SS_run\\sandbar_330_OM_Base_MCMC_2Surveys_MCMC"
+# MCMCdir = "D:\\MSE_COVID19_FILES_BACKUP\\MCMC\\sandbar_330_OM_BH_MCMC"
 # mcmc = SSgetMCMC(dir=MCMCdir, writecsv=FALSE) # read in MCMC data
 # OMdir = ""
 # i=1
@@ -24,6 +25,21 @@ BuildParFile = function(MCMCdir, mcmc, i, OMdirs=list()){
   parf = readLines(paste(MCMCdir,"\\ss.par",sep="")) # take par file from mcmc and save as newpar; edit newpar and save in OM 
   newpar = parf
   
+  
+  #### Biological/ Life History Parameters ####
+  # NOTE: Check these on and off as appropriate...
+  newpar[which(newpar=="# MGparm[1]:")+1] = mcmc[i,"L_at_Amin_Fem_GP_1"]
+  newpar[which(newpar=="# MGparm[2]:")+1] = mcmc[i,"L_at_Amax_Fem_GP_1"]
+  newpar[which(newpar=="# MGparm[3]:")+1] = mcmc[i,"VonBert_K_Fem_GP_1"]
+  # newpar[which(newpar=="# MGparm[6]:")+1] = mcmc[i,"Wtlen_1_Fem_GP_1"]
+  newpar[which(newpar=="# MGparm[7]:")+1] = mcmc[i,"Wtlen_2_Fem_GP_1"]
+  newpar[which(newpar=="# SR_parm[1]:")+1] = mcmc[i,"SR_LN(R0)"]
+  #LFSR
+  newpar[which(newpar=="# SR_parm[2]:")+1] = mcmc[i,"SR_surv_zfrac"]
+  newpar[which(newpar=="# SR_parm[3]:")+1] = mcmc[i,"SR_surv_Beta"]
+  # newpar[which(newpar=="# SR_parm[4]:")+1] = mcmc[i,"SR_autocorr"]
+  #BH
+  # newpar[which(newpar=="# SR_parm[2]:")+1] = mcmc[i,"SR_BH_steep"]
   
   
   #### Recruitment deviations ####
@@ -136,6 +152,8 @@ BuildParFile = function(MCMCdir, mcmc, i, OMdirs=list()){
     ifelse(is.null(mcmc$'Size_inflection_F4_MEN_DSC(4)')==T, newpar[which(newpar=="# selparm[20]:")+1], 
            mcmc[i,'Size_inflection_F4_MEN_DSC(4)']) 
   
+  ## NOTE!!! The priorSD was too large so producing wild values. Modify mcmc iterations by reducing SD by half
+  mcmc$`Size_95%width_F4_MEN_DSC(4)` = (((mcmc$`Size_95%width_F4_MEN_DSC(4)`)-1)/2.5)+1
   newpar[which(newpar=="# selparm[21]:") +1] = 
     ifelse(is.null(mcmc$'Size_95%width_F4_MEN_DSC(4)')==T, newpar[which(newpar=="# selparm[21]:")+1], 
            mcmc[i,'Size_95%width_F4_MEN_DSC(4)']) 
@@ -244,7 +262,7 @@ BuildParFile = function(MCMCdir, mcmc, i, OMdirs=list()){
   mcmcLnQ1 = mcmcLnQ1A[colnames(mcmcLnQ1A) %like% "_DEV_MR_rwalk_"]
   newpar[which(newpar=="# parm_dev[1]:")+1] =  paste(as.vector(unlist(mcmcLnQ1)), collapse=" ")
   #lnq2
-  mcmcLnQ2A = mcmc[i, colnames(mcmc) %like% "LnQ_base_S2" ] 
+  mcmcLnQ2A = mcmc[i, colnames(mcmc) %like% "LnQ_base_S5" ] 
   mcmcLnQ2 = mcmcLnQ2A[colnames(mcmcLnQ2A) %like% "_DEV_MR_rwalk_"]
   newpar[which(newpar=="# parm_dev[2]:")+1] =  paste(as.vector(unlist(mcmcLnQ2)), collapse=" ")
   
@@ -260,67 +278,67 @@ BuildParFile = function(MCMCdir, mcmc, i, OMdirs=list()){
   newpar[which(newpar=="# parm_dev[4]:")+1] =  paste(as.vector(unlist(mcmcSel2)), collapse=" ")
   
   #Size_DblN_descend_se_F1_COM_GOM(1)
-  mcmcSel3A = mcmc[i, colnames(mcmc) %like% "Size_DblN_descend_se_F1_COM_GOM(1)" ]
+  mcmcSel3A = mcmc[i, colnames(mcmc) %like% "Size_DblN_descend_se_F1_COM_GOM" ]
   mcmcSel3 = mcmcSel3A[colnames(mcmcSel3A) %like% "_DEV_MR_rwalk_"]
   newpar[which(newpar=="# parm_dev[5]:")+1] =  paste(as.vector(unlist(mcmcSel3)), collapse=" ")
   
   #Size_inflection_F2_COM_SA(2)
-  mcmcSel4A = mcmc[i, colnames(mcmc) %like% "Size_inflection_F2_COM_SA(2)" ]
+  mcmcSel4A = mcmc[i, colnames(mcmc) %like% "Size_inflection_F2_COM_SA" ]
   mcmcSel4 = mcmcSel4A[colnames(mcmcSel4A) %like% "_DEV_MR_rwalk_"]
   newpar[which(newpar=="# parm_dev[6]:")+1] =  paste(as.vector(unlist(mcmcSel4)), collapse=" ")
   
   #Size_95%width_F2_COM_SA(2)
-  mcmcSel5A = mcmc[i, colnames(mcmc) %like% "Size_95%width_F2_COM_SA(2)" ]
+  mcmcSel5A = mcmc[i, colnames(mcmc) %like% "Size_95%width_F2_COM_SA" ]
   mcmcSel5 = mcmcSel5A[colnames(mcmcSel5A) %like% "_DEV_MR_rwalk_"]
   newpar[which(newpar=="# parm_dev[7]:")+1] =  paste(as.vector(unlist(mcmcSel5)), collapse=" ")
   
   #Size_DblN_peak_F3_RecMEX(3)
-  mcmcSel6A = mcmc[i, colnames(mcmc) %like% "Size_DblN_peak_F3_RecMEX(3)" ]
+  mcmcSel6A = mcmc[i, colnames(mcmc) %like% "Size_DblN_peak_F3_RecMEX" ]
   mcmcSel6 = mcmcSel6A[colnames(mcmcSel6A) %like% "_DEV_MR_rwalk_"]
   newpar[which(newpar=="# parm_dev[8]:")+1] =  paste(as.vector(unlist(mcmcSel6)), collapse=" ")
   
   #Size_DblN_descend_se_F3_RecMEX(3)
-  mcmcSel7A = mcmc[i, colnames(mcmc) %like% "Size_DblN_descend_se_F3_RecMEX(3)" ]
+  mcmcSel7A = mcmc[i, colnames(mcmc) %like% "Size_DblN_descend_se_F3_RecMEX" ]
   mcmcSel7 = mcmcSel7A[colnames(mcmcSel7A) %like% "_DEV_MR_rwalk_"]
   newpar[which(newpar=="# parm_dev[9]:")+1] =  paste(as.vector(unlist(mcmcSel7)), collapse=" ")
   
   #Size_inflection_F4_MEN_DSC(4)
-  mcmcSel8A = mcmc[i, colnames(mcmc) %like% "Size_inflection_F4_MEN_DSC(4)" ]
+  mcmcSel8A = mcmc[i, colnames(mcmc) %like% "Size_inflection_F4_MEN_DSC" ]
   mcmcSel8 = mcmcSel8A[colnames(mcmcSel8A) %like% "_DEV_MR_rwalk_"]
   newpar[which(newpar=="# parm_dev[10]:")+1] =  paste(as.vector(unlist(mcmcSel8)), collapse=" ")
   
   #Size_95%width_F4_MEN_DSC(4)
-  mcmcSel9A = mcmc[i, colnames(mcmc) %like% "Size_95%width_F4_MEN_DSC(4)" ]
+  mcmcSel9A = mcmc[i, colnames(mcmc) %like% "Size_95%width_F4_MEN_DSC" ]
   mcmcSel9 = mcmcSel9A[colnames(mcmcSel9A) %like% "_DEV_MR_rwalk_"]
   newpar[which(newpar=="# parm_dev[11]:")+1] =  paste(as.vector(unlist(mcmcSel9)), collapse=" ")
   
   #Size_DblN_peak_S1_LPS(5)
-  mcmcSel10A = mcmc[i, colnames(mcmc) %like% "Size_DblN_peak_S1_LPS(5)" ]
+  mcmcSel10A = mcmc[i, colnames(mcmc) %like% "Size_DblN_peak_S1_LPS" ]
   mcmcSel10 = mcmcSel10A[colnames(mcmcSel10A) %like% "_DEV_MR_rwalk_"]
   newpar[which(newpar=="# parm_dev[12]:")+1] =  paste(as.vector(unlist(mcmcSel10)), collapse=" ")
   
   #Size_DblN_ascend_se_S1_LPS(5)
-  mcmcSel11A = mcmc[i, colnames(mcmc) %like% "Size_DblN_ascend_se_S1_LPS(5)" ]
+  mcmcSel11A = mcmc[i, colnames(mcmc) %like% "Size_DblN_ascend_se_S1_LPS" ]
   mcmcSel11 = mcmcSel11A[colnames(mcmcSel11A) %like% "_DEV_MR_rwalk_"]
   newpar[which(newpar=="# parm_dev[13]:")+1] =  paste(as.vector(unlist(mcmcSel11)), collapse=" ")
   
   #Size_DblN_descend_se_S1_LPS(5)
-  mcmcSel12A = mcmc[i, colnames(mcmc) %like% "Size_DblN_descend_se_S1_LPS(5)" ]
+  mcmcSel12A = mcmc[i, colnames(mcmc) %like% "Size_DblN_descend_se_S1_LPS" ]
   mcmcSel12 = mcmcSel12A[colnames(mcmcSel12A) %like% "_DEV_MR_rwalk_"]
   newpar[which(newpar=="# parm_dev[14]:")+1] =  paste(as.vector(unlist(mcmcSel12)), collapse=" ")
   
   #Size_DblN_peak_S5_NMFS_LLSE(6)
-  mcmcSel13A = mcmc[i, colnames(mcmc) %like% "Size_DblN_peak_S5_NMFS_LLSE(6)" ]
+  mcmcSel13A = mcmc[i, colnames(mcmc) %like% "Size_DblN_peak_S5_NMFS_LLSE" ]
   mcmcSel13 = mcmcSel13A[colnames(mcmcSel13A) %like% "_DEV_MR_rwalk_"]
   newpar[which(newpar=="# parm_dev[15]:")+1] =  paste(as.vector(unlist(mcmcSel13)), collapse=" ")
   
   #Size_DblN_ascend_se_S5_NMFS_LLSE(6)
-  mcmcSel14A = mcmc[i, colnames(mcmc) %like% "Size_DblN_ascend_se_S5_NMFS_LLSE(6)" ]
+  mcmcSel14A = mcmc[i, colnames(mcmc) %like% "Size_DblN_ascend_se_S5_NMFS_LLSE" ]
   mcmcSel14 = mcmcSel14A[colnames(mcmcSel14A) %like% "_DEV_MR_rwalk_"]
   newpar[which(newpar=="# parm_dev[16]:")+1] =  paste(as.vector(unlist(mcmcSel14)), collapse=" ")
   
   #Size_DblN_descend_se_S5_NMFS_LLSE(6)
-  mcmcSel15A = mcmc[i, colnames(mcmc) %like% "Size_DblN_descend_se_S5_NMFS_LLSE(6)" ]
+  mcmcSel15A = mcmc[i, colnames(mcmc) %like% "Size_DblN_descend_se_S5_NMFS_LLSE" ]
   mcmcSel15 = mcmcSel15A[colnames(mcmcSel15A) %like% "_DEV_MR_rwalk_"]
   newpar[which(newpar=="# parm_dev[17]:")+1] =  paste(as.vector(unlist(mcmcSel15)), collapse=" ")
   

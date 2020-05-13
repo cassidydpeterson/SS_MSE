@@ -1,6 +1,6 @@
 ######################################
 # BUILT EM DATA FILE FROM OM (MSE2)
-# Oct. 2018
+# Feb 2020
 # CPeterson
 ######################################
 
@@ -11,7 +11,7 @@
 # EMdir = "R:\\Management Strategy Evaluation\\SB\\TEST_Base\\HCR1\\EM" # EM directory
 
 ### MAKE INTO A FUNCTION:
-BuildEM = function(EMdir, OMdir, ...) {
+BuildEM = function(EMdir, OMdir, tt, ...) {
   # Get EM data file and add results from MSE_Step2
   ### NOTE: Make data Corrections for variance adjustment!!!
   
@@ -19,45 +19,49 @@ BuildEM = function(EMdir, OMdir, ...) {
   OMboot_dat = SS_readdat(file=paste(OMdir,"\\data.ss_new", sep=""), section=3, version="3.30") 
   
   
-  # calculate years
-  EndYr = EMdat$endyr
-  
   # get new EM data
   NewEMdat = EMdat
   
+  # calculate end year of estimation model
+  EndYr = tt-1
+  NewEMdat$endyr = EndYr
+  
   # Replace catch with bootstrapped catch for existing years
   newcatch = subset(OMboot_dat$catch, OMboot_dat$catch$year<=EndYr)
-  NewEMdat$catch = rbind(EMdat$catch, newcatch )
+  NewEMdat$catch = newcatch
   
   # Replace CPUE with bootstrapped CPUE for existing years
   newCPUE = subset(OMboot_dat$CPUE, OMboot_dat$CPUE$year<=EndYr)
-  NewEMdat$CPUE = rbind(EMdat$CPUE,  newCPUE)
+  NewEMdat$CPUE =  newCPUE
   
   
   # replace lencomp data with bootstrapped lencomp data
-  newlen = subset(OMboot_dat$lencomp, OMboot_dat$lencomp$Yr<=EndYr)
-  newlenFish = subset(newlen, newlen$FltSvy==1)
-  ObsLen = ifelse(newcatch$catch==0, NA, newcatch$year)
-  newlenFish$Nsamp = ifelse(is.na(ObsLen), 0, newlenFish$Nsamp)
-  newlenFish = newlenFish[newlenFish$Nsamp > 0,]
+  newlen = subset(OMboot_dat$lencomp, OMboot_dat$lencomp$Yr<=EndYr)     # subset length comps
+  newlen$Yr = ifelse(newlen$Nsamp<1, newlen$Yr*-1, newlen$Yr)          # if Nsamp <=0, make year negative
   
-  newlenSurv = subset(newlen, newlen$FltSvy==2)
-  newlenSurv$Nsamp = newCPUE$obs
-  newlenSurv = newlenSurv[newlenSurv$Nsamp > 0,]
-  
-  NewEMdat$lencomp = rbind(newlenFish, newlenSurv)
+  NewEMdat$lencomp = newlen
   
   # re-write new EM data file with bootstrapped historical data
-  SS_writedat(NewEMdat, outfile=paste(EMdir,"\\SB.dat", sep=""), version="3.30", overwrite=T)
+  SS_writedat(NewEMdat, outfile=paste0(EMdir,"\\SB.dat"), version="3.30", overwrite=T)
   
-}
+} # end BuildEM function
 
-BuildOM = function(OMdir,...){
+
+
+BuildOM = function(OMdir, tt, ...){
   # re-write new OM data file with historical expected values
-  OMexpect_dat = SS_readdat(file=paste(OMdir,"\\data.ss_new", sep=""), section=2, version="3.30") 
-  SS_writedat(OMexpect_dat, outfile=paste(OMdir,"\\SB.dat", sep=""), version="3.30", overwrite=T)
+  OMexpect_dat = SS_readdat(file=paste0(OMdir,"\\data.ss_new"), section=2, version="3.30")
+  OMdat = SS_readdat(file=paste0(OMdir,"\\data.ss_new"), section=1, version="3.30")
+  newdat = OMdat
   
-}
+  # Update Data
+  newdat$catch[newdat$catch$year<tt,] = OMexpect_dat$catch[OMexpect_dat$catch$year<tt,]
+  newdat$CPUE[newdat$CPUE$year<tt,] = OMexpect_dat$CPUE[OMexpect_dat$CPUE$year<tt,]
+  newdat$lencomp[newdat$lencomp$Yr>0 & newdat$lencomp$Yr<tt,] = OMexpect_dat$lencomp[OMexpect_dat$lencomp$Yr<tt,]
+  
+  SS_writedat(newdat, outfile=paste(OMdir,"\\SB.dat", sep=""), version="3.30", overwrite=T)
+  
+} # END BuildOM function
 
 
 
