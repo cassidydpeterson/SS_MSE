@@ -13,8 +13,8 @@
 # OMdir = "R:\\Management Strategy Evaluation\\SB\\TEST_Base\\HCR1\\OM" # OM directory
 
 # START FUNCTION
-implementHCR = function(hcr, tt, FRQ, modEM, OMdir, i, ...){
-  
+implementHCR = function(hcr, tt, FRQ, modEM, OMdir, i, seed=430, ...){
+  set.seed(seed*tt)
   modOM = SS_output(OMdir)
   
   #-------------------------------------------------------------------------------------------------------------
