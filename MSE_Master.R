@@ -77,6 +77,9 @@ MSE_func = function(MCMCdir, OMdir, EMdir, StoreResults, FRQ=5,
   if(SR=="BH"){
     source(file.path(sourcedir,"BuildParFile_BH.R")) # BuildParFile
   }
+  if(SR=="lnR0"){
+    source(file.path(sourcedir,"BuildParFile_lnR0.R")) # BuildParFile
+  }
   source(file.path(sourcedir,"RunOM_NoHess.R")) # RunOM_NoHess
   source(file.path(sourcedir,"BuildEMDatFile.R")) # BuildEMDatFile
   source(file.path(sourcedir,"UpdateEMDatFile.R")) # UpdateEMDatFile
