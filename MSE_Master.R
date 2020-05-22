@@ -49,7 +49,7 @@
 MSE_func = function(MCMCdir, OMdir, EMdir, StoreResults, FRQ=5, 
                     Btarg="BMSY", Bconst=1, Ftarg="FMSY", Fconst=1, a=0.1, b=1, 
                     BuildPar=T, OMdirs=list(OMdir), 
-                    simYrs=100, niters=NA, seed=430, sourcedir, SR="LFSR",...) {
+                    simYrs=100, niters=NA, seed=430, sourcedir, SR="LFSR", implement="default", ...) {
   # niters=seq(from=47, to=545, by=2)
   
   # WARNING REMINDER # 
@@ -85,7 +85,12 @@ MSE_func = function(MCMCdir, OMdir, EMdir, StoreResults, FRQ=5,
   source(file.path(sourcedir,"UpdateEMDatFile.R")) # UpdateEMDatFile
   source(file.path(sourcedir,"RunEM.R")) # RunEM
   source(file.path(sourcedir,"HCR.R")) # HCR
-  source(file.path(sourcedir,"ImplementHCR.R")) # ImplementHCR
+  if(implement=="default"){
+    source(file.path(sourcedir,"ImplementHCR.R")) # ImplementHCR
+  }
+  if(implement=="MexRec"){
+    source(file.path(sourcedir,"ImplementHCR_MexRec.R")) # ImplementHCR
+  }
   source(file.path(sourcedir,"EditStarterFile.R")) # ImplementHCR
   # copy files to *save results* folder; maybe save relevant results in .Rdata form
   
