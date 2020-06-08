@@ -1678,7 +1678,63 @@ SS_output_Report <-
   } # end function
 
 # st1 = Sys.time()
-# xx = SS_output_Report(dir="D:\\MSE_Run\\OM_BH\\HCR1\\StoreResults", repfile="OMReport_46.sso") 
+xx = SS_output_Report(dir="D:\\MSE_Run\\OM_BH\\HCR1\\StoreResults", repfile="OMReport_46.sso")
+yy = SS_output_Report(dir="D:\\MSE_Run\\OM_BH\\HCR1\\StoreResults", repfile="OMReport_47.sso")
+# xx2 = SS_output_Report(dir="D:\\MSE_Run\\OM_BH\\HCR2\\StoreResults", repfile="OMReport_46.sso")
+# xx3 = SS_output_Report(dir="D:\\MSE_Run\\OM_BH\\HCR3\\StoreResults", repfile="OMReport_46.sso")
+# xx4 = SS_output_Report(dir="D:\\MSE_Run\\OM_BH\\HCR4\\StoreResults", repfile="OMReport_46.sso")
 # st2 = Sys.time()
 # 
 # st2-st1
+
+
+
+
+######################################
+# NOTES 
+######################################
+
+plot(xx$timeseries$SpawnBio~xx$timeseries$Yr, type='l')
+lines(yy$timeseries$SpawnBio~yy$timeseries$Yr, type='l', col='blue')
+lines(xx2$timeseries$SpawnBio~yy$timeseries$Yr, type='l', col='black', lty=2)
+abline(h=mean(c(xx$derived_quants["SSB_MSY","Value"], yy$derived_quants["SSB_MSY","Value"])))
+
+plot(xx$timeseries$`obs_cat:_1`+xx$timeseries$`obs_cat:_2` ~xx$timeseries$Yr, type='l', 
+     ylim=c(0, mean(c(xx$derived_quants["SSB_MSY","Value"], yy$derived_quants["SSB_MSY","Value"]))) )
+lines(yy$timeseries$`obs_cat:_1`+yy$timeseries$`obs_cat:_2` ~yy$timeseries$Yr, type='l', col='blue')
+lines(xx2$timeseries$`obs_cat:_1`+xx2$timeseries$`obs_cat:_2` ~xx2$timeseries$Yr, type='l', lty=2)
+lines(xx$timeseries$`obs_cat:_1`+xx$timeseries$`obs_cat:_2`+xx$timeseries$`obs_cat:_3`+xx$timeseries$`obs_cat:_4` ~xx$timeseries$Yr, type='l')
+lines(yy$timeseries$`obs_cat:_1`+yy$timeseries$`obs_cat:_2`+yy$timeseries$`obs_cat:_3`+yy$timeseries$`obs_cat:_4` ~yy$timeseries$Yr, type='l', col='blue')
+lines(xx2$timeseries$`obs_cat:_1`+xx2$timeseries$`obs_cat:_2`+xx2$timeseries$`obs_cat:_3`+xx2$timeseries$`obs_cat:_4` ~xx2$timeseries$Yr, type='l', lty=2)
+
+
+abline(h=mean(c(xx$derived_quants["SSB_MSY","Value"], yy$derived_quants["SSB_MSY","Value"])))
+
+#### CALC MEAN & MEDIAN AGE ###
+xx$natage[xx$natage$`Beg/Mid`=='M' & xx$natage$Era=="TIME",]
+nn = xx$natage[xx$natage$`Beg/Mid`=='M' & xx$natage$Era=="TIME", -c(1:12)]
+
+MeanAge = vector()
+MedAge = vector()
+for(y in 1:nrow(nn)){
+  n1 = vector()
+  for(i in 1:ncol(nn)){
+    n1 = c(n1, rep(i-1, nn[y,i]) )
+  }
+  MeanAge = c( MeanAge, mean(n1) )
+  MedAge = c( MedAge, median(n1) )
+}
+
+
+
+
+
+# 
+# library(r4ss)
+# EMdat = SS_readdat("D:\\MSE_Run\\OM_BH\\HCR1\\StoreResults\\EMdata_46.ss_new")
+# 
+# 
+# ll = subset(EMdat$lencomp, EMdat$lencomp$Yr==2000)
+# ll2 = ll[,-c(1:6)]
+# ll3 = ll2[which(ll2!=0)]
+# apply(EMdat$lencomp, 2, median)
