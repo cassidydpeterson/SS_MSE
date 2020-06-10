@@ -66,7 +66,7 @@ implementHCR = function(hcr, tt, FRQ, modEM, OMdir, i, seed=430, ...){
   # F4exp = (0.2286625) + ((5.37979e-06)*modOM$timeseries[modOM$timeseries$Yr==tt-1,]$Bio_all)     # expected F4 catch
   lr4 = lm(modOM$timeseries[modOM$timeseries$Yr>1994 & modOM$timeseries$Yr<2016,]$`dead(N):_4` ~
              modEM$timeseries[modEM$timeseries$Yr>1994 & modEM$timeseries$Yr<2016,]$Bio_all)
-  F4exp = (  lr4$coefficients[1] ) + ( ( lr4$coefficients[2] )*modOM$timeseries[modOM$timeseries$Yr==tt-1,]$Bio_all )     # expected F4 catch
+  F4exp = (  lr4$coefficients[1] ) + ( ( lr4$coefficients[2] )*modEM$timeseries[modEM$timeseries$Yr==tt-1,]$Bio_all )     # expected F4 catch
   # F4catch = rep(as.numeric(F4exp), FRQ)
   # F4exp = (  0.1964266 ) + ((6.277744e-06)*modOM$timeseries[modOM$timeseries$Yr==tt-1,]$Bio_all)     # expected F4 catch
   F4catch = F4exp + rnorm(FRQ,0,0.04200714/2 )                         # actual F3 catch w implementation uncertainty; true sd too high
