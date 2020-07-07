@@ -163,7 +163,7 @@ MSE_func = function(MCMCdir, OMdir, EMdir, StoreResults, FRQ=5,
       #-------------------------------------------------------------------------------------------------------------
       RunEM(EMdir)
       # Copy control.ss_new to SB.ctl for next run -- to help starting values for next run. 
-      file.copy(from=paste0(EMdir,"\\control.ss_new"),to=paste0(EMdir,"\\SB.ctl"))
+      file.copy(from=paste0(EMdir,"\\control.ss_new"),to=paste0(EMdir,"\\SB.ctl"), overwrite=T)
       
       
       #-------------------------------------------------------------------------------------------------------------
@@ -186,14 +186,14 @@ MSE_func = function(MCMCdir, OMdir, EMdir, StoreResults, FRQ=5,
     } # end tt loop ; time loop
     
     # save files to StoreResults
-    file.copy(from=paste0(OMdir,"\\data.ss_new"),to=paste0(StoreResults,"\\OMdata_",i,".ss_new"))
-    file.copy(from=paste0(OMdir,"\\Report.sso"),to=paste0(StoreResults,"\\OMReport_",i,".sso"))
-    file.copy(from=paste0(EMdir,"\\data.ss_new"),to=paste0(StoreResults,"\\EMdata_",i,".ss_new"))
-    file.copy(from=paste0(EMdir,"\\Report.sso"),to=paste0(StoreResults,"\\EMReport_",i,".sso"))
-    OM = SS_output(OMdir)
-    EM = SS_output(EMdir)
-    MSEResults[[paste0("OM_",i)]] <- OM
-    MSEResults[[paste0("EM_",i)]] <- EM
+    # file.copy(from=paste0(OMdir,"\\data.ss_new"),to=paste0(StoreResults,"\\OMdata_",i,".ss_new"))
+    file.copy(from=paste0(OMdir,"\\Report.sso"),to=paste0(StoreResults,"\\OMReport_",i,".sso"), overwrite=T)
+    # file.copy(from=paste0(EMdir,"\\data.ss_new"),to=paste0(StoreResults,"\\EMdata_",i,".ss_new"))
+    file.copy(from=paste0(EMdir,"\\Report.sso"),to=paste0(StoreResults,"\\EMReport_",i,".sso"), overwrite=T)
+    # OM = SS_output(OMdir)
+    # EM = SS_output(EMdir)
+    # MSEResults[[paste0("OM_",i)]] <- OM
+    # MSEResults[[paste0("EM_",i)]] <- EM
     assign("MSEResults",MSEResults, envir=globalenv())
     # Save MSEResults data in store results
     save(MSEResults, file=paste0(StoreResults,"\\MSEResults.RData"))
