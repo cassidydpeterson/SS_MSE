@@ -162,6 +162,8 @@ MSE_func = function(MCMCdir, OMdir, EMdir, StoreResults, FRQ=5,
       # RUN EM
       #-------------------------------------------------------------------------------------------------------------
       RunEM(EMdir)
+      # Copy control.ss_new to SB.ctl for next run -- to help starting values for next run. 
+      file.copy(from=paste0(EMdir,"\\control.ss_new"),to=paste0(EMdir,"\\SB.ctl"))
       
       
       #-------------------------------------------------------------------------------------------------------------
