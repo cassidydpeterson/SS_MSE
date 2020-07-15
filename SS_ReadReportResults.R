@@ -1,10 +1,6 @@
-# dir <- "D:\\MSE_Run\\OM_BH\\HCR1\\StoreResults"
-# repfile <- "OMReport_47.sso"
-# # repfile <- file.path(dir, report)
-# ncols=NULL; forecast=FALSE; warn=FALSE; covar=FALSE; readwt=FALSE;
-# checkcor=TRUE; cormax=0.95; cormin=0.01; printhighcor=10; printlowcor=10;
-# verbose=TRUE; printstats=TRUE;hidewarn=FALSE; NoCompOK=FALSE;
-# aalmaxbinrange=4
+
+
+library(data.table)
 
 SS_output_Report <-
   function(dir="C:/myfiles/mymodels/myrun/", dir.mcmc=NULL,
@@ -1677,22 +1673,389 @@ SS_output_Report <-
     
   } # end function
 
-# st1 = Sys.time()
-xx = SS_output_Report(dir="D:\\MSE_Run\\OM_BH\\HCR1\\StoreResults", repfile="OMReport_46.sso")
-yy = SS_output_Report(dir="D:\\MSE_Run\\OM_BH\\HCR1\\StoreResults", repfile="OMReport_47.sso")
-# xx2 = SS_output_Report(dir="D:\\MSE_Run\\OM_BH\\HCR2\\StoreResults", repfile="OMReport_46.sso")
-# xx3 = SS_output_Report(dir="D:\\MSE_Run\\OM_BH\\HCR3\\StoreResults", repfile="OMReport_46.sso")
-# xx4 = SS_output_Report(dir="D:\\MSE_Run\\OM_BH\\HCR4\\StoreResults", repfile="OMReport_46.sso")
-# st2 = Sys.time()
+
+xx = SS_output_Report(dir="D:\\MSE_Run\\OM_BH\\HCR1\\StoreResults", repfile="OMReport_47.sso")
+yy = SS_output_Report(dir="D:\\MSE_Run\\OM_BH\\HCR1\\StoreResults", repfile="OMReport_49.sso")
+
+
+
+
+
+
+
+##### Get Results Function -----------------------------------------------------------------------------------------------------------
+
+OM_List = c("BASE","BH","Hih","lnR0","Loh","M_BH")
+
+for(OM in OM_List){
+  
+  for(h in 1:24){
+    
+    iters = seq(47,245, by=2)
+    years = 1960:2115
+    
+    # create results data frames: 
+    #  timeseries
+    SSB = as.data.frame( matrix(NA, nrow=length(years), ncol=length(iters)), row.names=years ) ; colnames(SSB) <- iters
+    SSB_SSBMSY = as.data.frame( matrix(NA, nrow=length(years), ncol=length(iters)), row.names=years ) ; colnames(SSB_SSBMSY) <- iters
+    SSB_SSB0 = as.data.frame( matrix(NA, nrow=length(years), ncol=length(iters)), row.names=years ) ; colnames(SSB_SSB0) <- iters
+    Biomass = as.data.frame( matrix(NA, nrow=length(years), ncol=length(iters)), row.names=years ) ; colnames(Biomass) <- iters
+    FM = as.data.frame( matrix(NA, nrow=length(years), ncol=length(iters)), row.names=years ) ; colnames(FM) <- iters
+    FM_FMMSY = as.data.frame( matrix(NA, nrow=length(years), ncol=length(iters)), row.names=years ) ; colnames(FM_FMMSY) <- iters
+    GOM_catch = as.data.frame( matrix(NA, nrow=length(years), ncol=length(iters)), row.names=years ) ; colnames(GOM_catch) <- iters
+    Atl_catch = as.data.frame( matrix(NA, nrow=length(years), ncol=length(iters)), row.names=years ) ; colnames(Atl_catch) <- iters
+    MEX_Rec_catch = as.data.frame( matrix(NA, nrow=length(years), ncol=length(iters)), row.names=years ) ; colnames(MEX_Rec_catch) <- iters
+    MEN_bycatch = as.data.frame( matrix(NA, nrow=length(years), ncol=length(iters)), row.names=years ) ; colnames(MEN_bycatch) <- iters
+    Com_catch = as.data.frame( matrix(NA, nrow=length(years), ncol=length(iters)), row.names=years ) ; colnames(Com_catch) <- iters
+    AvgLen_F = as.data.frame( matrix(NA, nrow=length(years), ncol=length(iters)), row.names=years ) ; colnames(AvgLen_F) <- iters
+    AvgLen_M = as.data.frame( matrix(NA, nrow=length(years), ncol=length(iters)), row.names=years ) ; colnames(AvgLen_M) <- iters
+    
+    # values
+    SSB_MSY = as.data.frame(vector(length=length(iters)), row.names=as.character(iters) ) ; colnames(SSB_MSY) <- "SSB_MSY"
+    F_MSY = as.data.frame(vector(length=length(iters)), row.names=as.character(iters) ) ; colnames(F_MSY) <- "F_MSY"
+    MSY = as.data.frame(vector(length=length(iters)), row.names=as.character(iters) ) ; colnames(MSY) <- "MSY"
+    SSB0 = as.data.frame(vector(length=length(iters)), row.names=as.character(iters) ) ; colnames(SSB0) <- "SSB0"
+    SSB_MSY = as.data.frame(vector(length=length(iters)), row.names=as.character(iters) ) ; colnames(SSB_MSY) <- "SSB_MSY"
+    
+    for(i in 1:length(iters)){
+      j=iters[i]
+      
+      #Get Results from Report File
+      xx = SS_output_Report(dir="D:\\MSE_Run\\OM_BH\\HCR1\\StoreResults", repfile=paste0("OMReport_",j,".sso") )
+      
+      # Timeseries
+      # Get F values
+      FM_FMMSY[,i] = xx$derived_quants[ rownames(xx$derived_quants) %like% "F_", "Value"][1:(nrow(xx$timeseries)-3)]
+      FM[,i] = xx$derived_quants[ rownames(xx$derived_quants) %like% "F_", "Value"][1:(nrow(xx$timeseries)-3)] * xx$derived_quants["annF_MSY","Value"]
+      # FM is equivalent to below with rounding error.
+      # FM[,i] = xx$timeseries$`F:_1`[3:(nrow(xx$timeseries)-1)] + xx$timeseries$`F:_2`[3:(nrow(xx$timeseries)-1)] + xx$timeseries$`F:_3`[3:(nrow(xx$timeseries)-1)] + xx$timeseries$`F:_4`[3:(nrow(xx$timeseries)-1)] 
+      
+      # Get B values
+      SSB_SSB0[,i] = xx$derived_quants[ rownames(xx$derived_quants) %like% "Bratio_", "Value"][1:(nrow(xx$timeseries)-3)]
+      SSB_SSBMSY[,i] = xx$timeseries$SpawnBio[3:(nrow(xx$timeseries)-1)] / xx$derived_quants["SSB_MSY","Value"]
+      SSB[,i] = xx$timeseries$SpawnBio[3:(nrow(xx$timeseries)-1)]
+      Biomass[,i] = xx$timeseries$Bio_all[3:(nrow(xx$timeseries)-1)]
+      
+      # Get catch values
+      GOM_catch[,i] = xx$timeseries$`retain(B):_1`[3:(nrow(xx$timeseries)-1)]
+      Atl_catch[,i] = xx$timeseries$`retain(B):_2`[3:(nrow(xx$timeseries)-1)]
+      MEX_Rec_catch[,i] = xx$timeseries$`retain(B):_3`[3:(nrow(xx$timeseries)-1)]
+      MEN_bycatch[,i] = xx$timeseries$`retain(B):_4`[3:(nrow(xx$timeseries)-1)]
+      Com_catch[,i] = xx$timeseries$`retain(B):_1`[3:(nrow(xx$timeseries)-1)] + xx$timeseries$`retain(B):_2`[3:(nrow(xx$timeseries)-1)]
+      
+      # Avg Lengths
+      l = as.numeric(names(xx$natlen[xx$natlen$'Beg/Mid'=="B",13:ncol(xx$natlen)]))
+      avgL = apply(xx$natlen[xx$natlen$'Beg/Mid'=="B",13:ncol(xx$natlen)] * sapply(l, rep, nrow(xx$natlen[xx$natlen$'Beg/Mid'=="B",13:ncol(xx$natlen)])), 1, sum) / 
+        apply(xx$natlen[xx$natlen$'Beg/Mid'=="B",13:ncol(xx$natlen)] , 1, sum)
+      avgL2 = as.data.frame(cbind(xx$natlen[xx$natlen$'Beg/Mid'=="B",]$Yr,xx$natlen[xx$natlen$'Beg/Mid'=="B",]$Sex, avgL)) ; colnames(avgL2) <- c("Yr","Sex","avgL")
+      AvgLen_F[,i] = avgL2[avgL2$Sex==1 & avgL2$Yr<2116,"avgL"]
+      AvgLen_M[,i] = avgL2[avgL2$Sex==2 & avgL2$Yr<2116,"avgL"]
+      
+      # Get MSY reference points
+      F_MSY[i,] = xx$derived_quants["annF_MSY","Value"]
+      SSB_MSY[i,] = xx$derived_quants["SSB_MSY","Value"]
+      SSB0[i,] = xx$derived_quants["SSB_unfished","Value"]
+      MSY[i,] = xx$derived_quants["Dead_Catch_MSY","Value"]
+      
+    } # End iter loop
+    
+    # Save results in list for each HCR. 
+    listx <- list()
+    listx[["SSB"]] <- SSB
+    listx[["SSB_SSB0"]] <- SSB_SSB0
+    listx[["SSB_SSBMSY"]] <- SSB_SSBMSY
+    listx[["Biomass"]] <- Biomass
+    listx[["FM_FMMSY"]] <- FM_FMMSY
+    listx[["FM"]] <- FM
+    listx[["GOM_catch"]] <- GOM_catch
+    listx[["Atl_catch"]] <- Atl_catch
+    listx[["MEX_Rec_catch"]] <- MEX_Rec_catch
+    listx[["MEN_bycatch"]] <- MEN_bycatch
+    listx[["Com_catch"]] <- Com_catch
+    listx[["AvgLen_F"]] <- AvgLen_F
+    listx[["AvgLen_M"]] <- AvgLen_M
+    listx[["F_MSY"]] <- F_MSY
+    listx[["SSB_MSY"]] <- SSB_MSY
+    listx[["SSB0"]] <- SSB0
+    listx[["MSY"]] <- MSY
+    
+    assign(paste0("HCR_",h), listx)
+    
+  } # for each HCR
+  
+  # Collate results for each HCR within each OM
+  listy <- list()
+  for(hh in 1:24){
+    listy[[paste0("HCR_",hh)]] <- get(paste0("HCR_",hh))
+  }
+  assign(paste0("OM_",OM), listy)
+  
+} # end OM loop
+
+# Save OM results in MSE_Results_List
+MSE_Results_List = list()
+MSE_Results_List[["OM_BASE"]] <- OM_Base
+MSE_Results_List[["OM_BH"]] <- OM_BH
+MSE_Results_List[["OM_Hih"]] <- OM_Hih
+MSE_Results_List[["OM_lnR0"]] <- OM_lnR0
+MSE_Results_List[["OM_Loh"]] <- OM_Loh
+MSE_Results_List[["OM_M_BH"]] <- OM_M_BH
+
+save(MSE_Results_List, file="")
+
+# NOTE RESULTS STRUCTURE: MSE_RESULTS_LIST >> OM >> HCR >> Value
+
+
+
+
+
+# PLOT RESULTS -----------------------------------------------------------------------------------------------------------------------------------------
+
+iters = seq(47,245, by=2)
+years = 1960:2115
+
+
+## Worm Plots ##
+plot(years, MSE_Results_List$OM_BASE$HCR_1$SSB_SSBMSY[,1], type='l', col="grey")
+abline(h=1)
+for(i in length(iters)){
+  lines(years, MSE_Results_List$OM_BASE$HCR_1$SSB_SSBMSY[,i])
+}
+lines(years, apply(MSE_Results_List$OM_BASE$HCR_1$SSB_SSBMSY, 1, median), type='l', lwd=3)
+
+
+
+
+## RADAR PLOTS ##
+library(fmsb)
+# Build data frame (see notes below)
+data <- data.frame()
+# add 2 lines to the dataframe: the max and min of each variable to show on the plot!
+data <- rbind(rep(MAXXX,ncol(data)) , rep(0,ncol(data)) , data)
+
+#Define colors
+# Color vector
+colors_border=c( rgb(0,0,1,1), rgb(1,0,0,1) , rgb(0,1,0,1) )
+colors_in=c( rgb(0,0,1,0.2), rgb(1,0,0,0.2) , rgb(0,1,0,0.2) )
+
+# plot with default options:
+radarchart( data  , axistype=1 , 
+            #custom polygon
+            pcol=colors_border , pfcol=colors_in , plwd=4 , plty=1, #plty is line type of polygon
+            #custom the grid
+            cglcol="grey", cglty=1, axislabcol="grey", caxislabels=seq(0,20,5), cglwd=0.8,
+            #custom labels
+            vlcex=0.8 
+)
+
+# # RADAR NOTES
+# # From: https://www.r-graph-gallery.com/143-spider-chart-with-saveral-individuals.html
 # 
-# st2-st1
+# library(fmsb)
+# 
+# 
+# # Create data: note in High school for several students
+# set.seed(99)
+# data <- as.data.frame(matrix( sample( 0:20 , 21 , replace=F) , ncol=7))
+# colnames(data) <- c("math" , "english" , "biology" , "music" , "R-coding" ,"X","Y")
+# rownames(data) <- paste("mister" , letters[1:3] , sep="-")
+# 
+# # To use the fmsb package, I have to add 2 lines to the dataframe: the max and min of each variable to show on the plot!
+# data <- rbind(rep(20,ncol(data)) , rep(0,ncol(data)) , data)
+# 
+# # plot with default options:
+# radarchart(data)
+# 
+# # The radarchart() function offers several options to customize the chart:
+# #   
+# # Polygon features:
+# #   pcol ??? line color
+# #   pfcol ??? fill color
+# #   plwd ??? line width
+# # 
+# # Grid features:
+# #   cglcol ??? color of the net
+# #   cglty ??? net line type (see possibilities)
+# #   axislabcol ??? color of axis labels
+# #   caxislabels ??? vector of axis labels to display
+# #   cglwd ??? net width
+# # 
+# # Labels:
+# #   vlcex ??? group labels size
+# 
+# radarchart(data, cglty=1, cglcol='grey', pcol=c('blue','red','green'), plwd=2, pfcol=c('blue','red','green'), pdensity=c(5, 10, 30))
+# 
+# col2rgb('blue')
+# col2rgb('red')
+# col2rgb('green')
+# 
+# 
+# # Color vector
+# colors_border=c( rgb(0,0,1,1), rgb(1,0,0,1) , rgb(0,1,0,1) )
+# colors_in=c( rgb(0,0,1,0.2), rgb(1,0,0,0.2) , rgb(0,1,0,0.2) )
+# radarchart(data, cglty=1, cglcol='grey', pcol=colors_border, plwd=2, pfcol=colors_in, 
+#            axistype=1, axislabcol='grey', caxislabels=seq(0,20,5))
+# 
+# # plot with default options:
+# radarchart( data  , axistype=1 , 
+#             #custom polygon
+#             pcol=colors_border , pfcol=colors_in , plwd=4 , plty=1, #plty is line type of polygon
+#             #custom the grid
+#             cglcol="grey", cglty=1, axislabcol="grey", caxislabels=seq(0,20,5), cglwd=0.8,
+#             #custom labels
+#             vlcex=0.8 
+# )
 
 
 
 
-######################################
+
+
+
+
+
+## Violin Plots ##
+
+# # EXAMPLE COPIED FROM SB SIMULATION RESULTS:
+# png(filename="D:/vspace1/DFA_Simulation/SB\\Plots\\Depletion_MISS.png",
+#     type="cairo",
+#     units="mm",
+#     width=400,
+#     height=200,
+#     pointsize=18,
+#     res=600)
+# par(mfrow=c(3,1), mar=c(1.1, 2.6, 0.3, 0.3),tcl = -0.1, mgp = c(0.8, 0.1, 0), cex=1)
+# vioplot(dep_M1$conflicting / dep_M1$actual, dep_M1$DFA / dep_M1$actual,
+#         
+#         dep_M9$conflicting / dep_M9$actual, dep_M9$DFA / dep_M9$actual, 
+#         dep_M10$conflicting / dep_M10$actual, dep_M10$DFA / dep_M10$actual,
+#         dep_M11$conflicting / dep_M11$actual, dep_M11$DFA / dep_M11$actual, 
+#         dep_M12$conflicting / dep_M12$actual, dep_M12$DFA / dep_M12$actual, 
+#         dep_M13$conflicting / dep_M13$actual, dep_M13$DFA / dep_M13$actual,
+#         dep_M14$conflicting / dep_M14$actual, dep_M14$DFA / dep_M14$actual, 
+#         dep_M15$conflicting / dep_M15$actual, dep_M15$DFA / dep_M15$actual, 
+#         
+#         dep_M2$conflicting / dep_M2$actual, dep_M2$DFA / dep_M2$actual, 
+#         dep_M3$conflicting / dep_M3$actual, dep_M3$DFA / dep_M3$actual, 
+#         dep_M4$conflicting / dep_M4$actual, dep_M4$DFA / dep_M4$actual,
+#         dep_M5$conflicting / dep_M5$actual, dep_M5$DFA / dep_M5$actual, 
+#         dep_M6$conflicting / dep_M6$actual, dep_M6$DFA / dep_M6$actual, 
+#         dep_M7$conflicting / dep_M7$actual, dep_M7$DFA / dep_M7$actual,
+#         dep_M8$conflicting / dep_M8$actual, dep_M8$DFA / dep_M8$actual,
+#         
+#         na.rm=T,
+#         col=c('dimgrey', 'grey', rep(c('darkolivegreen4','olivedrab1'), 7), rep(c('deepskyblue4','deepskyblue'), 7)),
+#         names=c(rep('',30)) , ylim=c(0.4, 2.5) )
+# axis(1, at=seq(length=15, from=1.5, by=2), 
+#      c('M1','M2','M3','M4','M5','M6','M7','M8','M9','M10','M11','M12','M13','M14','M15'), tck=0, cex=0.75)
+# abline(h=1, lwd=2)
+# mtext('Relative Depletion', side=2, line=1.2, cex=1.1)
+# mtext("Missing data", side=3, line=-1.1, cex=1.1)
+# legend("topright",c("confl indices","DFA trend"), fill=c("dimgrey","grey"),bty='n',
+#        border='white', cex=1.0)
+# 
+# vioplot(dep_M16$conflicting / dep_M16$actual, dep_M16$DFA / dep_M16$actual,
+#         dep_M17$conflicting / dep_M17$actual, dep_M17$DFA / dep_M17$actual, 
+#         dep_M18$conflicting / dep_M18$actual, dep_M18$DFA / dep_M18$actual, 
+#         dep_M19$conflicting / dep_M19$actual, dep_M19$DFA / dep_M19$actual,
+#         dep_M20$conflicting / dep_M20$actual, dep_M20$DFA / dep_M20$actual, 
+#         dep_M21$conflicting / dep_M21$actual, dep_M21$DFA / dep_M21$actual, 
+#         dep_M22$conflicting / dep_M22$actual, dep_M22$DFA / dep_M22$actual,
+#         dep_M23$conflicting / dep_M23$actual, dep_M23$DFA / dep_M23$actual, 
+#         dep_M24$conflicting / dep_M24$actual, dep_M24$DFA / dep_M24$actual, 
+#         dep_M25$conflicting / dep_M25$actual, dep_M25$DFA / dep_M25$actual,
+#         dep_M26$conflicting / dep_M26$actual, dep_M26$DFA / dep_M26$actual, 
+#         dep_M27$conflicting / dep_M27$actual, dep_M27$DFA / dep_M27$actual, 
+#         
+#         na.rm=T,
+#         col=c(rep(c('darkseagreen4','darkseagreen1'), 3), rep(c('darkslategray4','darkslategray1'), 3), rep(c('orchid3','orchid1'),3),
+#               rep(c('darkorchid4','darkorchid1'), 3) ),
+#         names=c(rep('',24)) , ylim=c(0.4, 2.5) )
+# axis(1, at=seq(length=12, from=1.5, by=2), 
+#      c('M16','M17','M18','M19','M20','M21','M22','M23','M24','M25','M26','M27'), tck=0, cex=0.75)
+# abline(h=1, lwd=2)
+# mtext('Relative Depletion', side=2, line=1.2, cex=1.1)
+# # mtext("Missing data", side=3, line=-1.1, cex=1.1)
+# 
+# 
+# vioplot(dep_M28$conflicting / dep_M28$actual, dep_M28$DFA / dep_M28$actual,
+#         dep_M29$conflicting / dep_M29$actual, dep_M29$DFA / dep_M29$actual, 
+#         dep_M30$conflicting / dep_M30$actual, dep_M30$DFA / dep_M30$actual, 
+#         dep_M31$conflicting / dep_M31$actual, dep_M31$DFA / dep_M31$actual, 
+#         dep_M32$conflicting / dep_M32$actual, dep_M32$DFA / dep_M32$actual, 
+#         dep_M33$conflicting / dep_M33$actual, dep_M33$DFA / dep_M33$actual, 
+#         
+#         dep_M37$conflicting / dep_M37$actual, dep_M37$DFA / dep_M37$actual, 
+#         dep_M38$conflicting / dep_M38$actual, dep_M38$DFA / dep_M38$actual, 
+#         dep_M39$conflicting / dep_M39$actual, dep_M39$DFA / dep_M39$actual, 
+#         
+#         dep_M34$conflicting / dep_M34$actual, dep_M34$DFA / dep_M34$actual, 
+#         dep_M35$conflicting / dep_M35$actual, dep_M35$DFA / dep_M35$actual, 
+#         dep_M36$conflicting / dep_M36$actual, dep_M36$DFA / dep_M36$actual, 
+#         na.rm=T,
+#         col=c(rep(c('springgreen4','springgreen'), 3), rep(c('steelblue4','steelblue1'), 3), rep(c('mediumpurple4','mediumpurple1'),3),
+#               rep(c('purple4','purple'), 3) ),
+#         names=c(rep('',24)) , ylim=c(0.4, 2.5))
+# axis(1, at=seq(length=12, from=1.5, by=2), 
+#      c('M28','M29','M30','M31','M32','M33','M34','M35','M36','M37','M38','M39'), tck=0, cex=0.75)
+# abline(h=1, lwd=2)
+# mtext('Relative Depletion', side=2, line=1.2, cex=1.1)
+# # mtext("Missing data", side=3, line=-1.1, cex=1.1)
+# 
+# dev.off()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+########################################################################################################################################################
 # NOTES 
-######################################
+########################################################################################################################################################
+
+names(xx)
+l = as.numeric(names(xx$natlen[xx$natlen$'Beg/Mid'=="B",13:ncol(xx$natlen)]))
+# sapply(l, rep, nrow(xx$natlen))sapply(l, rep, nrow(xx$natlen))
+# 
+# a = xx$natlen[xx$natlen$'Beg/Mid'=="B",13:ncol(xx$natlen)]
+# b = xx$natlen[xx$natlen$'Beg/Mid'=="B",13:ncol(xx$natlen)] * sapply(l, rep, nrow(xx$natlen[xx$natlen$'Beg/Mid'=="B",13:ncol(xx$natlen)]))
+avgL = apply(xx$natlen[xx$natlen$'Beg/Mid'=="B",13:ncol(xx$natlen)] * sapply(l, rep, nrow(xx$natlen[xx$natlen$'Beg/Mid'=="B",13:ncol(xx$natlen)])), 1, sum) / 
+  apply(xx$natlen[xx$natlen$'Beg/Mid'=="B",13:ncol(xx$natlen)] , 1, sum)
+avgL2 = as.data.frame(cbind(xx$natlen[xx$natlen$'Beg/Mid'=="B",]$Yr,xx$natlen[xx$natlen$'Beg/Mid'=="B",]$Sex, avgL))
+colnames(avgL2) <- c("Yr","Sex","avgL")
+avgL2_F = avgL2[avgL2$Sex==1 & avgL2$Yr<2116,]
+avgL2_M = avgL2[avgL2$Sex==2 & avgL2$Yr<2116,]
+
+
+plot(avgL2_F$avgL, type='l', ylim=c(93, 109))
+lines(avgL2_M$avgL)
+lines((avgL2_F$avgL+avgL2_M$avgL)/2, col='blue')
+
+
+SSB_MSY = xx$derived_quants["SSB_MSY","Value"]
+SSB = xx$timeseries$SpawnBio[3:(nrow(xx$timeseries)-1)]
+Bio_all = xx$timeseries$Bio_all[3:(nrow(xx$timeseries)-1)]
+GOM_catch = xx$timeseries$`retain(B):_1`[3:(nrow(xx$timeseries)-1)]
+Atl_catch = xx$timeseries$`retain(B):_2`[3:(nrow(xx$timeseries)-1)]
+MEX_Rec_catch = xx$timeseries$`retain(B):_3`[3:(nrow(xx$timeseries)-1)]
+MEN_bycatch = xx$timeseries$`retain(B):_4`[3:(nrow(xx$timeseries)-1)]
+
+
+
+
+
+
 
 plot(xx$timeseries$SpawnBio~xx$timeseries$Yr, type='l')
 lines(yy$timeseries$SpawnBio~yy$timeseries$Yr, type='l', col='blue')
