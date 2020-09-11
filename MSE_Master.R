@@ -91,6 +91,9 @@ MSE_func = function(MCMCdir, OMdir, EMdir, StoreResults, FRQ=5,
   if(implement=="MexRec"){
     source(file.path(sourcedir,"ImplementHCR_MexRec.R")) # ImplementHCR
   }
+  if(implement=="LoMexRec"){
+    source(file.path(sourcedir,"ImplementHCR_LoMexRec.R")) # ImplementHCR
+  }
   source(file.path(sourcedir,"EditStarterFile.R")) # ImplementHCR
   # copy files to *save results* folder; maybe save relevant results in .Rdata form
   
