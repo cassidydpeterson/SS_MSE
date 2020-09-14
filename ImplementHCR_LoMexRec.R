@@ -13,7 +13,7 @@
 # OMdir = "R:\\Management Strategy Evaluation\\SB\\TEST_Base\\HCR1\\OM" # OM directory
 
 # START FUNCTION
-implementHCR = function(hcr, tt, FRQ, modEM, OMdir, i, seed=430, ...){
+implementHCR = function(hcr, tt, FRQ, modEM, OMdir, i, seed=430, MaxCatch=2000, ...){
   set.seed(seed*tt)
   modOM = SS_output(OMdir)
   
@@ -23,6 +23,7 @@ implementHCR = function(hcr, tt, FRQ, modEM, OMdir, i, seed=430, ...){
   # COMMERCIAL CATCH #
   ### calculate expected commercial ACL ###
   # 41.7 mt DW => 58 mt round weight
+  hcr$ACL = ifelse(hcr$ACL > MaxCatch, 0, hcr$ACL)
   comACL = hcr$ACL - 58
   
   ### commercial catch w implementation uncertainty!   ###
