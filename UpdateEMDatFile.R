@@ -50,7 +50,7 @@ UpdateEM = function(EMdir, OMdir, FRQ=5, tt, ...) {
     assign(paste0("newcatchF",l), subset(newcatch, newcatch$fleet==l))
     catch = rbind(catch, get(paste0("oldcatchF",l)), get(paste0("newcatchF",l)) )
   }
-  NewEMdat$catch = catch
+  NewEMdat$catch = round(catch, digits=5)
   
   
   
@@ -65,7 +65,7 @@ UpdateEM = function(EMdir, OMdir, FRQ=5, tt, ...) {
     assign(paste0("newCPUE",m), subset(newCPUE, newCPUE$index==m))
     CPUE = rbind(CPUE, get(paste0("oldCPUE",m)), get(paste0("newCPUE",m)) )
   }
-  NewEMdat$CPUE = CPUE
+  NewEMdat$CPUE = round(CPUE, digits=5)
   
   
   
@@ -110,7 +110,7 @@ UpdateEM = function(EMdir, OMdir, FRQ=5, tt, ...) {
     
   } # end n loop for lencomps
   lencomps$Yr <- ifelse(lencomps$Nsamp<1, -1*abs(lencomps$Yr), lencomps$Yr)
-  NewEMdat$lencomp = lencomps
+  NewEMdat$lencomp = round(lencomps, digits=4)
   
   ####------------------------------------------------------------------------------------------------------------
   # update endyear
@@ -132,6 +132,7 @@ UpdateOM <- function(OMdir, tt, FRQ, ...){
   OMdat = SS_readdat(file=paste(OMdir,"\\data.ss_new", sep=""), section=1, version="3.30") 
   
   OMdat$CPUE[OMdat$CPUE$year>=tt-FRQ & OMdat$CPUE$year<tt,] <- OMexpect_dat$CPUE[OMexpect_dat$CPUE$year>=tt-FRQ & OMexpect_dat$CPUE$year<tt,]
+  OMdat$CPUE<-round(OMdat$CPUE, digits=5)
   
   SS_writedat(OMdat, outfile=paste(OMdir,"\\SB.dat", sep=""), version="3.30", overwrite=T)
 } # end UpdateOM function

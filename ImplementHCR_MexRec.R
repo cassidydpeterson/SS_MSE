@@ -13,7 +13,7 @@
 # OMdir = "R:\\Management Strategy Evaluation\\SB\\TEST_Base\\HCR1\\OM" # OM directory
 
 # START FUNCTION
-implementHCR = function(hcr, tt, FRQ, modEM, OMdir, i, seed=430, MaxCatch=2000, ...){
+implementHCR = function(hcr, tt, FRQ, modEM, OMdir, i, seed=430, ...){
   set.seed(seed*tt)
   modOM = SS_output(OMdir)
   
@@ -23,13 +23,12 @@ implementHCR = function(hcr, tt, FRQ, modEM, OMdir, i, seed=430, MaxCatch=2000, 
   # COMMERCIAL CATCH #
   ### calculate expected commercial ACL ###
   # 41.7 mt DW => 58 mt round weight
-  hcr$ACL = ifelse(hcr$ACL > MaxCatch, 0, hcr$ACL)
   comACL = hcr$ACL / 2
   
   ### commercial catch w implementation uncertainty!   ###
   # actualCatch = rlnorm(FRQ, -0.2722412, 0.3306523) * comACL
   actualCatch = rlnorm(FRQ, -0.6015450, 0.3306523) * comACL
-  # actualCatch = ifelse(actualCatch > MaxCatch, 0, actualCatch)
+  actualCatch = ifelse(actualCatch > 2000, 0, actualCatch)
   
   
   ### allocate commercial catch to area ###
@@ -169,18 +168,13 @@ implementHCR = function(hcr, tt, FRQ, modEM, OMdir, i, seed=430, MaxCatch=2000, 
         ifelse(newOMdat$lencomp[newOMdat$lencomp$Yr==y & newOMdat$lencomp$FltSvy==fs, "Nsamp"]<=0, 
                -1*newOMdat$lencomp[newOMdat$lencomp$Yr==y & newOMdat$lencomp$FltSvy==fs, "Yr"], 
                newOMdat$lencomp[newOMdat$lencomp$Yr==y & newOMdat$lencomp$FltSvy==fs, "Yr"])
-      
-      # IF Nsamp is > 1000, set year = -year. 
-      newOMdat$lencomp[newOMdat$lencomp$Yr==y & newOMdat$lencomp$FltSvy==fs, "Yr"] = 
-        ifelse(newOMdat$lencomp[newOMdat$lencomp$Yr==y & newOMdat$lencomp$FltSvy==fs, "Nsamp"]>1000, 
-               -1*newOMdat$lencomp[newOMdat$lencomp$Yr==y & newOMdat$lencomp$FltSvy==fs, "Yr"], 
-               newOMdat$lencomp[newOMdat$lencomp$Yr==y & newOMdat$lencomp$FltSvy==fs, "Yr"])
     } # end Lfreq fs loop
     
     
   } # end year loop
   
-  
+  newOMdat$catch<-round(newOMdat$catch, digits=5)
+  newOMdat$lencomp<-round(newOMdat$lencomp, digits=4)
   
   # Re-write OM data file with additional FRQ years of data. 
   SS_writedat(newOMdat, outfile=paste0(OMdir,"\\SB.dat"), version="3.30", overwrite=T)
