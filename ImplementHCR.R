@@ -170,11 +170,17 @@ implementHCR = function(hcr, tt, FRQ, modEM, OMdir, i, seed=430, MaxCatch=2000, 
     
   } # end year loop
   
+<<<<<<< HEAD
   
   # limit number of digits
   newOMdat$catch<-round(newOMdat$catch, digits=5)
   newOMdat$lencomp<-round(newOMdat$lencomp, digits=4)
   
+=======
+  # limit number of digits
+  newOMdat$catch<-round(newOMdat$catch, digits=5)
+  newOMdat$lencomp<-round(newOMdat$lencomp, digits=4)
+>>>>>>> 587df95c95a3c45ea94772dba5971d6a1d6050be
   
   # Re-write OM data file with additional FRQ years of data. 
   SS_writedat(newOMdat, outfile=paste0(OMdir,"\\SB.dat"), version="3.30", overwrite=T)
