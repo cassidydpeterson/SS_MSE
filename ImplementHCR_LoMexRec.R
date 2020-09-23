@@ -29,7 +29,7 @@ implementHCR = function(hcr, tt, FRQ, modEM, OMdir, i, seed=430, MaxCatch=2000, 
   ### commercial catch w implementation uncertainty!   ###
   # actualCatch = rlnorm(FRQ, -0.2722412, 0.3306523) * comACL
   actualCatch = rlnorm(FRQ, -0.6015450, 0.3306523) * comACL
-  actualCatch = ifelse(actualCatch > MaxCatch, 0, actualCatch)
+  # actualCatch = ifelse(actualCatch > MaxCatch, 0, actualCatch)
   
   
   ### allocate commercial catch to area ###
