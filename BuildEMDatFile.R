@@ -28,21 +28,13 @@ BuildEM = function(EMdir, OMdir, tt, ...) {
   
   # Replace catch with bootstrapped catch for existing years
   newcatch = subset(OMboot_dat$catch, OMboot_dat$catch$year<=EndYr)
-<<<<<<< HEAD
+
   newcatch<-round(newcatch, digits=5)
-=======
-  newcatch$catch = round(newcatch$catch, digits=5)
->>>>>>> 587df95c95a3c45ea94772dba5971d6a1d6050be
   NewEMdat$catch = newcatch
   
   # Replace CPUE with bootstrapped CPUE for existing years
   newCPUE = subset(OMboot_dat$CPUE, OMboot_dat$CPUE$year<=EndYr)
-<<<<<<< HEAD
   newCPUE<-round(newCPUE, digits=5)
-=======
-  newCPUE$obs = round(newCPUE$obs, digits=5)
-  newCPUE$se_log = round(newCPUE$se_log, digits=5)
->>>>>>> 587df95c95a3c45ea94772dba5971d6a1d6050be
   NewEMdat$CPUE =  newCPUE
   
   
@@ -67,16 +59,9 @@ BuildOM = function(OMdir, tt, ...){
   
   # Update Data
   newdat$catch[newdat$catch$year<tt,] = OMexpect_dat$catch[OMexpect_dat$catch$year<tt,]
-<<<<<<< HEAD
   newdat$catch<-round(newdat$catch, digits=5)
   newdat$CPUE[newdat$CPUE$year<tt,] = OMexpect_dat$CPUE[OMexpect_dat$CPUE$year<tt,]
   newdat$CPUE<-round( newdat$CPUE, digits=5)
-=======
-  newdat$catch$catch<-round(newdat$catch$catch, digits=5)
-  newdat$CPUE[newdat$CPUE$year<tt,] = OMexpect_dat$CPUE[OMexpect_dat$CPUE$year<tt,]
-  newdat$CPUE$obs<-round( newdat$CPUE$obs, digits=5)
-  newdat$CPUE$se_log<-round( newdat$CPUE$se_log, digits=5)
->>>>>>> 587df95c95a3c45ea94772dba5971d6a1d6050be
   newdat$lencomp[newdat$lencomp$Yr>0 & newdat$lencomp$Yr<tt,] = OMexpect_dat$lencomp[OMexpect_dat$lencomp$Yr<tt,]
   newdat$lencomp<-round(newdat$lencomp, digits=4)
   
