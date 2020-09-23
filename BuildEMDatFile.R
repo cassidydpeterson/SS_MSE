@@ -28,17 +28,19 @@ BuildEM = function(EMdir, OMdir, tt, ...) {
   
   # Replace catch with bootstrapped catch for existing years
   newcatch = subset(OMboot_dat$catch, OMboot_dat$catch$year<=EndYr)
+  newcatch<-round(newcatch, digits=5)
   NewEMdat$catch = newcatch
   
   # Replace CPUE with bootstrapped CPUE for existing years
   newCPUE = subset(OMboot_dat$CPUE, OMboot_dat$CPUE$year<=EndYr)
+  newCPUE<-round(newCPUE, digits=5)
   NewEMdat$CPUE =  newCPUE
   
   
   # replace lencomp data with bootstrapped lencomp data
   newlen = subset(OMboot_dat$lencomp, OMboot_dat$lencomp$Yr<=EndYr)     # subset length comps
   newlen$Yr = ifelse(newlen$Nsamp<1, newlen$Yr*-1, newlen$Yr)          # if Nsamp <=0, make year negative
-  
+  newlen<-round(newlen, digits=4)
   NewEMdat$lencomp = newlen
   
   # re-write new EM data file with bootstrapped historical data
@@ -56,8 +58,11 @@ BuildOM = function(OMdir, tt, ...){
   
   # Update Data
   newdat$catch[newdat$catch$year<tt,] = OMexpect_dat$catch[OMexpect_dat$catch$year<tt,]
+  newdat$catch<-round(newdat$catch, digits=5)
   newdat$CPUE[newdat$CPUE$year<tt,] = OMexpect_dat$CPUE[OMexpect_dat$CPUE$year<tt,]
+  newdat$CPUE<-round( newdat$CPUE, digits=5)
   newdat$lencomp[newdat$lencomp$Yr>0 & newdat$lencomp$Yr<tt,] = OMexpect_dat$lencomp[OMexpect_dat$lencomp$Yr<tt,]
+  newdat$lencomp<-round(newdat$lencomp, digits=4)
   
   SS_writedat(newdat, outfile=paste(OMdir,"\\SB.dat", sep=""), version="3.30", overwrite=T)
   

@@ -13,7 +13,7 @@
 # OMdir = "R:\\Management Strategy Evaluation\\SB\\TEST_Base\\HCR1\\OM" # OM directory
 
 # START FUNCTION
-implementHCR = function(hcr, tt, FRQ, modEM, OMdir, i, seed=430, ...){
+implementHCR = function(hcr, tt, FRQ, modEM, OMdir, i, seed=430, MaxCatch=2000, ...){
   set.seed(seed*tt)
   modOM = SS_output(OMdir)
   
@@ -28,7 +28,7 @@ implementHCR = function(hcr, tt, FRQ, modEM, OMdir, i, seed=430, ...){
   ### commercial catch w implementation uncertainty!   ###
   # actualCatch = rlnorm(FRQ, -0.2722412, 0.3306523) * comACL
   actualCatch = rlnorm(FRQ, -0.6015450, 0.3306523) * comACL
-  actualCatch = ifelse(actualCatch > 2000, 0, actualCatch)
+  actualCatch = ifelse(actualCatch > MaxCatch, 0, actualCatch)
   
   
   ### allocate commercial catch to area ###
@@ -170,6 +170,10 @@ implementHCR = function(hcr, tt, FRQ, modEM, OMdir, i, seed=430, ...){
     
   } # end year loop
   
+  
+  # limit number of digits
+  newOMdat$catch<-round(newOMdat$catch, digits=5)
+  newOMdat$lencomp<-round(newOMdat$lencomp, digits=4)
   
   
   # Re-write OM data file with additional FRQ years of data. 
