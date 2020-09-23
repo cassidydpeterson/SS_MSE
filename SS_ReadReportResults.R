@@ -1,7 +1,16 @@
+#####################################
+# GET MSE RESULTS
+# Working version: 8/2020
+#####################################
 
 
+
+### Call required packages -----------------------------------------------------------------------------------------------------------
 library(data.table)
+library(fmsb)
+library(vioplot)
 
+#### Build Results functions -----------------------------------------------------------------------------------------------------------
 SS_output_Report <-
   function(dir="C:/myfiles/mymodels/myrun/", dir.mcmc=NULL,
            repfile="Report.sso", #compfile="CompReport.sso",covarfile="covar.sso",
@@ -1674,21 +1683,7 @@ SS_output_Report <-
   } # end function
 
 
-xx = SS_output_Report(dir="D:\\MSE_Run\\OM_BH\\HCR1\\StoreResults", repfile="OMReport_47.sso")
-yy = SS_output_Report(dir="D:\\MSE_Run\\OM_BH\\HCR1\\StoreResults", repfile="OMReport_49.sso")
 
-
-
-
-
-
-
-##### Get Results Function -----------------------------------------------------------------------------------------------------------
-
-OM_List = c("BASE","BH","Hih","lnR0","Loh","M_BH")
-OM="Hih"
-iters=seq(47,49, by=2)
-# for(OM in OM_List){
 GET_MSE_RESULTS = function(OM="BASE", hlist=1:24, iters=seq(47,245, by=2), years=1960:2115, base_dir="D:\\MSE_Run\\MSE_Results\\"){
   
   for(h in hlist){
@@ -1709,6 +1704,7 @@ GET_MSE_RESULTS = function(OM="BASE", hlist=1:24, iters=seq(47,245, by=2), years
     MEX_Rec_catch = as.data.frame( matrix(NA, nrow=length(years), ncol=length(iters)), row.names=years ) ; colnames(MEX_Rec_catch) <- iters
     MEN_bycatch = as.data.frame( matrix(NA, nrow=length(years), ncol=length(iters)), row.names=years ) ; colnames(MEN_bycatch) <- iters
     Com_catch = as.data.frame( matrix(NA, nrow=length(years), ncol=length(iters)), row.names=years ) ; colnames(Com_catch) <- iters
+    Tot_catch = as.data.frame( matrix(NA, nrow=length(years), ncol=length(iters)), row.names=years ) ; colnames(Tot_catch) <- iters
     AvgLen_F = as.data.frame( matrix(NA, nrow=length(years), ncol=length(iters)), row.names=years ) ; colnames(AvgLen_F) <- iters
     AvgLen_M = as.data.frame( matrix(NA, nrow=length(years), ncol=length(iters)), row.names=years ) ; colnames(AvgLen_M) <- iters
     
@@ -1744,6 +1740,8 @@ GET_MSE_RESULTS = function(OM="BASE", hlist=1:24, iters=seq(47,245, by=2), years
       MEX_Rec_catch[,i] = xx$timeseries$`retain(B):_3`[3:(nrow(xx$timeseries)-1)]
       MEN_bycatch[,i] = xx$timeseries$`retain(B):_4`[3:(nrow(xx$timeseries)-1)]
       Com_catch[,i] = xx$timeseries$`retain(B):_1`[3:(nrow(xx$timeseries)-1)] + xx$timeseries$`retain(B):_2`[3:(nrow(xx$timeseries)-1)]
+      Tot_catch[,i] = xx$timeseries$`retain(B):_1`[3:(nrow(xx$timeseries)-1)] + xx$timeseries$`retain(B):_2`[3:(nrow(xx$timeseries)-1)] + 
+        xx$timeseries$`retain(B):_3`[3:(nrow(xx$timeseries)-1)] + xx$timeseries$`retain(B):_4`[3:(nrow(xx$timeseries)-1)]
       
       # Avg Lengths
       l = as.numeric(names(xx$natlen[xx$natlen$'Beg/Mid'=="B",13:ncol(xx$natlen)]))
@@ -1775,6 +1773,7 @@ GET_MSE_RESULTS = function(OM="BASE", hlist=1:24, iters=seq(47,245, by=2), years
     listx[["MEX_Rec_catch"]] <- MEX_Rec_catch
     listx[["MEN_bycatch"]] <- MEN_bycatch
     listx[["Com_catch"]] <- Com_catch
+    listx[["Tot_catch"]] <- Tot_catch
     listx[["AvgLen_F"]] <- AvgLen_F
     listx[["AvgLen_M"]] <- AvgLen_M
     listx[["F_MSY"]] <- F_MSY
@@ -1796,12 +1795,65 @@ GET_MSE_RESULTS = function(OM="BASE", hlist=1:24, iters=seq(47,245, by=2), years
   
   return(list=(  assign(paste0("OM_",OM), listy) )) 
 }
+
+
+# xx = SS_output_Report(dir="D:\\MSE_Run\\OM_BH\\HCR1\\StoreResults", repfile="OMReport_47.sso")
+# yy = SS_output_Report(dir="D:\\MSE_Run\\OM_BH\\HCR1\\StoreResults", repfile="OMReport_49.sso")
+
+
+
+
+
+
+
+##### Get Results Function -----------------------------------------------------------------------------------------------------------
+
+OM_List = c("Base","BH","Hih","lnR0","Loh","M_BH")
+# OM="Hih"
+# iters=seq(47,49, by=2)
+# for(OM in OM_List){
 # } # end OM loop
 
+### GET RESULTS ###
+# implementation 1 (real)
+OM_BASE<-GET_MSE_RESULTS(OM="Base")
+save(OM_BASE, file="D:\\MSE_Run\\MSE_Results\\OM_BASE_Results.RData")
+
+OM_BH<-GET_MSE_RESULTS(OM="BH")
+save(OM_BH, file="D:\\MSE_Run\\MSE_Results\\OM_BH_Results.RData")
+
 OM_Hih<-GET_MSE_RESULTS(OM="Hih")
-# OM_Hih<-GET_MSE_RESULTS(OM="Hih", iters=seq(47, 49, by=2), hlist=1:4) # TO TEST
 save(OM_Hih, file="D:\\MSE_Run\\MSE_Results\\OM_Hih_Results.RData")
-load(file="D:\\MSE_Run\\MSE_Results\\OM_Hih_Results.RData")
+
+OM_Loh<-GET_MSE_RESULTS(OM="Loh")
+save(OM_Loh, file="D:\\MSE_Run\\MSE_Results\\OM_Loh_Results.RData")
+
+OM_lnR0<-GET_MSE_RESULTS(OM="lnR0")
+save(OM_lnR0, file="D:\\MSE_Run\\MSE_Results\\OM_lnR0_Results.RData")
+
+OM_M_BH<-GET_MSE_RESULTS(OM="M_BH")
+save(OM_M_BH, file="D:\\MSE_Run\\MSE_Results\\OM_M_BH_Results.RData")
+
+
+# implementation 2 (MexRec)
+OM_BASE_MexRec<-GET_MSE_RESULTS(OM="Base_MexRec")
+save(OM_BASE_MexRec, file="D:\\MSE_Run\\MSE_Results\\OM_BASE_MexRec_Results.RData")
+
+OM_BH_MexRec<-GET_MSE_RESULTS(OM="BH_MexRec")
+save(OM_BH_MexRec, file="D:\\MSE_Run\\MSE_Results\\OM_BH_MexRec_Results.RData")
+
+OM_Hih_MexRec<-GET_MSE_RESULTS(OM="Hih_MexRec")
+save(OM_Hih_MexRec, file="D:\\MSE_Run\\MSE_Results\\OM_Hih_MexRec_Results.RData")
+
+OM_Loh_MexRec<-GET_MSE_RESULTS(OM="Loh_MexRec")
+save(OM_Loh_MexRec, file="D:\\MSE_Run\\MSE_Results\\OM_Loh_MexRec_Results.RData")
+
+OM_lnR0_MexRec<-GET_MSE_RESULTS(OM="lnR0_MexRec")
+save(OM_lnR0_MexRec, file="D:\\MSE_Run\\MSE_Results\\OM_lnR0_MexRec_Results.RData")
+
+OM_M_BH_MexRec<-GET_MSE_RESULTS(OM="M_BH_MexRec")
+save(OM_M_BH_MexRec, file="D:\\MSE_Run\\MSE_Results\\OM_M_BH_MexRec_Results.RData")
+
 
 
 
@@ -1819,67 +1871,1056 @@ save(MSE_Results_List, file="")
 # NOTE RESULTS STRUCTURE: MSE_RESULTS_LIST >> OM >> HCR >> Value
 
 
+#### LOAD RESULTS ####
+load(file="D:\\MSE_Run\\MSE_Results\\OM_BASE_Results.RData")
+load(file="D:\\MSE_Run\\MSE_Results\\OM_BH_Results.RData")
+load(file="D:\\MSE_Run\\MSE_Results\\OM_Hih_Results.RData")
+load(file="D:\\MSE_Run\\MSE_Results\\OM_Loh_Results.RData")
+load(file="D:\\MSE_Run\\MSE_Results\\OM_lnR0_Results.RData")
+load(file="D:\\MSE_Run\\MSE_Results\\OM_M_BH_Results.RData")
+
+
+load(file="D:\\MSE_Run\\MSE_Results\\OM_BASE_MexRec_Results.RData")
+load(file="D:\\MSE_Run\\MSE_Results\\OM_BH_MexRec_Results.RData")
+load(file="D:\\MSE_Run\\MSE_Results\\OM_Hih_MexRec_Results.RData")
+load(file="D:\\MSE_Run\\MSE_Results\\OM_Loh_MexRec_Results.RData")
+load(file="D:\\MSE_Run\\MSE_Results\\OM_lnR0_MexRec_Results.RData")
+load(file="D:\\MSE_Run\\MSE_Results\\OM_M_BH_MexRec_Results.RData")
 
 
 
-# PLOT RESULTS -----------------------------------------------------------------------------------------------------------------------------------------
+OM_Plot = OM_BASE
+OM_Name = "BASE"
+
+### MANIPULATE AND PLOT RESULTS FUNCTION -----------------------------------------------------------------------------------------------------------
+MANIP_RESULTS <- function(OM_Plot, OM_Name, plot=TRUE){
+  
+ ##### GET RESULTS ######
+  
+  ## Get AAV ##
+  AAV_all = matrix(nrow=100, ncol=24)
+  row.names(AAV_all) <- names(OM_Plot$HCR_1$Com_catch)
+  colnames(AAV_all) <- paste0("HCR_",1:24)
+  AAV=vector(length=100)
+  
+  for(hcr in 1:24){
+    HCR_iter = OM_Plot[[paste0("HCR_",hcr)]]
+    
+    for(j in 1:ncol(HCR_iter$Com_catch)){
+      
+      bb = HCR_iter$Com_catch[,j]
+      numsum = 0
+      denomsum = 0
+      for(i in (which(rownames(HCR_iter$Com_catch)=='2017')):(which(rownames(HCR_iter$Com_catch)=='2115'))  ){
+        numsum = numsum + abs(bb[i] - bb[i-1])
+        denomsum = denomsum + bb[i]
+      } # end i loop
+      
+      AAV[j] = ( numsum / denomsum ) #NOTE: NaNs == 0
+      
+    } # end j loop
+    AAVe = ifelse(is.na(AAV), 0, AAV)
+    AAV_all[,hcr] = AAVe
+  }
+  
+  AAV_HCR = apply(AAV_all , 2 , median)
+  
+  
+  
+  ## Get SSB/SSBMSY 2115 ##
+  
+  SSB_SSBMSY_2115 =  matrix(nrow=100, ncol=24) 
+  for(h in 1:24){
+    SSB_SSBMSY_2115[,h] = t( OM_Plot[[paste0("HCR_",h)]]$SSB_SSBMSY["2115",] )
+  }
+  SSB_SSBMSY_2115 <- as.data.frame(SSB_SSBMSY_2115)
+  row.names(SSB_SSBMSY_2115) <- names(OM_Plot$HCR_1$SSB_SSBMSY)
+  names(SSB_SSBMSY_2115) <- paste0("HCR_",1:24)
+  
+  
+  
+  ## Get SSB/SSBMSY 2065 ##
+  
+  SSB_SSBMSY_2065 =  matrix(nrow=100, ncol=24) 
+  for(h in 1:24){
+    SSB_SSBMSY_2065[,h] = t( OM_Plot[[paste0("HCR_",h)]]$SSB_SSBMSY["2065",] )
+  }
+  SSB_SSBMSY_2065 <- as.data.frame(SSB_SSBMSY_2065)
+  row.names(SSB_SSBMSY_2065) <- names(OM_Plot$HCR_1$SSB_SSBMSY)
+  names(SSB_SSBMSY_2065) <- paste0("HCR_",1:24)
+  
+  
+  
+  ## Get Get F/FBMSY 2115 ##
+  
+  FM_FMMSY_2115 =  matrix(nrow=100, ncol=24) 
+  for(h in 1:24){
+    FM_FMMSY_2115[,h] = t( OM_Plot[[paste0("HCR_",h)]]$FM_FMMSY["2115",] )
+  }
+  FM_FMMSY_2115 <- as.data.frame(FM_FMMSY_2115)
+  row.names(FM_FMMSY_2115) <- names(OM_Plot$HCR_1$FM_FMMSY)
+  names(FM_FMMSY_2115) <- paste0("HCR_",1:24)
+  
+  
+  
+  ## Get F/FBMSY 2065 ##
+  
+  FM_FMMSY_2065 =  matrix(nrow=100, ncol=24) 
+  for(h in 1:24){
+    FM_FMMSY_2065[,h] = t( OM_Plot[[paste0("HCR_",h)]]$FM_FMMSY["2065",] )
+  }
+  FM_FMMSY_2065 <- as.data.frame(FM_FMMSY_2065)
+  row.names(FM_FMMSY_2065) <- names(OM_Plot$HCR_1$FM_FMMSY)
+  names(FM_FMMSY_2065) <- paste0("HCR_",1:24)
+  
+  
+  
+  ## Get cumulative Catch 2016-2115 ##
+  
+  Com_Catch_cumulative =  matrix(nrow=100, ncol=24) 
+  for(h in 1:24){
+    Com_Catch_cumulative[,h] = t( apply(OM_Plot[[paste0("HCR_",h)]]$Com_catch[as.character(2016:2115),] , 2, sum) )
+  }
+  Com_Catch_cumulative <- as.data.frame(Com_Catch_cumulative)
+  row.names(Com_Catch_cumulative) <- names(OM_Plot$HCR_1$Com_catch)
+  names(Com_Catch_cumulative) <- paste0("HCR_",1:24)
+  
+  
+  
+  
+  ## Get Avg Catch 2106-2115 ##
+  
+  Com_Catch_2115 =  matrix(nrow=100, ncol=24) 
+  for(h in 1:24){
+    Com_Catch_2115[,h] = t( apply(OM_Plot[[paste0("HCR_",h)]]$Com_catch[as.character(2106:2115),] , 2, mean) )
+  }
+  Com_Catch_2115 <- as.data.frame(Com_Catch_2115)
+  row.names(Com_Catch_2115) <- names(OM_Plot$HCR_1$Com_catch)
+  names(Com_Catch_2115) <- paste0("HCR_",1:24)
+  
+  
+  ## Get Avg Catch 2056-2065 ##
+  
+  Com_Catch_2065 =  matrix(nrow=100, ncol=24) 
+  for(h in 1:24){
+    Com_Catch_2065[,h] = t( apply(OM_Plot[[paste0("HCR_",h)]]$Com_catch[as.character(2056:2065),] , 2, mean) )
+  }
+  Com_Catch_2065 <- as.data.frame(Com_Catch_2065)
+  row.names(Com_Catch_2065) <- names(OM_Plot$HCR_1$Com_catch)
+  names(Com_Catch_2065) <- paste0("HCR_",1:24)
+  
+  
+  
+  
+  
+  ll = list()
+  
+  ll[["AAV_HCR"]] = AAV_HCR
+  
+  ll[["SSB_SSBMSY_2115"]] = SSB_SSBMSY_2115 
+  
+  ll[["SSB_SSBMSY_2065"]] = SSB_SSBMSY_2065 
+  
+  ll[["FM_FMMSY_2115"]] = FM_FMMSY_2115
+  
+  ll[["FM_FMMSY_2065"]] = FM_FMMSY_2065 
+  
+  ll[["Com_Catch_cumulative"]] = Com_Catch_cumulative 
+  
+  ll[["Com_Catch_2115"]] = Com_Catch_2115 
+  
+  ll[["Com_Catch_2065"]] = Com_Catch_2065 
+  
+  assign(paste0("Results_",OM_Name), ll, envir = .GlobalEnv)
+  
+  
+  
+  ####################
+  # PLOT 
+  #################### ----------------------------------------------------------------------------------------------------------
+  if(plot==TRUE){
+    
+    library(fmsb)
+    library(vioplot)
+    
+    iters = seq(47,245, by=2)
+    years = 1960:2115
+    col_list = c(rgb(0.75, 0.75, 0.75, 0.20),rgb(0.33, 0.80, 0.92, 0.15),rgb(0.79, 0.9, 0.44, 0.3),rgb(0.86, 0.44, 0.84, 0.2))
+    col_list2 = c("black","deepskyblue3","forestgreen","darkorchid")
+    lty_list = c(2,1,2,1)
+    
+    col_lista = rep(col_list, (24/4))
+    col_list2a = rep(col_list2, (24/4))
+    lty_lista = rep(lty_list, (24/4))
+    
+    
+    
+    ####### Worm Plots ----------------------------------------------------------------------------------------------------------
+
+    # SSB/SSBMSY
+    png(filename=paste0("D:\\MSE_Run\\MSE_Results\\Plots\\",OM_Name,"_WORM_SSBSSBMSY.png"),
+        type="cairo",
+        units="mm",
+        width=300,
+        height=225,
+        pointsize=16,
+        res=300)
+    par(mfrow=c(2,3),  mar=c(1.1, 1.6, 1.5, 0.3),tcl = -0.1, mgp = c(0.8, 0.1, 0), cex=1, oma = c(0, 1, 2, 0))
+    for(k in 1:(24/4)){
+      kh = k*4
+      hlist=c(kh, kh-1, kh-2, kh-3)
+      plot(years, OM_Plot$HCR_1$SSB_SSBMSY[,1], type='l', col="white", ylim=c(0, 2.5), ylab="")
+      if(k==1) { mtext(expression("F"["lim"]*"= F"["MSY"]), side=3, line=0, cex=0.8) }
+      if(k==2) { mtext(expression("F"["lim"]*"= M"), side=3, line=0, cex=0.8) }
+      if(k==3) { mtext(expression("F"["lim"]*"= 0.8M"), side=3, line=0, cex=0.8) }
+      if(k==4) { mtext(expression("F"["lim"]*"= 0.6M"), side=3, line=0, cex=0.8) }
+      if(k==5) { mtext(expression("F"["lim"]*"= 0.4M"), side=3, line=0, cex=0.8) }
+      if(k==6) { mtext(expression("F"["lim"]*"= 0.2M"), side=3, line=0, cex=0.8) }
+      if(k==6) { legend("topright",c(expression("a=0, b=B"["MSY"]), expression("a=0, b=0.8B"["MSY"]),
+                                     expression("a=0.3B"[0]*", b=B"["MSY"]), expression("a=0.3B"[0]*", b=0.8B"["MSY"])),
+                        col=col_list2, lty=lty_list, cex=0.7, bty='n') }
+      abline(h=1)
+      for(h in hlist){
+        for(i in 1:length(iters)){
+          lines(years, OM_Plot[[paste0("HCR_",h)]]$SSB_SSBMSY[,i], col=col_lista[h])
+        }
+      }
+      for(h in hlist){
+        lines(years, apply(OM_Plot[[paste0("HCR_",h)]]$SSB_SSBMSY, 1, median), type='l', lwd=2, col=col_list2a[h], lty=lty_lista[h])
+      }
+    }
+    mtext(OM_Name, outer = TRUE, cex = 1.5, line=-0.2)
+    mtext(expression("SSB/SSB"["MSY"])  , side=2, outer = TRUE, cex = 1.5, line=-0.5)
+    dev.off()
+
+    
+    
+    # F/FMSY
+    png(filename=paste0("D:\\MSE_Run\\MSE_Results\\Plots\\",OM_Name,"_WORM_FFMSY.png"),
+        type="cairo",
+        units="mm",
+        width=300,
+        height=225,
+        pointsize=16,
+        res=300)
+    par(mfrow=c(2,3),  mar=c(1.1, 1.6, 1.5, 0.3),tcl = -0.1, mgp = c(0.8, 0.1, 0), cex=1, oma = c(0, 1, 2, 0))
+    for(k in 1:(24/4)){
+      kh = k*4
+      hlist=c(kh, kh-1, kh-2, kh-3)
+      plot(years, OM_Plot$HCR_1$FM_FMMSY[,1], type='l', col="white", ylim=c(0, 10), ylab="")
+      abline(h=1)
+      if(k==1) { mtext(expression("F"["lim"]*"= F"["MSY"]), side=3, line=0, cex=0.8) }
+      if(k==2) { mtext(expression("F"["lim"]*"= M"), side=3, line=0, cex=0.8) }
+      if(k==3) { mtext(expression("F"["lim"]*"= 0.8M"), side=3, line=0, cex=0.8) }
+      if(k==4) { mtext(expression("F"["lim"]*"= 0.6M"), side=3, line=0, cex=0.8) }
+      if(k==5) { mtext(expression("F"["lim"]*"= 0.4M"), side=3, line=0, cex=0.8) }
+      if(k==6) { mtext(expression("F"["lim"]*"= 0.2M"), side=3, line=0, cex=0.8) }
+      if(k==6) { legend("topright",c(expression("a=0, b=B"["MSY"]), expression("a=0, b=0.8B"["MSY"]),
+                                     expression("a=0.3B"[0]*", b=B"["MSY"]), expression("a=0.3B"[0]*", b=0.8B"["MSY"])),
+                        col=col_list2, lty=lty_list, cex=0.7, bty='n') }
+      for(h in hlist){
+        for(i in 1:length(iters)){
+          lines(years, OM_Plot[[paste0("HCR_",h)]]$FM_FMMSY[,i], col=col_lista[h])
+        }
+      }
+      abline(h=1)
+      for(h in hlist){
+        lines(years, apply(OM_Plot[[paste0("HCR_",h)]]$FM_FMMSY, 1, median), type='l', lwd=2, col=col_list2a[h], lty=lty_lista[h])
+      }
+    }
+    mtext(OM_Name, outer = TRUE, cex = 1.5, line=-0.2)
+    mtext(expression("F/F"["MSY"])  , side=2, outer = TRUE, cex = 1.5, line=-0.5)
+    dev.off()
+
+    
+    
+    # Commercial Catch
+    png(filename=paste0("D:\\MSE_Run\\MSE_Results\\Plots\\",OM_Name,"_WORM_ComCatch.png"),
+        type="cairo",
+        units="mm",
+        width=300,
+        height=225,
+        pointsize=16,
+        res=300)
+    par(mfrow=c(2,3),  mar=c(1.1, 1.6, 1.5, 0.3),tcl = -0.1, mgp = c(0.8, 0.1, 0), cex=1, oma = c(0, 1, 2, 0))
+    for(k in 1:(24/4)){
+      kh = k*4
+      hlist=c(kh, kh-1, kh-2, kh-3)
+      plot(years, OM_Plot$HCR_1$Com_catch[,1], type='l', col="white", ylim=c(0, 1000), ylab="")
+      abline(h=1)
+      if(k==1) { mtext(expression("F"["lim"]*"= F"["MSY"]), side=3, line=0, cex=0.8) }
+      if(k==2) { mtext(expression("F"["lim"]*"= M"), side=3, line=0, cex=0.8) }
+      if(k==3) { mtext(expression("F"["lim"]*"= 0.8M"), side=3, line=0, cex=0.8) }
+      if(k==4) { mtext(expression("F"["lim"]*"= 0.6M"), side=3, line=0, cex=0.8) }
+      if(k==5) { mtext(expression("F"["lim"]*"= 0.4M"), side=3, line=0, cex=0.8) }
+      if(k==6) { mtext(expression("F"["lim"]*"= 0.2M"), side=3, line=0, cex=0.8) }
+      if(k==6) { legend("topright",c(expression("a=0, b=B"["MSY"]), expression("a=0, b=0.8B"["MSY"]),
+                                     expression("a=0.3B"[0]*", b=B"["MSY"]), expression("a=0.3B"[0]*", b=0.8B"["MSY"])),
+                        col=col_list2, lty=lty_list, cex=0.7, bty='n') }
+      for(h in hlist){
+        for(i in 1:length(iters)){
+          lines(years, OM_Plot[[paste0("HCR_",h)]]$Com_catch[,i], col=col_lista[h])
+        }
+      }
+      for(h in hlist){
+        lines(years, apply(OM_Plot[[paste0("HCR_",h)]]$Com_catch, 1, median), type='l', lwd=2, col=col_list2a[h], lty=lty_lista[h])
+      }
+    }
+    mtext(OM_Name, outer = TRUE, cex = 1.5, line=-0.2)
+    mtext("Commercial Catch", side=2, outer = TRUE, cex = 1.5, line=-0.5)
+    dev.off()
+    
+    
+    
+    # MEX Catch
+    png(filename=paste0("D:\\MSE_Run\\MSE_Results\\Plots\\",OM_Name,"_WORM_MEXRecCatch.png"),
+        type="cairo",
+        units="mm",
+        width=300,
+        height=225,
+        pointsize=16,
+        res=300)
+    par(mfrow=c(2,3),  mar=c(1.1, 1.6, 1.5, 0.3),tcl = -0.1, mgp = c(0.8, 0.1, 0), cex=1, oma = c(0, 1, 2, 0))
+    for(k in 1:(24/4)){
+      kh = k*4
+      hlist=c(kh, kh-1, kh-2, kh-3)
+      plot(years, OM_Plot$HCR_1$MEX_Rec_catch[,1], type='l', col="white", ylim=c(0, 1000), ylab="")
+      abline(h=1)
+      if(k==1) { mtext(expression("F"["lim"]*"= F"["MSY"]), side=3, line=0, cex=0.8) }
+      if(k==2) { mtext(expression("F"["lim"]*"= M"), side=3, line=0, cex=0.8) }
+      if(k==3) { mtext(expression("F"["lim"]*"= 0.8M"), side=3, line=0, cex=0.8) }
+      if(k==4) { mtext(expression("F"["lim"]*"= 0.6M"), side=3, line=0, cex=0.8) }
+      if(k==5) { mtext(expression("F"["lim"]*"= 0.4M"), side=3, line=0, cex=0.8) }
+      if(k==6) { mtext(expression("F"["lim"]*"= 0.2M"), side=3, line=0, cex=0.8) }
+      if(k==6) { legend("topright",c(expression("a=0, b=B"["MSY"]), expression("a=0, b=0.8B"["MSY"]),
+                                     expression("a=0.3B"[0]*", b=B"["MSY"]), expression("a=0.3B"[0]*", b=0.8B"["MSY"])),
+                        col=col_list2, lty=lty_list, cex=0.7, bty='n') }
+      for(h in hlist){
+        for(i in 1:length(iters)){
+          lines(years, OM_Plot[[paste0("HCR_",h)]]$MEX_Rec_catch[,i], col=col_lista[h])
+        }
+      }
+      for(h in hlist){
+        lines(years, apply(OM_Plot[[paste0("HCR_",h)]]$MEX_Rec_catch, 1, median), type='l', lwd=2, col=col_list2a[h], lty=lty_lista[h])
+      }
+    }
+    mtext(OM_Name, outer = TRUE, cex = 1.5, line=-0.2)
+    mtext("Mexican & Recreational Catch", side=2, outer = TRUE, cex = 1.5, line=-0.5)
+    dev.off()
+    
+    
+    
+    # Total Catch
+    png(filename=paste0("D:\\MSE_Run\\MSE_Results\\Plots\\",OM_Name,"_WORM_TotalCatch.png"),
+        type="cairo",
+        units="mm",
+        width=300,
+        height=225,
+        pointsize=16,
+        res=300)
+    par(mfrow=c(2,3),  mar=c(1.1, 1.6, 1.5, 0.3),tcl = -0.1, mgp = c(0.8, 0.1, 0), cex=1, oma = c(0, 1, 2, 0))
+    for(k in 1:(24/4)){
+      kh = k*4
+      hlist=c(kh, kh-1, kh-2, kh-3)
+      plot(years, OM_Plot$HCR_1$Tot_catch[,1], type='l', col="white", ylim=c(0, 1000), ylab="")
+      abline(h=1)
+      if(k==1) { mtext(expression("F"["lim"]*"= F"["MSY"]), side=3, line=0, cex=0.8) }
+      if(k==2) { mtext(expression("F"["lim"]*"= M"), side=3, line=0, cex=0.8) }
+      if(k==3) { mtext(expression("F"["lim"]*"= 0.8M"), side=3, line=0, cex=0.8) }
+      if(k==4) { mtext(expression("F"["lim"]*"= 0.6M"), side=3, line=0, cex=0.8) }
+      if(k==5) { mtext(expression("F"["lim"]*"= 0.4M"), side=3, line=0, cex=0.8) }
+      if(k==6) { mtext(expression("F"["lim"]*"= 0.2M"), side=3, line=0, cex=0.8) }
+      if(k==6) { legend("topright",c(expression("a=0, b=B"["MSY"]), expression("a=0, b=0.8B"["MSY"]),
+                                     expression("a=0.3B"[0]*", b=B"["MSY"]), expression("a=0.3B"[0]*", b=0.8B"["MSY"])),
+                        col=col_list2, lty=lty_list, cex=0.7, bty='n') }
+      for(h in hlist){
+        for(i in 1:length(iters)){
+          lines(years, OM_Plot[[paste0("HCR_",h)]]$Tot_catch[,i], col=col_lista[h])
+        }
+      }
+      for(h in hlist){
+        lines(years, apply(OM_Plot[[paste0("HCR_",h)]]$Tot_catch, 1, median), type='l', lwd=2, col=col_list2a[h], lty=lty_lista[h])
+      }
+    }
+    mtext(OM_Name, outer = TRUE, cex = 1.5, line=-0.2)
+    mtext("Total Catch", side=2, outer = TRUE, cex = 1.5, line=-0.5)
+    dev.off()
+    
+    
+    # SSB/SSB0
+    png(filename=paste0("D:\\MSE_Run\\MSE_Results\\Plots\\",OM_Name,"_WORM_SSBSSB0.png"),
+        type="cairo",
+        units="mm",
+        width=300,
+        height=225,
+        pointsize=16,
+        res=300)
+    par(mfrow=c(2,3),  mar=c(1.1, 1.6, 1.5, 0.3),tcl = -0.1, mgp = c(0.8, 0.1, 0), cex=1, oma = c(0, 1, 2, 0))
+    for(k in 1:(24/4)){
+      kh = k*4
+      hlist=c(kh, kh-1, kh-2, kh-3)
+      plot(years, OM_Plot$HCR_1$SSB_SSB0[,1], type='l', col="white", ylim=c(0, 1.1), ylab="")
+      abline(h=1)
+      if(k==1) { mtext(expression("F"["lim"]*"= F"["MSY"]), side=3, line=0, cex=0.8) }
+      if(k==2) { mtext(expression("F"["lim"]*"= M"), side=3, line=0, cex=0.8) }
+      if(k==3) { mtext(expression("F"["lim"]*"= 0.8M"), side=3, line=0, cex=0.8) }
+      if(k==4) { mtext(expression("F"["lim"]*"= 0.6M"), side=3, line=0, cex=0.8) }
+      if(k==5) { mtext(expression("F"["lim"]*"= 0.4M"), side=3, line=0, cex=0.8) }
+      if(k==6) { mtext(expression("F"["lim"]*"= 0.2M"), side=3, line=0, cex=0.8) }
+      if(k==6) { legend("topright",c(expression("a=0, b=B"["MSY"]), expression("a=0, b=0.8B"["MSY"]),
+                                     expression("a=0.3B"[0]*", b=B"["MSY"]), expression("a=0.3B"[0]*", b=0.8B"["MSY"])),
+                        col=col_list2, lty=lty_list, cex=0.7, bty='n') }
+      for(h in hlist){
+        for(i in 1:length(iters)){
+          lines(years, OM_Plot[[paste0("HCR_",h)]]$SSB_SSB0[,i], col=col_lista[h])
+        }
+      }
+      for(h in hlist){
+        lines(years, apply(OM_Plot[[paste0("HCR_",h)]]$SSB_SSB0, 1, median), type='l', lwd=2, col=col_list2a[h], lty=lty_lista[h])
+      }
+    }
+    mtext(OM_Name, outer = TRUE, cex = 1.5, line=-0.2)
+    mtext(expression("SSB/SSB"[0])  , side=2, outer = TRUE, cex = 1.5, line=-0.5)
+    dev.off()
+
+    
+    
+    # avg length 
+    png(filename=paste0("D:\\MSE_Run\\MSE_Results\\Plots\\",OM_Name,"_WORM_AvgLen.png"),
+        type="cairo",
+        units="mm",
+        width=300,
+        height=225,
+        pointsize=16,
+        res=300)
+    par(mfrow=c(2,3),  mar=c(1.1, 1.6, 1.5, 0.3),tcl = -0.1, mgp = c(0.8, 0.1, 0), cex=1, oma = c(0, 1, 2, 0))
+    for(k in 1:(24/4)){
+      kh = k*4
+      hlist=c(kh, kh-1, kh-2, kh-3)
+      plot(years, OM_Plot$HCR_1$AvgLen_F[,1], type='l', col="white", ylim=c(85, 130), ylab="")
+      abline(h=1)
+      if(k==1) { mtext(expression("F"["lim"]*"= F"["MSY"]), side=3, line=0, cex=0.8) }
+      if(k==2) { mtext(expression("F"["lim"]*"= M"), side=3, line=0, cex=0.8) }
+      if(k==3) { mtext(expression("F"["lim"]*"= 0.8M"), side=3, line=0, cex=0.8) }
+      if(k==4) { mtext(expression("F"["lim"]*"= 0.6M"), side=3, line=0, cex=0.8) }
+      if(k==5) { mtext(expression("F"["lim"]*"= 0.4M"), side=3, line=0, cex=0.8) }
+      if(k==6) { mtext(expression("F"["lim"]*"= 0.2M"), side=3, line=0, cex=0.8) }
+      if(k==6) { legend("topright",c(expression("a=0, b=B"["MSY"]), expression("a=0, b=0.8B"["MSY"]),
+                                     expression("a=0.3B"[0]*", b=B"["MSY"]), expression("a=0.3B"[0]*", b=0.8B"["MSY"])),
+                        col=col_list2, lty=lty_list, cex=0.7, bty='n') }
+      for(h in hlist){
+        for(i in 1:length(iters)){
+          lines(years, OM_Plot[[paste0("HCR_",h)]]$AvgLen_F[,i], col=col_lista[h])
+        }
+      }
+      for(h in hlist){
+        lines(years, apply(OM_Plot[[paste0("HCR_",h)]]$AvgLen_F, 1, median), type='l', lwd=2, col=col_list2a[h], lty=lty_lista[h])
+      }
+    }
+    mtext(OM_Name, outer = TRUE, cex = 1.5, line=-0.2)
+    mtext("Average Length"  , side=2, outer = TRUE, cex = 1.5, line=-0.5)
+    dev.off()
+
+    
+    
+    
+    
+    
+    
+    ####### RADAR PLOTS ----------------------------------------------------------------------------------------------------------
+
+    
+    
+    ### Format data table 
+    # FOR HCR 1-4:
+    h=1:24
+    h2= c(rep(1, 4), rep(2, 4), rep(3, 4), rep(4, 4), rep(5, 4), rep(6, 4) )
+    # h=1
+    
+    data1 = matrix(c(1, 3, 300, 1, 120, 0, 0, 0, 0, 80), ncol=5, byrow=T)
+    data2 = matrix(c(1, 3, 300, 1, 120, 0, 0, 0, 0, 80), ncol=5, byrow=T)
+    data3 = matrix(c(1, 3, 300, 1, 120, 0, 0, 0, 0, 80), ncol=5, byrow=T)
+    data4 = matrix(c(1, 3, 300, 1, 120, 0, 0, 0, 0, 80), ncol=5, byrow=T)
+    data5 = matrix(c(1, 3, 300, 1, 120, 0, 0, 0, 0, 80), ncol=5, byrow=T)
+    data6 = matrix(c(1, 3, 300, 1, 120, 0, 0, 0, 0, 80), ncol=5, byrow=T)
+    for(h in h){
+      if(h2[h]==1){
+        data1 = rbind(data1, c(
+          apply(OM_Plot[[paste0("HCR_",h)]]$SSB_SSBMSY, 1, median)[length(years)] ,
+          apply(OM_Plot[[paste0("HCR_",h)]]$FM_FMMSY, 1, median)[length(years)] ,
+          mean( apply(OM_Plot[[paste0("HCR_",h)]]$Com_catch, 1, median)[(length(years)-4):length(years)] ) ,
+          AAV_HCR[h] ,
+          mean( apply(OM_Plot[[paste0("HCR_",h)]]$AvgLen_F, 1, median)[(length(years)-4):length(years)] ) 
+        ) )
+      } # end if h2=1
+      
+      if(h2[h]==2){
+        data2 = rbind(data2, c(
+          apply(OM_Plot[[paste0("HCR_",h)]]$SSB_SSBMSY, 1, median)[length(years)] ,
+          apply(OM_Plot[[paste0("HCR_",h)]]$FM_FMMSY, 1, median)[length(years)] ,
+          mean( apply(OM_Plot[[paste0("HCR_",h)]]$Com_catch, 1, median)[(length(years)-4):length(years)] ) ,
+          AAV_HCR[h] ,
+          mean( apply(OM_Plot[[paste0("HCR_",h)]]$AvgLen_F, 1, median)[(length(years)-4):length(years)] ) 
+        ) )
+      } # end if h2=2
+      
+      if(h2[h]==3){
+        data3 = rbind(data3, c(
+          apply(OM_Plot[[paste0("HCR_",h)]]$SSB_SSBMSY, 1, median)[length(years)] ,
+          apply(OM_Plot[[paste0("HCR_",h)]]$FM_FMMSY, 1, median)[length(years)] ,
+          mean( apply(OM_Plot[[paste0("HCR_",h)]]$Com_catch, 1, median)[(length(years)-4):length(years)] ) ,
+          AAV_HCR[h] ,
+          mean( apply(OM_Plot[[paste0("HCR_",h)]]$AvgLen_F, 1, median)[(length(years)-4):length(years)] ) 
+        ) )
+      } # end if h2=3
+      
+      if(h2[h]==4){
+        data4 = rbind(data4, c(
+          apply(OM_Plot[[paste0("HCR_",h)]]$SSB_SSBMSY, 1, median)[length(years)] ,
+          apply(OM_Plot[[paste0("HCR_",h)]]$FM_FMMSY, 1, median)[length(years)] ,
+          mean( apply(OM_Plot[[paste0("HCR_",h)]]$Com_catch, 1, median)[(length(years)-4):length(years)] ) ,
+          AAV_HCR[h] ,
+          mean( apply(OM_Plot[[paste0("HCR_",h)]]$AvgLen_F, 1, median)[(length(years)-4):length(years)] ) 
+        ) )
+      } # end if h2=4
+      
+      if(h2[h]==5){
+        data5 = rbind(data5, c(
+          apply(OM_Plot[[paste0("HCR_",h)]]$SSB_SSBMSY, 1, median)[length(years)] ,
+          apply(OM_Plot[[paste0("HCR_",h)]]$FM_FMMSY, 1, median)[length(years)] ,
+          mean( apply(OM_Plot[[paste0("HCR_",h)]]$Com_catch, 1, median)[(length(years)-4):length(years)] ) ,
+          AAV_HCR[h] ,
+          mean( apply(OM_Plot[[paste0("HCR_",h)]]$AvgLen_F, 1, median)[(length(years)-4):length(years)] ) 
+        ) )
+      } # end if h2=5
+      
+      if(h2[h]==6){
+        data6 = rbind(data6, c(
+          apply(OM_Plot[[paste0("HCR_",h)]]$SSB_SSBMSY, 1, median)[length(years)] ,
+          apply(OM_Plot[[paste0("HCR_",h)]]$FM_FMMSY, 1, median)[length(years)] ,
+          mean( apply(OM_Plot[[paste0("HCR_",h)]]$Com_catch, 1, median)[(length(years)-4):length(years)] ) ,
+          AAV_HCR[h] ,
+          mean( apply(OM_Plot[[paste0("HCR_",h)]]$AvgLen_F, 1, median)[(length(years)-4):length(years)] ) 
+        ) )
+      } # end if h2=6
+      
+      
+    } # end h loop. 
+    
+    colnames(data1) <- c("SSB2015/SSBMSY","F2015/FMSY", "Com Catch 2110-2115","AAV","Avg Len 2110-2115")
+    row.names(data1) <- c("max",'min','HCR1','HCR2','HCR3','HCR4')
+    data1 = as.data.frame(data1)
+    colnames(data2) <- c("SSB2015/SSBMSY","F2015/FMSY", "Com Catch 2110-2115","AAV","Avg Len 2110-2115")
+    row.names(data2) <- c("max",'min','HCR5','HCR6','HCR7','HCR8')
+    data2 = as.data.frame(data2)
+    colnames(data3) <- c("SSB2015/SSBMSY","F2015/FMSY", "Com Catch 2110-2115","AAV","Avg Len 2110-2115")
+    row.names(data3) <- c("max",'min','HCR9','HCR10','HCR11','HCR12')
+    data3 = as.data.frame(data3)
+    colnames(data4) <- c("SSB2015/SSBMSY","F2015/FMSY", "Com Catch 2110-2115","AAV","Avg Len 2110-2115")
+    row.names(data4) <- c("max",'min','HCR13','HCR14','HCR15','HCR16')
+    data4 = as.data.frame(data4)
+    colnames(data5) <- c("SSB2015/SSBMSY","F2015/FMSY", "Com Catch 2110-2115","AAV","Avg Len 2110-2115")
+    row.names(data5) <- c("max",'min','HCR17','HCR18','HCR19','HCR20')
+    data5 = as.data.frame(data5)
+    colnames(data6) <- c("SSB2015/SSBMSY","F2015/FMSY", "Com Catch 2110-2115","AAV","Avg Len 2110-2115")
+    row.names(data6) <- c("max",'min','HCR21','HCR22','HCR23','HCR24')
+    data6 = as.data.frame(data6)
+    
+    # plot
+    png(filename=paste0("D:\\MSE_Run\\MSE_Results\\Plots\\",OM_Name,"_RADAR.png"),
+        type="cairo",
+        units="mm",
+        width=400,
+        height=300,
+        pointsize=16,
+        res=300)
+    par(mfrow=c(2,3), mar=c(0.5, 1, 0.5, 1), oma = c(0, 0, 1.1, 0))
+    colors_border=c( rgb(0,0,1,1), rgb(1,0,0,1) , rgb(0,1,0,1), rgb(0.627, 0.125, 0.941, 1) )
+    colors_in=c( rgb(0,0,1,0.2), rgb(1,0,0,0.2) , rgb(0,1,0,0.2) , rgb(0.627, 0.125, 0.941, 0.2))
+    plty_list=c(1, 2, 1, 2)
+    counter=0
+    for(d in list(data1, data2, data3, data4, data5, data6)){
+      counter=counter+1
+      radarchart( d  , axistype=1 ,
+                  #custom polygon
+                  pcol=colors_border , pfcol=colors_in , plwd=2 , plty=plty_list, #plty is line type of polygon
+                  #custom the grid
+                  cglcol="grey", cglty=1, axislabcol="grey", cglwd=0.8,
+                  #custom labels
+                  vlcex=1
+      )
+  
+      if(counter==1) { mtext(expression("F"["lim"]*"= F"["MSY"]), side=3, line=-2, cex=0.8) }
+      if(counter==2) { mtext(expression("F"["lim"]*"= M"), side=3, line=-2, cex=0.8) }
+      if(counter==3) { mtext(expression("F"["lim"]*"= 0.8M"), side=3, line=-2, cex=0.8) }
+      if(counter==4) { mtext(expression("F"["lim"]*"= 0.6M"), side=3, line=-2, cex=0.8) }
+      if(counter==5) { mtext(expression("F"["lim"]*"= 0.4M"), side=3, line=-2, cex=0.8) }
+      if(counter==6) { mtext(expression("F"["lim"]*"= 0.2M"), side=3, line=-2, cex=0.8) }
+      if(counter==2) { legend("bottom",c(expression("a=0, b=B"["MSY"]), expression("a=0, b=0.8B"["MSY"]),
+                                     expression("a=0.3B"[0]*", b=B"["MSY"]), expression("a=0.3B"[0]*", b=0.8B"["MSY"])),
+                        col=col_list2, lty=lty_list, cex=0.8, bty='n', ncol=2) }
+    }
+    mtext(OM_Name, outer = TRUE, cex = 1.5, line=-0.8)
+    dev.off()
+    
+    
+    
+    
+    
+    
+    
+    
+    ######## Violin Plots ----------------------------------------------------------------------------------------------------------
+
+    
+    
+    ## Get SSB/SSBMSY 2115 ##
+    png(filename=paste0("D:\\MSE_Run\\MSE_Results\\Plots\\",OM_Name,"_VIOLIN_SSBSSBMSY2115.png"),
+        type="cairo",
+        units="mm",
+        width=300,
+        height=225,
+        pointsize=16,
+        res=300)
+    par(mfrow=c(2,3), mar=c(1.1, 1.6, 1, 0.3),tcl = -0.1, mgp = c(0.8, 0.1, 0), cex=1, oma=c(0,1.5,2,0))
+    for(r in seq(1, 24, by=4)){
+      vioplot(SSB_SSBMSY_2115[,r], SSB_SSBMSY_2115[,(r+1)], SSB_SSBMSY_2115[,(r+2)], SSB_SSBMSY_2115[,(r+3)], 
+              col=c("dimgrey","deepskyblue3","forestgreen","darkorchid"), ylim=c(0, 2.5), names=c(rep("", 4)) )
+      abline(h=1)
+      if(r==1) { mtext(expression("F"["lim"]*"= F"["MSY"]), side=3, line=0, cex=0.8) }
+      if(r==5) { mtext(expression("F"["lim"]*"= M"), side=3, line=0, cex=0.8) }
+      if(r==9) { mtext(expression("F"["lim"]*"= 0.8M"), side=3, line=0, cex=0.8) }
+      if(r==13) { mtext(expression("F"["lim"]*"= 0.6M"), side=3, line=0, cex=0.8) }
+      if(r==17) { mtext(expression("F"["lim"]*"= 0.4M"), side=3, line=0, cex=0.8) }
+      if(r==21) { mtext(expression("F"["lim"]*"= 0.2M"), side=3, line=0, cex=0.8) }
+      if(r==21) { legend("bottomright",c(expression("a=0, b=B"["MSY"]), expression("a=0, b=0.8B"["MSY"]),
+                                     expression("a=0.3B"[0]*", b=B"["MSY"]), expression("a=0.3B"[0]*", b=0.8B"["MSY"])),
+                        fill=col_list2, cex=0.8, bty='n') }
+    }
+    mtext(OM_Name, outer = TRUE, cex = 1.5, line=0)
+    mtext(expression("SSB"[2115]*"/SSB"["MSY"])  , side=2, outer = TRUE, cex = 1.5, line=-0.3)
+    dev.off()
+    
+    
+    ## Get SSB/SSBMSY 2065 ##
+    png(filename=paste0("D:\\MSE_Run\\MSE_Results\\Plots\\",OM_Name,"_VIOLIN_SSBSSBMSY2065.png"),
+        type="cairo",
+        units="mm",
+        width=300,
+        height=225,
+        pointsize=16,
+        res=300)
+    par(mfrow=c(2,3), mar=c(1.1, 1.6, 1, 0.3),tcl = -0.1, mgp = c(0.8, 0.1, 0), cex=1, oma=c(0,1.5,2,0))
+    for(r in seq(1, 24, by=4)){
+      vioplot(SSB_SSBMSY_2065[,r], SSB_SSBMSY_2065[,(r+1)], SSB_SSBMSY_2065[,(r+2)], SSB_SSBMSY_2065[,(r+3)], 
+              col=c("dimgrey","deepskyblue3","forestgreen","darkorchid"), ylim=c(0, 2), names=c(rep("", 4)))
+      abline(h=1)
+      if(r==1) { mtext(expression("F"["lim"]*"= F"["MSY"]), side=3, line=0, cex=0.8) }
+      if(r==5) { mtext(expression("F"["lim"]*"= M"), side=3, line=0, cex=0.8) }
+      if(r==9) { mtext(expression("F"["lim"]*"= 0.8M"), side=3, line=0, cex=0.8) }
+      if(r==13) { mtext(expression("F"["lim"]*"= 0.6M"), side=3, line=0, cex=0.8) }
+      if(r==17) { mtext(expression("F"["lim"]*"= 0.4M"), side=3, line=0, cex=0.8) }
+      if(r==21) { mtext(expression("F"["lim"]*"= 0.2M"), side=3, line=0, cex=0.8) }
+      if(r==21) { legend("bottomright",c(expression("a=0, b=B"["MSY"]), expression("a=0, b=0.8B"["MSY"]),
+                                         expression("a=0.3B"[0]*", b=B"["MSY"]), expression("a=0.3B"[0]*", b=0.8B"["MSY"])),
+                         fill=col_list2, cex=0.8, bty='n') }
+    }
+    mtext(OM_Name, outer = TRUE, cex = 1.5, line=0)
+    mtext(expression("SSB"[2065]*"/SSB"["MSY"])  , side=2, outer = TRUE, cex = 1.5, line=-0.3)
+    dev.off()
+    
+    
+    ## Get Get F/FBMSY 2115 ##
+    png(filename=paste0("D:\\MSE_Run\\MSE_Results\\Plots\\",OM_Name,"_VIOLIN_FFMSY2115.png"),
+        type="cairo",
+        units="mm",
+        width=300,
+        height=225,
+        pointsize=16,
+        res=300)
+    par(mfrow=c(2,3), mar=c(1.1, 1.6, 1, 0.3),tcl = -0.1, mgp = c(0.8, 0.1, 0), cex=1, oma=c(0,1.5,2,0))
+    for(r in seq(1, 24, by=4)){
+      vioplot(FM_FMMSY_2115[,r], FM_FMMSY_2115[,(r+1)], FM_FMMSY_2115[,(r+2)], FM_FMMSY_2115[,(r+3)], 
+              col=c("dimgrey","deepskyblue3","forestgreen","darkorchid"), ylim=c(0, 2.5), names=c(rep("", 4)))
+      abline(h=1)
+      if(r==1) { mtext(expression("F"["lim"]*"= F"["MSY"]), side=3, line=0, cex=0.8) }
+      if(r==5) { mtext(expression("F"["lim"]*"= M"), side=3, line=0, cex=0.8) }
+      if(r==9) { mtext(expression("F"["lim"]*"= 0.8M"), side=3, line=0, cex=0.8) }
+      if(r==13) { mtext(expression("F"["lim"]*"= 0.6M"), side=3, line=0, cex=0.8) }
+      if(r==17) { mtext(expression("F"["lim"]*"= 0.4M"), side=3, line=0, cex=0.8) }
+      if(r==21) { mtext(expression("F"["lim"]*"= 0.2M"), side=3, line=0, cex=0.8) }
+      if(r==21) { legend("topright",c(expression("a=0, b=B"["MSY"]), expression("a=0, b=0.8B"["MSY"]),
+                                         expression("a=0.3B"[0]*", b=B"["MSY"]), expression("a=0.3B"[0]*", b=0.8B"["MSY"])),
+                         fill=col_list2, cex=0.8, bty='n') }
+    }
+    mtext(OM_Name, outer = TRUE, cex = 1.5, line=0)
+    mtext(expression("F"[2115]*"/F"["MSY"])  , side=2, outer = TRUE, cex = 1.5, line=-0.3)
+    dev.off()
+    
+    
+    ## Get F/FBMSY 2065 ##
+    png(filename=paste0("D:\\MSE_Run\\MSE_Results\\Plots\\",OM_Name,"_VIOLIN_FFMSY2065.png"),
+        type="cairo",
+        units="mm",
+        width=300,
+        height=225,
+        pointsize=16,
+        res=300)
+    par(mfrow=c(2,3), mar=c(1.1, 1.6, 1, 0.3),tcl = -0.1, mgp = c(0.8, 0.1, 0), cex=1, oma=c(0,1.5,2,0))
+    for(r in seq(1, 24, by=4)){
+      vioplot(FM_FMMSY_2065[,r], FM_FMMSY_2065[,(r+1)], FM_FMMSY_2065[,(r+2)], FM_FMMSY_2065[,(r+3)], 
+              col=c("dimgrey","deepskyblue3","forestgreen","darkorchid"), ylim=c(0, 4), names=c(rep("", 4)))
+      abline(h=1)
+      if(r==1) { mtext(expression("F"["lim"]*"= F"["MSY"]), side=3, line=0, cex=0.8) }
+      if(r==5) { mtext(expression("F"["lim"]*"= M"), side=3, line=0, cex=0.8) }
+      if(r==9) { mtext(expression("F"["lim"]*"= 0.8M"), side=3, line=0, cex=0.8) }
+      if(r==13) { mtext(expression("F"["lim"]*"= 0.6M"), side=3, line=0, cex=0.8) }
+      if(r==17) { mtext(expression("F"["lim"]*"= 0.4M"), side=3, line=0, cex=0.8) }
+      if(r==21) { mtext(expression("F"["lim"]*"= 0.2M"), side=3, line=0, cex=0.8) }
+      if(r==21) { legend("topright",c(expression("a=0, b=B"["MSY"]), expression("a=0, b=0.8B"["MSY"]),
+                                         expression("a=0.3B"[0]*", b=B"["MSY"]), expression("a=0.3B"[0]*", b=0.8B"["MSY"])),
+                         fill=col_list2, cex=0.8, bty='n') }
+    }
+    mtext(OM_Name, outer = TRUE, cex = 1.5, line=0)
+    mtext(expression("F"[2065]*"/F"["MSY"])  , side=2, outer = TRUE, cex = 1.5, line=-0.3)
+    dev.off()
+    
+    
+    
+    
+    ## cumulative Catch  ##
+    png(filename=paste0("D:\\MSE_Run\\MSE_Results\\Plots\\",OM_Name,"_VIOLIN_ComCatchCum.png"),
+        type="cairo",
+        units="mm",
+        width=300,
+        height=225,
+        pointsize=16,
+        res=300)
+    par(mfrow=c(2,3), mar=c(1.1, 1.6, 1, 0.3),tcl = -0.1, mgp = c(0.8, 0.1, 0), cex=1, oma=c(0,1.5,2,0))
+    for(r in seq(1, 24, by=4)){
+      vioplot(Com_Catch_cumulative[,r], Com_Catch_cumulative[,(r+1)], Com_Catch_cumulative[,(r+2)], Com_Catch_cumulative[,(r+3)], 
+              col=c("dimgrey","deepskyblue3","forestgreen","darkorchid"), ylim=c(0, 30000), names=c(rep("", 4)))
+      if(r==1) { mtext(expression("F"["lim"]*"= F"["MSY"]), side=3, line=0, cex=0.8) }
+      if(r==5) { mtext(expression("F"["lim"]*"= M"), side=3, line=0, cex=0.8) }
+      if(r==9) { mtext(expression("F"["lim"]*"= 0.8M"), side=3, line=0, cex=0.8) }
+      if(r==13) { mtext(expression("F"["lim"]*"= 0.6M"), side=3, line=0, cex=0.8) }
+      if(r==17) { mtext(expression("F"["lim"]*"= 0.4M"), side=3, line=0, cex=0.8) }
+      if(r==21) { mtext(expression("F"["lim"]*"= 0.2M"), side=3, line=0, cex=0.8) }
+      if(r==21) { legend("topright",c(expression("a=0, b=B"["MSY"]), expression("a=0, b=0.8B"["MSY"]),
+                                      expression("a=0.3B"[0]*", b=B"["MSY"]), expression("a=0.3B"[0]*", b=0.8B"["MSY"])),
+                         fill=col_list2, cex=0.8, bty='n') }
+    }
+    mtext(OM_Name, outer = TRUE, cex = 1.5, line=0)
+    mtext("Cumulative Commercial Catch"  , side=2, outer = TRUE, cex = 1.5, line=-0.3)
+    dev.off()
+    
+    
+    
+    ## Get Avg Catch 2106-2115 ##
+    png(filename=paste0("D:\\MSE_Run\\MSE_Results\\Plots\\",OM_Name,"_VIOLIN_ComCatch2115.png"),
+        type="cairo",
+        units="mm",
+        width=300,
+        height=225,
+        pointsize=16,
+        res=300)
+    par(mfrow=c(2,3), mar=c(1.1, 1.6, 1, 0.3),tcl = -0.1, mgp = c(0.8, 0.1, 0), cex=1, oma=c(0,1.5,2,0))
+    for(r in seq(1, 24, by=4)){
+      vioplot(Com_Catch_2115[,r], Com_Catch_2115[,(r+1)], Com_Catch_2115[,(r+2)], Com_Catch_2115[,(r+3)], 
+              col=c("dimgrey","deepskyblue3","forestgreen","darkorchid"), ylim=c(0, 1000), names=c(rep("", 4)))
+      if(r==1) { mtext(expression("F"["lim"]*"= F"["MSY"]), side=3, line=0, cex=0.8) }
+      if(r==5) { mtext(expression("F"["lim"]*"= M"), side=3, line=0, cex=0.8) }
+      if(r==9) { mtext(expression("F"["lim"]*"= 0.8M"), side=3, line=0, cex=0.8) }
+      if(r==13) { mtext(expression("F"["lim"]*"= 0.6M"), side=3, line=0, cex=0.8) }
+      if(r==17) { mtext(expression("F"["lim"]*"= 0.4M"), side=3, line=0, cex=0.8) }
+      if(r==21) { mtext(expression("F"["lim"]*"= 0.2M"), side=3, line=0, cex=0.8) }
+      if(r==21) { legend("topright",c(expression("a=0, b=B"["MSY"]), expression("a=0, b=0.8B"["MSY"]),
+                                         expression("a=0.3B"[0]*", b=B"["MSY"]), expression("a=0.3B"[0]*", b=0.8B"["MSY"])),
+                         fill=col_list2, cex=0.8, bty='n') }
+    }
+    mtext(OM_Name, outer = TRUE, cex = 1.5, line=0)
+    mtext(expression("Commercial Catch"[2115])  , side=2, outer = TRUE, cex = 1.5, line=-0.3)
+    dev.off()
+    
+    
+    ## Get Avg Catch 2061-2065 ##
+    png(filename=paste0("D:\\MSE_Run\\MSE_Results\\Plots\\",OM_Name,"_VIOLIN_ComCatch2065.png"),
+        type="cairo",
+        units="mm",
+        width=300,
+        height=225,
+        pointsize=16,
+        res=300)
+    par(mfrow=c(2,3), mar=c(1.1, 1.6, 1, 0.3),tcl = -0.1, mgp = c(0.8, 0.1, 0), cex=1, oma=c(0,1.5,2,0))
+    for(r in seq(1, 24, by=4)){
+      vioplot(Com_Catch_2065[,r], Com_Catch_2065[,(r+1)], Com_Catch_2065[,(r+2)], Com_Catch_2065[,(r+3)], 
+              col=c("dimgrey","deepskyblue3","forestgreen","darkorchid"), ylim=c(0, 600), names=c(rep("", 4)))
+      if(r==1) { mtext(expression("F"["lim"]*"= F"["MSY"]), side=3, line=0, cex=0.8) }
+      if(r==5) { mtext(expression("F"["lim"]*"= M"), side=3, line=0, cex=0.8) }
+      if(r==9) { mtext(expression("F"["lim"]*"= 0.8M"), side=3, line=0, cex=0.8) }
+      if(r==13) { mtext(expression("F"["lim"]*"= 0.6M"), side=3, line=0, cex=0.8) }
+      if(r==17) { mtext(expression("F"["lim"]*"= 0.4M"), side=3, line=0, cex=0.8) }
+      if(r==21) { mtext(expression("F"["lim"]*"= 0.2M"), side=3, line=0, cex=0.8) }
+      if(r==21) { legend("topright",c(expression("a=0, b=B"["MSY"]), expression("a=0, b=0.8B"["MSY"]),
+                                         expression("a=0.3B"[0]*", b=B"["MSY"]), expression("a=0.3B"[0]*", b=0.8B"["MSY"])),
+                         fill=col_list2, cex=0.8, bty='n') }
+    }
+    mtext(OM_Name, outer = TRUE, cex = 1.5, line=0)
+    mtext(expression("Commercial Catch"[2065])  , side=2, outer = TRUE, cex = 1.5, line=-0.3)
+    dev.off()
+    
+    
+  } # END IF PLOT==T
+  
+} # END FUNCTION
+
+
+
+MANIP_RESULTS(OM_Plot=OM_BASE, OM_Name="BASE", plot=TRUE)
+
+MANIP_RESULTS(OM_Plot=OM_BH, OM_Name="BH", plot=TRUE)
+
+MANIP_RESULTS(OM_Plot=OM_Hih, OM_Name="Hih", plot=TRUE)
+
+MANIP_RESULTS(OM_Plot=OM_lnR0, OM_Name="lnR0", plot=TRUE)
+
+MANIP_RESULTS(OM_Plot=OM_Loh, OM_Name="Loh", plot=TRUE)
+
+MANIP_RESULTS(OM_Plot=OM_M_BH, OM_Name="M_BH", plot=TRUE)
+
+
+
+# DON"T PLOT ; Just read in data
+MANIP_RESULTS(OM_Plot=OM_BASE, OM_Name="BASE", plot=FALSE)
+
+MANIP_RESULTS(OM_Plot=OM_BH, OM_Name="BH", plot=FALSE)
+
+MANIP_RESULTS(OM_Plot=OM_Hih, OM_Name="Hih", plot=FALSE)
+
+MANIP_RESULTS(OM_Plot=OM_lnR0, OM_Name="lnR0", plot=FALSE)
+
+MANIP_RESULTS(OM_Plot=OM_Loh, OM_Name="Loh", plot=FALSE)
+
+MANIP_RESULTS(OM_Plot=OM_M_BH, OM_Name="M_BH", plot=FALSE)
+
+
+
+
+
+# MEX REC
+MANIP_RESULTS(OM_Plot=OM_BASE_MexRec, OM_Name="Base_MexRec", plot=TRUE)
+
+MANIP_RESULTS(OM_Plot=OM_BH_MexRec, OM_Name="BH_MexRec", plot=TRUE)
+
+MANIP_RESULTS(OM_Plot=OM_Hih_MexRec, OM_Name="Hih_MexRec", plot=TRUE)
+
+MANIP_RESULTS(OM_Plot=OM_lnR0_MexRec, OM_Name="lnR0_MexRec", plot=TRUE)
+
+MANIP_RESULTS(OM_Plot=OM_Loh_MexRec, OM_Name="Loh_MexRec", plot=TRUE)
+
+MANIP_RESULTS(OM_Plot=OM_M_BH_MexRec, OM_Name="M_BH_MexRec", plot=TRUE)
+
+
+OM_lnR0$HCR_23$SSB[nrow(OM_lnR0$HCR_23$SSB),]
+
+
+##### FILTER RESULTS FOR COLLAPSED STOCKS ???  #########  ???  ######### 
+# Try to re-run with upper bound on catch and see how results pan out for Loh (just HCR1 for now... )
+for(HCR in list("HCR_1", "HCR_2", "HCR_3", "HCR_4", "HCR_5", "HCR_6", "HCR_7", "HCR_8", "HCR_9", "HCR_10", "HCR_11", "HCR_12", 
+                "HCR_13", "HCR_14", "HCR_15", "HCR_16", "HCR_17", "HCR_18", "HCR_19", "HCR_20", "HCR_21", "HCR_22", "HCR_23", "HCR_24") ){
+  bb = OM_Loh[[HCR]]$SSB
+  iters_col = which(bb[nrow(bb),]<1)
+  # bb_collapsed = bb[,which(bb[nrow(bb),]<1)]
+  #   names(bb)[iters_col]
+  #   print(HCR)
+  #   print( names(bb)[iters_col] )
+  #   
+  # }
+  
+  yr_col = c()
+  for(i in iters_col){
+    yr_col = c(yr_col, min(which(bb[,i]<1)) )
+  }
+  
+  # cbind(iters_col, yr_col)
+  View(OM_Loh[[HCR]]$FM_FMMSY[,which(bb[nrow(bb),]<1)])
+  View(OM_Loh[[HCR]]$Com_catch[,which(bb[nrow(bb),]<1)])
+  
+  for(j in 1:length(iters_col)){
+    OM_Loh[[HCR]]$FM_FMMSY[(yr_col[j]:nrow(bb)),iters_col[j]] = rep(NA, length=length(OM_Loh[[HCR]]$FM_FMMSY[(yr_col[j]:nrow(bb)),iters_col[j]]) )
+    OM_Loh[[HCR]]$Com_catch[(yr_col[j]:nrow(bb)),iters_col[j]] = rep(NA, length=length(OM_Loh[[HCR]]$FM_FMMSY[(yr_col[j]:nrow(bb)),iters_col[j]]) )
+    
+  }
+  
+  
+} # END HCR Loop
+
+bb = OM_Loh$HCR_1$SSB
+list=which(bb[nrow(bb),]<1)
+bb_collapse = bb[,which(bb[nrow(bb),]<1)]
+View(round(bb_collapse))
+
+
+
+
+### FOR BASE_MexRec
+# Try to re-run with upper bound on catch and see how results pan out for Loh (just HCR1 for now... )
+for(HCR in list("HCR_1", "HCR_2", "HCR_3", "HCR_4", "HCR_5", "HCR_6", "HCR_7", "HCR_8", "HCR_9", "HCR_10", "HCR_11", "HCR_12", 
+                "HCR_13", "HCR_14", "HCR_15", "HCR_16", "HCR_17", "HCR_18", "HCR_19", "HCR_20", "HCR_21", "HCR_22", "HCR_23", "HCR_24") ){
+  bb = OM_BASE_MexRec[[HCR]]$FM_FMMSY
+  bb = OM_BASE_MexRec[[HCR]]$SSB_SSBMSY
+  # bb = OM_BASE_MexRec[[HCR]]$Com_catch
+  # iters_col = which(bb[nrow(bb),]>2)
+  iters_col = which(bb[nrow(bb),]<0.6)
+  # bb_collapsed = bb[,which(bb[nrow(bb),]>20)]
+  #   names(bb)[iters_col]
+  print(HCR)
+  print( names(bb)[iters_col] )
+  
+}
+  
+  
+HCR="HCR_3"
+bb = OM_BASE_MexRec[[HCR]]$Com_catch
+iters_col = which(bb[nrow(bb),]>300)
+
+# cbind(iters_col, yr_col)
+View(OM_BASE_MexRec[[HCR]]$FM_FMMSY[,iters_col])
+View(OM_BASE_MexRec[[HCR]]$Com_catch[,iters_col])
+  
+
+
+
+
+
+### FOR Loh_MexRec
+# Try to re-run with upper bound on catch and see how results pan out for Loh (just HCR1 for now... )
+for(HCR in list("HCR_1", "HCR_2", "HCR_3", "HCR_4", "HCR_5", "HCR_6", "HCR_7", "HCR_8", "HCR_9", "HCR_10", "HCR_11", "HCR_12", 
+                "HCR_13", "HCR_14", "HCR_15", "HCR_16", "HCR_17", "HCR_18", "HCR_19", "HCR_20", "HCR_21", "HCR_22", "HCR_23", "HCR_24") ){
+  # bb = OM_Loh_MexRec[[HCR]]$FM_FMMSY
+  # bb = OM_Loh_MexRec[[HCR]]$Tot_catch
+  # iters_col = which(bb[nrow(bb),]>200)
+  bb = OM_Loh_MexRec[[HCR]]$SSB_SSBMSY
+  iters_col = which(bb[nrow(bb),]<0.4)
+  # bb_collapsed = bb[,which(bb[nrow(bb),]>20)]
+  #   names(bb)[iters_col]
+  print(HCR)
+  print( names(bb)[iters_col] )
+  
+}
+
+HCR="HCR_3"
+bb = OM_BASE_MexRec[[HCR]]$Com_catch
+iters_col = which(bb[nrow(bb),]>300)
+
+# cbind(iters_col, yr_col)
+View(OM_BASE_MexRec[[HCR]]$FM_FMMSY[,iters_col])
+View(OM_BASE_MexRec[[HCR]]$Com_catch[,iters_col])
+
+  # for(j in 1:length(iters_col)){
+  #   OM_BASE_MexRec[[HCR]]$FM_FMMSY[(yr_col[j]:nrow(bb)),iters_col[j]] = rep(NA, length=length(OM_BASE_MexRec[[HCR]]$FM_FMMSY[(yr_col[j]:nrow(bb)),iters_col[j]]) )
+  #   OM_BASE_MexRec[[HCR]]$Com_catch[(yr_col[j]:nrow(bb)),iters_col[j]] = rep(NA, length=length(OM_BASE_MexRec[[HCR]]$FM_FMMSY[(yr_col[j]:nrow(bb)),iters_col[j]]) )
+  #   
+  # }
+  
+  
+
+
+bb = OM_Loh$HCR_1$SSB
+list=which(bb[nrow(bb),]<1)
+bb_collapse = bb[,which(bb[nrow(bb),]<1)]
+View(round(bb_collapse))
+
+
+
+
+
+
+
+
+### FOR lnR0_MexRec
+# Try to re-run with upper bound on catch and see how results pan out for Loh (just HCR1 for now... )
+for(HCR in list("HCR_1", "HCR_2", "HCR_3", "HCR_4", "HCR_5", "HCR_6", "HCR_7", "HCR_8", "HCR_9", "HCR_10", "HCR_11", "HCR_12", 
+                "HCR_13", "HCR_14", "HCR_15", "HCR_16", "HCR_17", "HCR_18", "HCR_19", "HCR_20", "HCR_21", "HCR_22", "HCR_23", "HCR_24") ){
+  # bb = OM_lnR0_MexRec[[HCR]]$FM_FMMSY
+  bb = OM_lnR0_MexRec[[HCR]]$SSB_SSBMSY
+  # bb = OM_lnR0_MexRec[[HCR]]$Tot_catch
+  # iters_col = which(bb[nrow(bb),]>2)
+  iters_col = which(bb[nrow(bb),]<0.6)
+  # iters_col = which(bb[nrow(bb),]>600)
+  # bb_collapsed = bb[,which(bb[nrow(bb),]>20)]
+  #   names(bb)[iters_col]
+  print(HCR)
+  print( names(bb)[iters_col] )
+  
+}
+
+
+OM_lnR0_MexRec$HCR_4$Tot_catch[,"201"]
+
+
+
+
+
+
+### END ----------------------------------------------------------------------------------------------------------
+
+
+
+######### NOTES ##########
+
+
+# apply(OM_Plot[[paste0("HCR_",h)]]$SSB_SSBMSY, 1, median)[length(years)] 
+# apply(OM_Plot[[paste0("HCR_",h)]]$FM_FMMSY, 1, median)[length(years)] 
+# mean( apply(OM_Plot[[paste0("HCR_",h)]]$Com_catch, 1, median)[(length(years)-4):length(years)] ) 
+# AAV_HCR[h] 
+# mean( apply(OM_Plot[[paste0("HCR_",h)]]$AvgLen_F, 1, median)[(length(years)-4):length(years)] ) 
+
+
+
+
+
+
 
 iters = seq(47,245, by=2)
 years = 1960:2115
-
-
-## Worm Plots ##
-
-col2rgb(col="skyblue")/255
-col2rgb(col="darkolivegreen1")/255
-col2rgb(col="orchid")/255
-col2rgb(col="grey")/255
-
-
-rgb(0, 0.75, 1, 0.2)
-# SSB/SSBMSY
-plot(years, OM_Hih$HCR_1$SSB_SSBMSY[,1], type='l', col="white", ylim=c(0, 3))
-abline(h=1)
-
 col_list = c(rgb(0.75, 0.75, 0.75, 0.20),rgb(0.33, 0.80, 0.92, 0.15),rgb(0.79, 0.9, 0.44, 0.3),rgb(0.86, 0.44, 0.84, 0.2))
 col_list2 = c("black","deepskyblue3","forestgreen","darkorchid")
 lty_list = c(2,1,2,1)
 
-par(mfrow=c(2,3))
 col_lista = rep(col_list, (24/4))
 col_list2a = rep(col_list2, (24/4))
 lty_lista = rep(lty_list, (24/4))
+
+## Worm Plots ##
+
+# col2rgb(col="skyblue")/255
+# col2rgb(col="darkolivegreen1")/255
+# col2rgb(col="orchid")/255
+# col2rgb(col="grey")/255
+# rgb(0, 0.75, 1, 0.2)
+
+# SSB/SSBMSY
+par(mfrow=c(2,3))
 for(k in 1:(24/4)){
   kh = k*4
   hlist=c(kh, kh-1, kh-2, kh-3)
-  plot(years, OM_Hih$HCR_1$SSB_SSBMSY[,1], type='l', col="white", ylim=c(0, 3))
+  plot(years, OM_Plot$HCR_1$SSB_SSBMSY[,1], type='l', col="white", ylim=c(0, 3))
   abline(h=1)
   for(h in hlist){
     for(i in 1:length(iters)){
-      lines(years, OM_Hih[[paste0("HCR_",h)]]$SSB_SSBMSY[,i], col=col_lista[h])
+      lines(years, OM_Plot[[paste0("HCR_",h)]]$SSB_SSBMSY[,i], col=col_lista[h])
     }
   }
   for(h in hlist){
-    lines(years, apply(OM_Hih[[paste0("HCR_",h)]]$SSB_SSBMSY, 1, median), type='l', lwd=2, col=col_list2a[h], lty=lty_lista[h])
+    lines(years, apply(OM_Plot[[paste0("HCR_",h)]]$SSB_SSBMSY, 1, median), type='l', lwd=2, col=col_list2a[h], lty=lty_lista[h])
   }
 }
-
+# plot(years, OM_Plot$HCR_1$SSB_SSBMSY[,1], type='l', col="white", ylim=c(0, 3))
+# abline(h=1)
 
 
 # F/FMSY
-plot(years, OM_Hih$HCR_1$FM_FMMSY[,1], type='l', col="white", ylim=c(0, 10))
-abline(h=1)
-
-for(h in 4:1){
-  for(i in 1:length(iters)){
-    lines(years, OM_Hih[[paste0("HCR_",h)]]$FM_FMMSY[,i], col=col_list[h])
-  }
-}
-abline(h=1)
-for(h in 4:1){
-  lines(years, apply(OM_Hih[[paste0("HCR_",h)]]$FM_FMMSY, 1, median), type='l', lwd=2, col=col_list2[h], lty=lty_list[h])
-}
-
 par(mfrow=c(2,3))
 col_lista = rep(col_list, (24/4))
 col_list2a = rep(col_list2, (24/4))
@@ -1887,32 +2928,34 @@ lty_lista = rep(lty_list, (24/4))
 for(k in 1:(24/4)){
   kh = k*4
   hlist=c(kh, kh-1, kh-2, kh-3)
-  plot(years, OM_Hih$HCR_1$FM_FMMSY[,1], type='l', col="white", ylim=c(0, 10))
+  plot(years, OM_Plot$HCR_1$FM_FMMSY[,1], type='l', col="white", ylim=c(0, 10))
   abline(h=1)
   for(h in hlist){
     for(i in 1:length(iters)){
-      lines(years, OM_Hih[[paste0("HCR_",h)]]$FM_FMMSY[,i], col=col_lista[h])
+      lines(years, OM_Plot[[paste0("HCR_",h)]]$FM_FMMSY[,i], col=col_lista[h])
     }
   }
   abline(h=1)
   for(h in hlist){
-    lines(years, apply(OM_Hih[[paste0("HCR_",h)]]$FM_FMMSY, 1, median), type='l', lwd=2, col=col_list2a[h], lty=lty_lista[h])
+    lines(years, apply(OM_Plot[[paste0("HCR_",h)]]$FM_FMMSY, 1, median), type='l', lwd=2, col=col_list2a[h], lty=lty_lista[h])
   }
 }
+# plot(years, OM_Plot$HCR_1$FM_FMMSY[,1], type='l', col="white", ylim=c(0, 10))
+# abline(h=1)
+# 
+# for(h in 4:1){
+#   for(i in 1:length(iters)){
+#     lines(years, OM_Plot[[paste0("HCR_",h)]]$FM_FMMSY[,i], col=col_list[h])
+#   }
+# }
+# abline(h=1)
+# for(h in 4:1){
+#   lines(years, apply(OM_Plot[[paste0("HCR_",h)]]$FM_FMMSY, 1, median), type='l', lwd=2, col=col_list2[h], lty=lty_list[h])
+# }
+
 
 
 # Commercial Catch
-plot(years, OM_Hih$HCR_1$Com_catch[,1], type='l', col="white", ylim=c(0, 1000))
-
-for(h in 4:1){
-  for(i in 1:length(iters)){
-    lines(years, OM_Hih[[paste0("HCR_",h)]]$Com_catch[,i], col=col_list[h])
-  }
-}
-for(h in 4:1){
-  lines(years, apply(OM_Hih[[paste0("HCR_",h)]]$Com_catch, 1, median), type='l', lwd=2, col=col_list2[h], lty=lty_list[h])
-}
-
 par(mfrow=c(2,3))
 col_lista = rep(col_list, (24/4))
 col_list2a = rep(col_list2, (24/4))
@@ -1920,57 +2963,91 @@ lty_lista = rep(lty_list, (24/4))
 for(k in 1:(24/4)){
   kh = k*4
   hlist=c(kh, kh-1, kh-2, kh-3)
-  plot(years, OM_Hih$HCR_1$Com_catch[,1], type='l', col="white", ylim=c(0, 1000))
+  plot(years, OM_Plot$HCR_1$Com_catch[,1], type='l', col="white", ylim=c(0, 1000))
   abline(h=1)
   for(h in hlist){
     for(i in 1:length(iters)){
-      lines(years, OM_Hih[[paste0("HCR_",h)]]$Com_catch[,i], col=col_lista[h])
+      lines(years, OM_Plot[[paste0("HCR_",h)]]$Com_catch[,i], col=col_lista[h])
     }
   }
   for(h in hlist){
-    lines(years, apply(OM_Hih[[paste0("HCR_",h)]]$Com_catch, 1, median), type='l', lwd=2, col=col_list2a[h], lty=lty_lista[h])
+    lines(years, apply(OM_Plot[[paste0("HCR_",h)]]$Com_catch, 1, median), type='l', lwd=2, col=col_list2a[h], lty=lty_lista[h])
   }
 }
+# plot(years, OM_Plot$HCR_1$Com_catch[,1], type='l', col="white", ylim=c(0, 1000))
+# 
+# for(h in 4:1){
+#   for(i in 1:length(iters)){
+#     lines(years, OM_Plot[[paste0("HCR_",h)]]$Com_catch[,i], col=col_list[h])
+#   }
+# }
+# for(h in 4:1){
+#   lines(years, apply(OM_Plot[[paste0("HCR_",h)]]$Com_catch, 1, median), type='l', lwd=2, col=col_list2[h], lty=lty_list[h])
+# }
 
 
 # SSB/SSB0
-plot(years, OM_Hih$HCR_1$SSB_SSB0[,1], type='l', col="white")
-abline(h=1)
-
-for(h in 4:1){
-  for(i in 1:length(iters)){
-    lines(years, OM_Hih[[paste0("HCR_",h)]]$SSB_SSB0[,i], col=col_list[h])
+par(mfrow=c(2,3))
+for(k in 1:(24/4)){
+  kh = k*4
+  hlist=c(kh, kh-1, kh-2, kh-3)
+  plot(years, OM_Plot$HCR_1$SSB_SSB0[,1], type='l', col="white", ylim=c(0, 1.1))
+  abline(h=1)
+  for(h in hlist){
+    for(i in 1:length(iters)){
+      lines(years, OM_Plot[[paste0("HCR_",h)]]$SSB_SSB0[,i], col=col_lista[h])
+    }
+  }
+  for(h in hlist){
+    lines(years, apply(OM_Plot[[paste0("HCR_",h)]]$SSB_SSB0, 1, median), type='l', lwd=2, col=col_list2a[h], lty=lty_lista[h])
   }
 }
-for(h in 4:1){
-  lines(years, apply(OM_Hih[[paste0("HCR_",h)]]$SSB_SSB0, 1, median), type='l', lwd=2, col=col_list2[h], lty=lty_list[h])
-}
+# plot(years, OM_Plot$HCR_1$SSB_SSB0[,1], type='l', col="white")
+# abline(h=1)
+# 
+# for(h in 4:1){
+#   for(i in 1:length(iters)){
+#     lines(years, OM_Plot[[paste0("HCR_",h)]]$SSB_SSB0[,i], col=col_list[h])
+#   }
+# }
+# for(h in 4:1){
+#   lines(years, apply(OM_Plot[[paste0("HCR_",h)]]$SSB_SSB0, 1, median), type='l', lwd=2, col=col_list2[h], lty=lty_list[h])
+# }
+
 
 # avg length 
-plot(years, OM_Hih$HCR_1$AvgLen_F[,1], type='l', col="white", ylim=c(85, 120))
-abline(h=1)
-
-for(h in 4:1){
-  for(i in 1:length(iters)){
-    lines(years, OM_Hih[[paste0("HCR_",h)]]$AvgLen_F[,i], col=col_list[h])
+par(mfrow=c(2,3))
+for(k in 1:(24/4)){
+  kh = k*4
+  hlist=c(kh, kh-1, kh-2, kh-3)
+  plot(years, OM_Plot$HCR_1$AvgLen_F[,1], type='l', col="white", ylim=c(85, 120))
+  abline(h=1)
+  for(h in hlist){
+    for(i in 1:length(iters)){
+      lines(years, OM_Plot[[paste0("HCR_",h)]]$AvgLen_F[,i], col=col_lista[h])
+    }
+  }
+  for(h in hlist){
+    lines(years, apply(OM_Plot[[paste0("HCR_",h)]]$AvgLen_F, 1, median), type='l', lwd=2, col=col_list2a[h], lty=lty_lista[h])
   }
 }
-for(h in 4:1){
-  lines(years, apply(OM_Hih[[paste0("HCR_",h)]]$AvgLen_F, 1, median), type='l', lwd=2, col=col_list2[h], lty=lty_list[h])
-}
+# plot(years, OM_Plot$HCR_1$AvgLen_F[,1], type='l', col="white", ylim=c(85, 120))
+# abline(h=1)
+# 
+# for(h in 4:1){
+#   for(i in 1:length(iters)){
+#     lines(years, OM_Plot[[paste0("HCR_",h)]]$AvgLen_F[,i], col=col_list[h])
+#   }
+# }
+# for(h in 4:1){
+#   lines(years, apply(OM_Plot[[paste0("HCR_",h)]]$AvgLen_F, 1, median), type='l', lwd=2, col=col_list2[h], lty=lty_list[h])
+# }
 
 
-h=1
-OM_Hih$paste0("HCR_",h)$SSB_SSBMSY[,1]
-
-OM_Hih[[paste0("HCR_",h)]]$SSB_SSBMSY[,1]
-
-
-
-
-
-
-
+# h=1
+# OM_Plot$paste0("HCR_",h)$SSB_SSBMSY[,1]
+# 
+# OM_Plot[[paste0("HCR_",h)]]$SSB_SSBMSY[,1]
 
 
 
@@ -1983,118 +3060,6 @@ OM_Hih[[paste0("HCR_",h)]]$SSB_SSBMSY[,1]
 library(fmsb)
 
 
-
-
-## Get AAV ##
-AAV_all = matrix(nrow=100, ncol=24)
-row.names(AAV_all) <- names(OM_Hih$HCR_1$Com_catch)
-colnames(AAV_all) <- paste0("HCR_",1:24)
-
-for(hcr in 1:24){
-  HCR_iter = OM_Hih[[paste0("HCR_",hcr)]]
-  
-  for(j in 1:ncol(HCR_iter$Com_catch)){
-    
-    bb = HCR_iter$Com_catch[,j]
-    numsum = 0
-    denomsum = 0
-    for(i in (which(rownames(HCR_iter$Com_catch)=='2017')):(which(rownames(HCR_iter$Com_catch)=='2115'))  ){
-      numsum = numsum + abs(bb[i] - bb[i-1])
-      denomsum = denomsum + bb[i]
-    } # end i loop
-    
-    AAV[j] = ( numsum / denomsum ) #NOTE: NaNs == 0
-    
-  } # end j loop
-  AAVe = ifelse(is.na(AAV), 0, AAV)
-  AAV_all[,hcr] = AAVe
-}
-
-
-AAV_HCR = apply(AAV_all , 2 , median)
-
-
-
-## Get SSB/SSBMSY 2115 ##
-
-SSB_SSBMSY_2115 =  matrix(nrow=100, ncol=24) 
-for(h in 1:24){
-  SSB_SSBMSY_2115[,h] = t( OM_Hih[[paste0("HCR_",h)]]$SSB_SSBMSY["2115",] )
-}
-SSB_SSBMSY_2115 <- as.data.frame(SSB_SSBMSY_2115)
-row.names(SSB_SSBMSY_2115) <- names(OM_Hih$HCR_1$SSB_SSBMSY)
-names(SSB_SSBMSY_2115) <- paste0("HCR_",1:24)
-
-
-
-## Get SSB/SSBMSY 2065 ##
-
-SSB_SSBMSY_2065 =  matrix(nrow=100, ncol=24) 
-for(h in 1:24){
-  SSB_SSBMSY_2065[,h] = t( OM_Hih[[paste0("HCR_",h)]]$SSB_SSBMSY["2065",] )
-}
-SSB_SSBMSY_2065 <- as.data.frame(SSB_SSBMSY_2065)
-row.names(SSB_SSBMSY_2065) <- names(OM_Hih$HCR_1$SSB_SSBMSY)
-names(SSB_SSBMSY_2065) <- paste0("HCR_",1:24)
-
-
-
-## Get Get F/FBMSY 2115 ##
-
-FM_FMMSY_2115 =  matrix(nrow=100, ncol=24) 
-for(h in 1:24){
-  FM_FMMSY_2115[,h] = t( OM_Hih[[paste0("HCR_",h)]]$FM_FMMSY["2115",] )
-}
-FM_FMMSY_2115 <- as.data.frame(FM_FMMSY_2115)
-row.names(FM_FMMSY_2115) <- names(OM_Hih$HCR_1$FM_FMMSY)
-names(FM_FMMSY_2115) <- paste0("HCR_",1:24)
-
-
-
-## Get F/FBMSY 2065 ##
-
-FM_FMMSY_2065 =  matrix(nrow=100, ncol=24) 
-for(h in 1:24){
-  FM_FMMSY_2065[,h] = t( OM_Hih[[paste0("HCR_",h)]]$FM_FMMSY["2065",] )
-}
-FM_FMMSY_2065 <- as.data.frame(FM_FMMSY_2065)
-row.names(FM_FMMSY_2065) <- names(OM_Hih$HCR_1$FM_FMMSY)
-names(FM_FMMSY_2065) <- paste0("HCR_",1:24)
-
-
-
-## Get Avg Catch 2111-2115 ##
-
-Com_Catch_2115 =  matrix(nrow=100, ncol=24) 
-for(h in 1:24){
-  Com_Catch_2115[,h] = t( apply(OM_Hih[[paste0("HCR_",h)]]$Com_catch[as.character(2111:2115),] , 2, mean) )
-}
-Com_Catch_2115 <- as.data.frame(Com_Catch_2115)
-row.names(Com_Catch_2115) <- names(OM_Hih$HCR_1$Com_catch)
-names(Com_Catch_2115) <- paste0("HCR_",1:24)
-
-
-## Get Avg Catch 2061-2065 ##
-
-Com_Catch_2065 =  matrix(nrow=100, ncol=24) 
-for(h in 1:24){
-  Com_Catch_2065[,h] = t( apply(OM_Hih[[paste0("HCR_",h)]]$Com_catch[as.character(2061:2065),] , 2, mean) )
-}
-Com_Catch_2065 <- as.data.frame(Com_Catch_2065)
-row.names(Com_Catch_2065) <- names(OM_Hih$HCR_1$Com_catch)
-names(Com_Catch_2065) <- paste0("HCR_",1:24)
-
-
-
-
-
-
-
-apply(OM_Hih[[paste0("HCR_",h)]]$SSB_SSBMSY, 1, median)[length(years)] 
-apply(OM_Hih[[paste0("HCR_",h)]]$FM_FMMSY, 1, median)[length(years)] 
-mean( apply(OM_Hih[[paste0("HCR_",h)]]$Com_catch, 1, median)[(length(years)-4):length(years)] ) 
-AAV_HCR[h] 
-mean( apply(OM_Hih[[paste0("HCR_",h)]]$AvgLen_F, 1, median)[(length(years)-4):length(years)] ) 
 
 
 # FOR HCR 1-4:
@@ -2111,65 +3076,65 @@ data6 = matrix(c(1, 3, 300, 1, 120, 0, 0, 0, 0, 80), ncol=5, byrow=T)
 for(h in h){
   if(h2[h]==1){
     data1 = rbind(data1, c(
-      apply(OM_Hih[[paste0("HCR_",h)]]$SSB_SSBMSY, 1, median)[length(years)] ,
-      apply(OM_Hih[[paste0("HCR_",h)]]$FM_FMMSY, 1, median)[length(years)] ,
-      mean( apply(OM_Hih[[paste0("HCR_",h)]]$Com_catch, 1, median)[(length(years)-4):length(years)] ) ,
+      apply(OM_Plot[[paste0("HCR_",h)]]$SSB_SSBMSY, 1, median)[length(years)] ,
+      apply(OM_Plot[[paste0("HCR_",h)]]$FM_FMMSY, 1, median)[length(years)] ,
+      mean( apply(OM_Plot[[paste0("HCR_",h)]]$Com_catch, 1, median)[(length(years)-4):length(years)] ) ,
       AAV_HCR[h] ,
-      mean( apply(OM_Hih[[paste0("HCR_",h)]]$AvgLen_F, 1, median)[(length(years)-4):length(years)] ) 
+      mean( apply(OM_Plot[[paste0("HCR_",h)]]$AvgLen_F, 1, median)[(length(years)-4):length(years)] ) 
     ) )
   } # end if h2=1
   
   if(h2[h]==2){
     data2 = rbind(data2, c(
-      apply(OM_Hih[[paste0("HCR_",h)]]$SSB_SSBMSY, 1, median)[length(years)] ,
-      apply(OM_Hih[[paste0("HCR_",h)]]$FM_FMMSY, 1, median)[length(years)] ,
-      mean( apply(OM_Hih[[paste0("HCR_",h)]]$Com_catch, 1, median)[(length(years)-4):length(years)] ) ,
+      apply(OM_Plot[[paste0("HCR_",h)]]$SSB_SSBMSY, 1, median)[length(years)] ,
+      apply(OM_Plot[[paste0("HCR_",h)]]$FM_FMMSY, 1, median)[length(years)] ,
+      mean( apply(OM_Plot[[paste0("HCR_",h)]]$Com_catch, 1, median)[(length(years)-4):length(years)] ) ,
       AAV_HCR[h] ,
-      mean( apply(OM_Hih[[paste0("HCR_",h)]]$AvgLen_F, 1, median)[(length(years)-4):length(years)] ) 
+      mean( apply(OM_Plot[[paste0("HCR_",h)]]$AvgLen_F, 1, median)[(length(years)-4):length(years)] ) 
     ) )
   } # end if h2=2
   
   if(h2[h]==3){
     data3 = rbind(data3, c(
-      apply(OM_Hih[[paste0("HCR_",h)]]$SSB_SSBMSY, 1, median)[length(years)] ,
-      apply(OM_Hih[[paste0("HCR_",h)]]$FM_FMMSY, 1, median)[length(years)] ,
-      mean( apply(OM_Hih[[paste0("HCR_",h)]]$Com_catch, 1, median)[(length(years)-4):length(years)] ) ,
+      apply(OM_Plot[[paste0("HCR_",h)]]$SSB_SSBMSY, 1, median)[length(years)] ,
+      apply(OM_Plot[[paste0("HCR_",h)]]$FM_FMMSY, 1, median)[length(years)] ,
+      mean( apply(OM_Plot[[paste0("HCR_",h)]]$Com_catch, 1, median)[(length(years)-4):length(years)] ) ,
       AAV_HCR[h] ,
-      mean( apply(OM_Hih[[paste0("HCR_",h)]]$AvgLen_F, 1, median)[(length(years)-4):length(years)] ) 
+      mean( apply(OM_Plot[[paste0("HCR_",h)]]$AvgLen_F, 1, median)[(length(years)-4):length(years)] ) 
     ) )
   } # end if h2=3
   
   if(h2[h]==4){
     data4 = rbind(data4, c(
-      apply(OM_Hih[[paste0("HCR_",h)]]$SSB_SSBMSY, 1, median)[length(years)] ,
-      apply(OM_Hih[[paste0("HCR_",h)]]$FM_FMMSY, 1, median)[length(years)] ,
-      mean( apply(OM_Hih[[paste0("HCR_",h)]]$Com_catch, 1, median)[(length(years)-4):length(years)] ) ,
+      apply(OM_Plot[[paste0("HCR_",h)]]$SSB_SSBMSY, 1, median)[length(years)] ,
+      apply(OM_Plot[[paste0("HCR_",h)]]$FM_FMMSY, 1, median)[length(years)] ,
+      mean( apply(OM_Plot[[paste0("HCR_",h)]]$Com_catch, 1, median)[(length(years)-4):length(years)] ) ,
       AAV_HCR[h] ,
-      mean( apply(OM_Hih[[paste0("HCR_",h)]]$AvgLen_F, 1, median)[(length(years)-4):length(years)] ) 
+      mean( apply(OM_Plot[[paste0("HCR_",h)]]$AvgLen_F, 1, median)[(length(years)-4):length(years)] ) 
     ) )
   } # end if h2=4
   
   if(h2[h]==5){
     data5 = rbind(data5, c(
-      apply(OM_Hih[[paste0("HCR_",h)]]$SSB_SSBMSY, 1, median)[length(years)] ,
-      apply(OM_Hih[[paste0("HCR_",h)]]$FM_FMMSY, 1, median)[length(years)] ,
-      mean( apply(OM_Hih[[paste0("HCR_",h)]]$Com_catch, 1, median)[(length(years)-4):length(years)] ) ,
+      apply(OM_Plot[[paste0("HCR_",h)]]$SSB_SSBMSY, 1, median)[length(years)] ,
+      apply(OM_Plot[[paste0("HCR_",h)]]$FM_FMMSY, 1, median)[length(years)] ,
+      mean( apply(OM_Plot[[paste0("HCR_",h)]]$Com_catch, 1, median)[(length(years)-4):length(years)] ) ,
       AAV_HCR[h] ,
-      mean( apply(OM_Hih[[paste0("HCR_",h)]]$AvgLen_F, 1, median)[(length(years)-4):length(years)] ) 
+      mean( apply(OM_Plot[[paste0("HCR_",h)]]$AvgLen_F, 1, median)[(length(years)-4):length(years)] ) 
     ) )
   } # end if h2=5
   
   if(h2[h]==6){
     data6 = rbind(data6, c(
-      apply(OM_Hih[[paste0("HCR_",h)]]$SSB_SSBMSY, 1, median)[length(years)] ,
-      apply(OM_Hih[[paste0("HCR_",h)]]$FM_FMMSY, 1, median)[length(years)] ,
-      mean( apply(OM_Hih[[paste0("HCR_",h)]]$Com_catch, 1, median)[(length(years)-4):length(years)] ) ,
+      apply(OM_Plot[[paste0("HCR_",h)]]$SSB_SSBMSY, 1, median)[length(years)] ,
+      apply(OM_Plot[[paste0("HCR_",h)]]$FM_FMMSY, 1, median)[length(years)] ,
+      mean( apply(OM_Plot[[paste0("HCR_",h)]]$Com_catch, 1, median)[(length(years)-4):length(years)] ) ,
       AAV_HCR[h] ,
-      mean( apply(OM_Hih[[paste0("HCR_",h)]]$AvgLen_F, 1, median)[(length(years)-4):length(years)] ) 
+      mean( apply(OM_Plot[[paste0("HCR_",h)]]$AvgLen_F, 1, median)[(length(years)-4):length(years)] ) 
     ) )
   } # end if h2=6
   
-
+  
 } # end h loop. 
 
 colnames(data1) <- c("SSB2015/SSBMSY","F2015/FMSY", "Com Catch 2110-2115","AAV","Avg Len 2110-2115")
@@ -2205,6 +3170,78 @@ for(d in list(data1, data2, data3, data4, data5, data6)){
               vlcex=1
   )
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+## Violin Plots ##
+library(vioplot)
+
+
+## Get SSB/SSBMSY 2115 ##
+par(mfrow=c(2,3), mar=c(1.1, 2.6, 0.3, 0.3),tcl = -0.1, mgp = c(0.8, 0.1, 0), cex=1)
+for(r in seq(1, 24, by=4)){
+  vioplot(SSB_SSBMSY_2115[,r], SSB_SSBMSY_2115[,(r+1)], SSB_SSBMSY_2115[,(r+2)], SSB_SSBMSY_2115[,(r+3)], 
+          col=c('blue','red','green','purple'), ylim=c(0, 1), names=c(rep("", 4)) )
+  if(r==1){ mtext('SSB_2115/SSB_MSY', side=2, line=1.2, cex=1.1) }
+  abline(h=1)
+}
+
+
+
+## Get SSB/SSBMSY 2065 ##
+par(mfrow=c(2,3), mar=c(1.1, 2.6, 0.3, 0.3),tcl = -0.1, mgp = c(0.8, 0.1, 0), cex=1)
+for(r in seq(1, 24, by=4)){
+  vioplot(SSB_SSBMSY_2065[,r], SSB_SSBMSY_2065[,(r+1)], SSB_SSBMSY_2065[,(r+2)], SSB_SSBMSY_2065[,(r+3)], 
+          col=c('blue','red','green','purple'), ylim=c(0, 1))
+  abline(h=1)
+}
+
+
+## Get Get F/FBMSY 2115 ##
+par(mfrow=c(2,3), mar=c(1.1, 2.6, 0.3, 0.3),tcl = -0.1, mgp = c(0.8, 0.1, 0), cex=1)
+for(r in seq(1, 24, by=4)){
+  vioplot(FM_FMMSY_2115[,r], FM_FMMSY_2115[,(r+1)], FM_FMMSY_2115[,(r+2)], FM_FMMSY_2115[,(r+3)], 
+          col=c('blue','red','green','purple'), ylim=c(0, 2.5))
+  abline(h=1)
+}
+
+
+## Get F/FBMSY 2065 ##
+par(mfrow=c(2,3), mar=c(1.1, 2.6, 0.3, 0.3),tcl = -0.1, mgp = c(0.8, 0.1, 0), cex=1)
+for(r in seq(1, 24, by=4)){
+  vioplot(FM_FMMSY_2065[,r], FM_FMMSY_2065[,(r+1)], FM_FMMSY_2065[,(r+2)], FM_FMMSY_2065[,(r+3)], 
+          col=c('blue','red','green','purple'), ylim=c(0, 6))
+  abline(h=1)
+}
+
+
+
+## Get Avg Catch 2111-2115 ##
+par(mfrow=c(2,3), mar=c(1.1, 2.6, 0.3, 0.3),tcl = -0.1, mgp = c(0.8, 0.1, 0), cex=1)
+for(r in seq(1, 24, by=4)){
+  vioplot(Com_Catch_2115[,r], Com_Catch_2115[,(r+1)], Com_Catch_2115[,(r+2)], Com_Catch_2115[,(r+3)], 
+          col=c('blue','red','green','purple'), ylim=c(0, 1000))
+}
+
+
+## Get Avg Catch 2061-2065 ##
+par(mfrow=c(2,3), mar=c(1.1, 2.6, 0.3, 0.3),tcl = -0.1, mgp = c(0.8, 0.1, 0), cex=1)
+for(r in seq(1, 24, by=4)){
+  vioplot(Com_Catch_2065[,r], Com_Catch_2065[,(r+1)], Com_Catch_2065[,(r+2)], Com_Catch_2065[,(r+3)], 
+          col=c('blue','red','green','purple'), ylim=c(0, 600))
+}
+
 
 
 # Build data frame (see notes below)
@@ -2284,75 +3321,6 @@ for(d in list(data1, data2, data3, data4, data5, data6)){
 #             #custom labels
 #             vlcex=0.8 
 # )
-
-
-
-
-
-
-
-
-
-
-
-
-
-## Violin Plots ##
-library(vioplot)
-
-
-## Get SSB/SSBMSY 2115 ##
-par(mfrow=c(2,3), mar=c(1.1, 2.6, 0.3, 0.3),tcl = -0.1, mgp = c(0.8, 0.1, 0), cex=1)
-for(r in seq(1, 24, by=4)){
-  vioplot(SSB_SSBMSY_2115[,r], SSB_SSBMSY_2115[,(r+1)], SSB_SSBMSY_2115[,(r+2)], SSB_SSBMSY_2115[,(r+3)], 
-          col=c('blue','red','green','purple'), ylim=c(0, 1))
-  abline(h=1)
-}
-
-
-
-## Get SSB/SSBMSY 2065 ##
-par(mfrow=c(2,3), mar=c(1.1, 2.6, 0.3, 0.3),tcl = -0.1, mgp = c(0.8, 0.1, 0), cex=1)
-for(r in seq(1, 24, by=4)){
-  vioplot(SSB_SSBMSY_2065[,r], SSB_SSBMSY_2065[,(r+1)], SSB_SSBMSY_2065[,(r+2)], SSB_SSBMSY_2065[,(r+3)], 
-          col=c('blue','red','green','purple'), ylim=c(0, 1))
-  abline(h=1)
-}
-
-
-## Get Get F/FBMSY 2115 ##
-par(mfrow=c(2,3), mar=c(1.1, 2.6, 0.3, 0.3),tcl = -0.1, mgp = c(0.8, 0.1, 0), cex=1)
-for(r in seq(1, 24, by=4)){
-  vioplot(FM_FMMSY_2115[,r], FM_FMMSY_2115[,(r+1)], FM_FMMSY_2115[,(r+2)], FM_FMMSY_2115[,(r+3)], 
-          col=c('blue','red','green','purple'), ylim=c(0, 2.5))
-    abline(h=1)
-}
-
-
-## Get F/FBMSY 2065 ##
-par(mfrow=c(2,3), mar=c(1.1, 2.6, 0.3, 0.3),tcl = -0.1, mgp = c(0.8, 0.1, 0), cex=1)
-for(r in seq(1, 24, by=4)){
-  vioplot(FM_FMMSY_2065[,r], FM_FMMSY_2065[,(r+1)], FM_FMMSY_2065[,(r+2)], FM_FMMSY_2065[,(r+3)], 
-          col=c('blue','red','green','purple'), ylim=c(0, 6))
-    abline(h=1)
-}
-
-
-
-## Get Avg Catch 2111-2115 ##
-par(mfrow=c(2,3), mar=c(1.1, 2.6, 0.3, 0.3),tcl = -0.1, mgp = c(0.8, 0.1, 0), cex=1)
-for(r in seq(1, 24, by=4)){
-  vioplot(Com_Catch_2115[,r], Com_Catch_2115[,(r+1)], Com_Catch_2115[,(r+2)], Com_Catch_2115[,(r+3)], 
-          col=c('blue','red','green','purple'), ylim=c(0, 1000))
-}
-
-
-## Get Avg Catch 2061-2065 ##
-par(mfrow=c(2,3), mar=c(1.1, 2.6, 0.3, 0.3),tcl = -0.1, mgp = c(0.8, 0.1, 0), cex=1)
-for(r in seq(1, 24, by=4)){
-  vioplot(Com_Catch_2065[,r], Com_Catch_2065[,(r+1)], Com_Catch_2065[,(r+2)], Com_Catch_2065[,(r+3)], 
-          col=c('blue','red','green','purple'), ylim=c(0, 600))
-}
 
 
 
