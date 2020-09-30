@@ -49,7 +49,8 @@
 MSE_func = function(MCMCdir, OMdir, EMdir, StoreResults, FRQ=5, 
                     Btarg="BMSY", Bconst=1, Ftarg="FMSY", Fconst=1, a=0.1, b=1, 
                     BuildPar=T, OMdirs=list(OMdir), 
-                    simYrs=100, niters=NA, seed=430, sourcedir, SR="LFSR", implement="default", ...) {
+                    simYrs=100, niters=NA, seed=430, sourcedir, SR="LFSR", implement="default", 
+                    MaxCatch=2000, ...) {
   # niters=seq(from=47, to=545, by=2)
   
   # WARNING REMINDER # 
@@ -181,7 +182,7 @@ MSE_func = function(MCMCdir, OMdir, EMdir, StoreResults, FRQ=5,
         #-------------------------------------------------------------------------------------------------------------
         # UPDATE OM TO APPLY HCR
         #-------------------------------------------------------------------------------------------------------------
-        implementHCR(hcr, tt, FRQ, modEM, OMdir, i)
+        implementHCR(hcr, tt, FRQ, modEM, OMdir, i, MaxCatch=MaxCatch)
         # MSEResults <<- imphcr$MSEResults
         
       } # End HCR and implementHCR
