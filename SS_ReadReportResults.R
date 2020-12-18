@@ -2797,7 +2797,6 @@ MANIP_RESULTS(OM_Plot=OM_Loh, OM_Name="Loh", plot=TRUE)
 MANIP_RESULTS(OM_Plot=OM_M_BH, OM_Name="M_BH", plot=TRUE)
 
 
-
 # DON"T PLOT ; Just read in data
 MANIP_RESULTS(OM_Plot=OM_BASE, OM_Name="BASE", plot=FALSE)
 MANIP_RESULTS(OM_Plot=OM_BH, OM_Name="BH", plot=FALSE)
@@ -2805,6 +2804,8 @@ MANIP_RESULTS(OM_Plot=OM_Hih, OM_Name="Hih", plot=FALSE)
 MANIP_RESULTS(OM_Plot=OM_lnR0, OM_Name="lnR0", plot=FALSE)
 MANIP_RESULTS(OM_Plot=OM_Loh, OM_Name="Loh", plot=FALSE)
 MANIP_RESULTS(OM_Plot=OM_M_BH, OM_Name="M_BH", plot=FALSE)
+
+
 
 
 
@@ -2822,6 +2823,16 @@ MANIP_RESULTS(OM_Plot=OM_lnR0_MexRec, OM_Name="lnR0_MexRec", plot=TRUE)
 MANIP_RESULTS(OM_Plot=OM_Loh_MexRec, OM_Name="Loh_MexRec", plot=TRUE)
 
 MANIP_RESULTS(OM_Plot=OM_M_BH_MexRec, OM_Name="M_BH_MexRec", plot=TRUE)
+
+
+# MEX REC  DON"T PLOT ; Just read in data
+MANIP_RESULTS(OM_Plot=OM_BASE_MexRec, OM_Name="Base_MexRec", plot=F)
+MANIP_RESULTS(OM_Plot=OM_BH_MexRec, OM_Name="BH_MexRec", plot=F)
+MANIP_RESULTS(OM_Plot=OM_Hih_MexRec, OM_Name="Hih_MexRec", plot=F)
+MANIP_RESULTS(OM_Plot=OM_lnR0_MexRec, OM_Name="lnR0_MexRec", plot=F)
+MANIP_RESULTS(OM_Plot=OM_Loh_MexRec, OM_Name="Loh_MexRec", plot=F)
+MANIP_RESULTS(OM_Plot=OM_M_BH_MexRec, OM_Name="M_BH_MexRec", plot=F)
+
 
 
 
@@ -2843,9 +2854,70 @@ MANIP_RESULTS(OM_Plot=OM_Loh_LoMexRec, OM_Name="Loh_LoMexRec", plot=TRUE)
 MANIP_RESULTS(OM_Plot=OM_M_BH_LoMexRec, OM_Name="M_BH_LoMexRec", plot=TRUE)
 
 
+# Lo MEX REC DON"T PLOT ; Just read in data
+MANIP_RESULTS(OM_Plot=OM_BASE_LoMexRec, OM_Name="Base_LoMexRec", plot=F)
+MANIP_RESULTS(OM_Plot=OM_BH_LoMexRec, OM_Name="BH_LoMexRec", plot=F)
+MANIP_RESULTS(OM_Plot=OM_Hih_LoMexRec, OM_Name="Hih_LoMexRec", plot=F)
+MANIP_RESULTS(OM_Plot=OM_lnR0_LoMexRec, OM_Name="lnR0_LoMexRec", plot=F)
+MANIP_RESULTS(OM_Plot=OM_Loh_LoMexRec, OM_Name="Loh_LoMexRec", plot=F)
+MANIP_RESULTS(OM_Plot=OM_M_BH_LoMexRec, OM_Name="M_BH_LoMexRec", plot=F)
+
+
+
+#### Save Results
+# save(Results_BASE, file="D:\\MSE_Run\\MSE_Results\\Results_Base_HiMexRec.RData")
+# save(Results_BH, file="D:\\MSE_Run\\MSE_Results\\Results_BH_HiMexRec.RData")
+# save(Results_Hih, file="D:\\MSE_Run\\MSE_Results\\Results_Hih_HiMexRec.RData")
+# save(Results_lnR0, file="D:\\MSE_Run\\MSE_Results\\Results_lnR0_HiMexRec.RData")
+# save(Results_Loh, file="D:\\MSE_Run\\MSE_Results\\Results_Loh_HiMexRec.RData")
+# save(Results_M_BH, file="D:\\MSE_Run\\MSE_Results\\Results_M_BH_HiMexRec.RData")
+# 
+# save(Results_Base_MexRec, file="D:\\MSE_Run\\MSE_Results\\Results_Base_Conceptual.RData")
+# save(Results_BH_MexRec, file="D:\\MSE_Run\\MSE_Results\\Results_BH_Conceptual.RData")
+# save(Results_Hih_MexRec, file="D:\\MSE_Run\\MSE_Results\\Results_Hih_Conceptual.RData")
+# save(Results_lnR0_MexRec, file="D:\\MSE_Run\\MSE_Results\\Results_lnR0_Conceptual.RData")
+# save(Results_Loh_MexRec, file="D:\\MSE_Run\\MSE_Results\\Results_Loh_Conceptual.RData")
+# save(Results_M_BH_MexRec, file="D:\\MSE_Run\\MSE_Results\\Results_M_BH_Conceptual.RData")
+# 
+# save(Results_Base_LoMexRec, file="D:\\MSE_Run\\MSE_Results\\Results_Base_LoMexRec.RData")
+# save(Results_BH_LoMexRec, file="D:\\MSE_Run\\MSE_Results\\Results_BH_LoMexRec.RData")
+# save(Results_Hih_LoMexRec, file="D:\\MSE_Run\\MSE_Results\\Results_Hih_LoMexRec.RData")
+# save(Results_lnR0_LoMexRec, file="D:\\MSE_Run\\MSE_Results\\Results_lnR0_LoMexRec.RData")
+# save(Results_Loh_LoMexRec, file="D:\\MSE_Run\\MSE_Results\\Results_Loh_LoMexRec.RData")
+# save(Results_M_BH_LoMexRec, file="D:\\MSE_Run\\MSE_Results\\Results_M_BH_LoMexRec.RData")
+
+#### Load Saved Results 
+load(file="D:\\MSE_Run\\MSE_Results\\Results_Base_HiMexRec.RData")
+load(file="D:\\MSE_Run\\MSE_Results\\Results_BH_HiMexRec.RData")
+load(file="D:\\MSE_Run\\MSE_Results\\Results_Hih_HiMexRec.RData")
+load(file="D:\\MSE_Run\\MSE_Results\\Results_lnR0_HiMexRec.RData")
+load(file="D:\\MSE_Run\\MSE_Results\\Results_Loh_HiMexRec.RData")
+load(file="D:\\MSE_Run\\MSE_Results\\Results_M_BH_HiMexRec.RData")
+
+load(file="D:\\MSE_Run\\MSE_Results\\Results_Base_Conceptual.RData")
+load(file="D:\\MSE_Run\\MSE_Results\\Results_BH_Conceptual.RData")
+load(file="D:\\MSE_Run\\MSE_Results\\Results_Hih_Conceptual.RData")
+load(file="D:\\MSE_Run\\MSE_Results\\Results_lnR0_Conceptual.RData")
+load(file="D:\\MSE_Run\\MSE_Results\\Results_Loh_Conceptual.RData")
+load(file="D:\\MSE_Run\\MSE_Results\\Results_M_BH_Conceptual.RData")
+
+load(file="D:\\MSE_Run\\MSE_Results\\Results_Base_LoMexRec.RData")
+load(file="D:\\MSE_Run\\MSE_Results\\Results_BH_LoMexRec.RData")
+load(file="D:\\MSE_Run\\MSE_Results\\Results_Hih_LoMexRec.RData")
+load(file="D:\\MSE_Run\\MSE_Results\\Results_lnR0_LoMexRec.RData")
+load(file="D:\\MSE_Run\\MSE_Results\\Results_Loh_LoMexRec.RData")
+load(file="D:\\MSE_Run\\MSE_Results\\Results_M_BH_LoMexRec.RData")
+
+
+
+
 OM_lnR0$HCR_23$SSB[nrow(OM_lnR0$HCR_23$SSB),]
 
 MANIP_RESULTS(OM_Plot=OM_BASE_MexRec, OM_Name="Base_MexRec", plot=FALSE)
+
+
+
+
 
 ##### FILTER RESULTS FOR COLLAPSED STOCKS ???  #########  ???  ######### 
 # Try to re-run with upper bound on catch and see how results pan out for Loh (just HCR1 for now... )
@@ -2928,10 +3000,15 @@ for(HCR in list("HCR_1", "HCR_2", "HCR_3", "HCR_4", "HCR_5", "HCR_6", "HCR_7", "
   # bb = OM_Loh_MexRec[[HCR]]$FM_FMMSY
   # bb = OM_Loh_MexRec[[HCR]]$Tot_catch
   # iters_col = which(bb[nrow(bb),]>200)
-  bb = OM_Loh_MexRec[[HCR]]$SSB_SSBMSY
-  iters_col = which(bb[nrow(bb),]<0.4)
+  # bb = OM_Loh_MexRec[[HCR]]$SSB_SSBMSY
+  # iters_col = which(bb[nrow(bb),]<0.4)
   # bb_collapsed = bb[,which(bb[nrow(bb),]>20)]
   #   names(bb)[iters_col]
+  
+  bb = OM_Loh_MexRec[[HCR]]$Tot_catch
+  bb= subset(bb, rownames(bb)>2015)
+  iters_col = which(apply(bb, 2, max)>1000)
+  
   print(HCR)
   print( names(bb)[iters_col] )
   
@@ -2959,6 +3036,31 @@ list=which(bb[nrow(bb),]<1)
 bb_collapse = bb[,which(bb[nrow(bb),]<1)]
 View(round(bb_collapse))
 
+
+
+
+### FOR Loh_LoMexRec
+# Try to re-run with upper bound on catch and see how results pan out for Loh (just HCR1 for now... )
+for(HCR in list("HCR_1", "HCR_2", "HCR_3", "HCR_4", "HCR_5", "HCR_6", "HCR_7", "HCR_8", "HCR_9", "HCR_10", "HCR_11", "HCR_12", 
+                "HCR_13", "HCR_14", "HCR_15", "HCR_16", "HCR_17", "HCR_18", "HCR_19", "HCR_20", "HCR_21", "HCR_22", "HCR_23", "HCR_24") ){
+  # bb = OM_Loh_MexRec[[HCR]]$FM_FMMSY
+  # bb = OM_Loh_MexRec[[HCR]]$Tot_catch
+  # iters_col = which(bb[nrow(bb),]>200)
+  # bb = OM_Loh_MexRec[[HCR]]$SSB_SSBMSY
+  # iters_col = which(bb[nrow(bb),]<0.4)
+  # bb_collapsed = bb[,which(bb[nrow(bb),]>20)]
+  #   names(bb)[iters_col]
+  
+  bb = OM_Loh_LoMexRec[[HCR]]$Tot_catch
+  bb= subset(bb, rownames(bb)>2085)
+  iters_col = which(apply(bb, 2, max)>600)
+  
+  print(HCR)
+  print( names(bb)[iters_col] )
+  
+}
+
+tail(OM_Loh_LoMexRec$HCR_16$Com_catch, 10)
 
 
 
@@ -3015,6 +3117,29 @@ for(HCR in list("HCR_1", "HCR_2", "HCR_3", "HCR_4", "HCR_5", "HCR_6", "HCR_7", "
   
 }
 cbind(as.numeric(rownames(OM_M_BH_MexRec[["HCR_9"]]$Tot_catch)),OM_M_BH_MexRec[["HCR_9"]]$Tot_catch$"121")
+
+
+### FOR M_BH
+# Try to re-run with upper bound on catch and see how results pan out for Loh (just HCR1 for now... )
+for(HCR in list("HCR_1", "HCR_2", "HCR_3", "HCR_4", "HCR_5", "HCR_6", "HCR_7", "HCR_8", "HCR_9", "HCR_10", "HCR_11", "HCR_12", "HCR_13", "HCR_14", "HCR_15", "HCR_16", "HCR_17", "HCR_18", "HCR_19", "HCR_20", "HCR_21", "HCR_22", "HCR_23", "HCR_24") ){
+  # bb = OM_M_BH[[HCR]]$FM_FMMSY
+  # bb = OM_M_BH[[HCR]]$Tot_catch
+  # iters_col = which(bb[nrow(bb),]>200)
+  bb = OM_M_BH[[HCR]]$SSB_SSBMSY
+  iters_col = which(apply(bb, 2, min)<0.3)
+ 
+  # bb = OM_M_BH[[HCR]]$Tot_catch
+  # bb= subset(bb, rownames(bb)>2015)
+  # iters_col = which(apply(bb, 2, max)>2000)
+  
+  # iters_col = which(bb[nrow(bb),]<0.6)
+  # bb_collapsed = bb[,which(bb[nrow(bb),]>20)]
+  #   names(bb)[iters_col]
+  print(HCR)
+  print( names(bb)[iters_col] )
+  
+}
+cbind(as.numeric(rownames(OM_M_BH[["HCR_9"]]$Tot_catch)),OM_M_BH[["HCR_9"]]$Tot_catch$"121")
 
 
 
