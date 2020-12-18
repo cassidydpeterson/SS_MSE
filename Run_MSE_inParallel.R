@@ -78,7 +78,8 @@ foreach(h=names(list.hcr)) %dopar% {
            StoreResults=list.hcr[[h]]$StoreResults, FRQ=5,
            Btarg="BMSY", Bconst=1, Ftarg=list.hcr[[h]]$Ftarg, 
            Fconst=list.hcr[[h]]$Fconst, a=list.hcr[[h]]$a, b=list.hcr[[h]]$b,
-           sourcedir=sourcedir, SR="BH")
+           niters=seq(from=47, to=245, by=2),
+           sourcedir=sourcedir, SR="BH", implement="MexRec", MaxCatch=NA)
 }
   
   

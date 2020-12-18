@@ -13,18 +13,36 @@
 # OMdir = "R:\\Management Strategy Evaluation\\SB\\TEST_Base\\HCR1\\OM" # OM directory
 
 # START FUNCTION
-implementHCR = function(hcr, tt, FRQ, modEM, OMdir, i, seed=430, MaxCatch=2000, ...){
+implementHCR = function(hcr, tt, FRQ, modEM, OMdir, i, seed=430, MaxCatch=NA, ...){
   set.seed(seed*tt)
   modOM = SS_output(OMdir)
   
   #-------------------------------------------------------------------------------------------------------------
   # Implementation uncertainty + allocation
   #-------------------------------------------------------------------------------------------------------------
+  
+  ## Corrections for Max Catch ###
+  #if max catch present
+  if(!is.na(MaxCatch)) { hcr$ACL = ifelse(hcr$ACL > MaxCatch, MaxCatch, hcr$ACL) }
+  
+  # if ACL > 50% total biomass, limit catch
+  if(hcr$ACL >= 0.5 * modOM$timeseries[modOM$timeseries$Yr==(tt-1),]$Bio_all) {
+    
+    c1=vector(length=FRQ)
+    for(f in 1:FRQ){
+      c1[f] = 0.5*((1-0.5)^(f-1))*modOM$timeseries[modOM$timeseries$Yr==tt,]$Bio_all
+    } # end f loop
+    
+    hcr$ACL <- c1
+    
+  } # end if ACL > 50% total biomass
+  
+  
   # COMMERCIAL CATCH #
   ### calculate expected commercial ACL ###
   # 41.7 mt DW => 58 mt round weight
-  hcr$ACL = ifelse(hcr$ACL > MaxCatch, 0, hcr$ACL)
   comACL = hcr$ACL - 58
+  comACL <- ifelse(comACL<0, 0, comACL)
   
   ### commercial catch w implementation uncertainty!   ###
   # actualCatch = rlnorm(FRQ, -0.2722412, 0.3306523) * comACL
