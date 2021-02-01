@@ -68,6 +68,11 @@ implementHCR = function(hcr, tt, FRQ, modEM, OMdir, i, seed=430, MaxCatch=NA, ..
   lr3 = lm(modOM$timeseries[modOM$timeseries$Yr>1994 & modOM$timeseries$Yr<2016,]$`dead(B):_3` ~
              modOM$timeseries[modOM$timeseries$Yr>1994 & modOM$timeseries$Yr<2016,]$Bio_all)
   F3exp = (lr3$coefficients[1]) + ( (lr3$coefficients[2] )*modOM$timeseries[modOM$timeseries$Yr==tt-1,]$Bio_all )
+  # If expected F3 catch is less than average over past few years (), then linear ramp to zero. This is to account for the negative intercept
+  if(F3exp < 109 ){
+    temp_a <- (109 - lr3$coefficients[1])/(lr3$coefficients[2]) 
+    F3exp <- (109/temp_a) * modOM$timeseries[modOM$timeseries$Yr==tt-1,]$Bio_all
+  }
   # F3catch = rep(as.numeric(F3exp), FRQ)
   # # F3exp = (-146.0739) + ((0.01690873)*modOM$timeseries[modOM$timeseries$Yr==tt-1,]$Bio_all)      # expected F3 catch
   # F3exp = (-1670.934) + ( (0.07053087 )*modOM$timeseries[modOM$timeseries$Yr==tt-1,]$Bio_all )      # expected F3 catch
