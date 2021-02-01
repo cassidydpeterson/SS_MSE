@@ -98,6 +98,10 @@ MSE_func = function(MCMCdir, OMdir, EMdir, StoreResults, FRQ=5,
   source(file.path(sourcedir,"EditStarterFile.R")) # ImplementHCR
   # copy files to *save results* folder; maybe save relevant results in .Rdata form
   
+  #convert data files to starter version. 
+  file.copy(from=file.path(OMdir,"SB_START.dat"),to=file.path(OMdir,"SB.dat"), overwrite=T)
+  file.copy(from=file.path(EMdir,"SB_START.dat"),to=file.path(EMdir,"SB.dat"), overwrite=T)
+  
   # required libraries
   library(r4ss)
   library(data.table)
@@ -204,8 +208,8 @@ MSE_func = function(MCMCdir, OMdir, EMdir, StoreResults, FRQ=5,
     save(MSEResults, file=paste0(StoreResults,"\\MSEResults.RData"))
     
     #convert data files to starter version. 
-    file.copy(from=file.path(OMdir,"SB - START.dat"),to=file.path(OMdir,"SB.dat"), overwrite=T)
-    file.copy(from=file.path(EMdir,"SB - START.dat"),to=file.path(EMdir,"SB.dat"), overwrite=T)
+    file.copy(from=file.path(OMdir,"SB_START.dat"),to=file.path(OMdir,"SB.dat"), overwrite=T)
+    file.copy(from=file.path(EMdir,"SB_START.dat"),to=file.path(EMdir,"SB.dat"), overwrite=T)
     
     
   }  # end for i:nrow(mcmc); iteration loop
