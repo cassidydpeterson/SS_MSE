@@ -124,11 +124,11 @@ MSE_func = function(MCMCdir, OMdir, EMdir, StoreResults, FRQ=5,
   EndYear = OMdat$endyr
   StartSimYear = EndYear - (simYrs-1)
   
-  #get niters as sequence
-  if(length(niters)<=1){
-    ni = ifelse(is.na(niters), 1000, niters)
-    niters = 1:ni
-  }
+  # #get niters as sequence
+  # if(length(niters)<=1){
+  #   ni = ifelse(is.na(niters), 1000, niters)
+  #   niters = 1:ni
+  # }
   
   for(i in niters) {
     # i=1

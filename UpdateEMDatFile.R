@@ -110,7 +110,8 @@ UpdateEM = function(EMdir, OMdir, FRQ=5, tt, ...) {
     
   } # end n loop for lencomps
   lencomps$Yr <- ifelse(lencomps$Nsamp<1, -1*abs(lencomps$Yr), lencomps$Yr)
-  NewEMdat$lencomp = round(lencomps, digits=4)
+  NewEMdat$lencomp = round(lencomps, digits=5)
+  NewEMdat$CPUE$obs <- ifelse(NewEMdat$CPUE$obs==0, 0.00001, NewEMdat$CPUE$obs)
   
   ####----------------------------------------------------------------------------------------------------------
   # update endyear
@@ -133,6 +134,7 @@ UpdateOM <- function(OMdir, tt, FRQ, ...){
   
   OMdat$CPUE[OMdat$CPUE$year>=tt-FRQ & OMdat$CPUE$year<tt,] <- OMexpect_dat$CPUE[OMexpect_dat$CPUE$year>=tt-FRQ & OMexpect_dat$CPUE$year<tt,]
   OMdat$CPUE<-round(OMdat$CPUE, digits=5)
+  OMdat$CPUE$obs <- ifelse(OMdat$CPUE$obs==0, 0.00001, OMdat$CPUE$obs)
   
   SS_writedat(OMdat, outfile=paste(OMdir,"\\SB.dat", sep=""), version="3.30", overwrite=T)
 } # end UpdateOM function
