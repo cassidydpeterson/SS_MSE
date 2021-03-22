@@ -1686,8 +1686,12 @@ SS_output_Report <-
 
 GET_MSE_RESULTS = function(OM="BASE", hlist=1:24, iters=seq(47,245, by=2), years=1960:2115, base_dir="D:\\MSE_Run\\MSE_Results\\"){
   
+  iters0=iters
+  
   for(h in hlist){
     
+    iters=iters0
+    # if(h==13){iters=iters0[-which(iters==153)]} # for Hih_LoMexRec
     # iters = seq(47,245, by=2)
     # years = 1960:2115
     
@@ -1962,19 +1966,26 @@ MANIP_RESULTS <- function(OM_Plot, OM_Name, plot=TRUE){
   
   SSB_SSBMSY_2115 =  matrix(nrow=100, ncol=24) 
   for(h in 1:24){
-    SSB_SSBMSY_2115[,h] = t( OM_Plot[[paste0("HCR_",h)]]$SSB_SSBMSY["2115",] )
+    ssb = t(as.data.frame(rbind(OM_Plot[[paste0("HCR_",h)]]$SSB_SSBMSY["2115",], 'iter'=as.numeric(colnames(OM_Plot[[paste0("HCR_",h)]]$SSB_SSBMSY["2115",])) ) ) )
+    xx = as.data.frame(seq(from=47, to=245, by=2)); colnames(xx)="iter" # DO THIS TO ACCOUNT FOR MISSING ITERATIONS
+    
+    SSB_SSBMSY_2115[,h] = merge(ssb, xx, all.y=T)[,2]
   }
   SSB_SSBMSY_2115 <- as.data.frame(SSB_SSBMSY_2115)
   row.names(SSB_SSBMSY_2115) <- names(OM_Plot$HCR_1$SSB_SSBMSY)
   names(SSB_SSBMSY_2115) <- paste0("HCR_",1:24)
   
+
   
   
   ## Get SSB/SSBMSY 2065 ##
   
   SSB_SSBMSY_2065 =  matrix(nrow=100, ncol=24) 
   for(h in 1:24){
-    SSB_SSBMSY_2065[,h] = t( OM_Plot[[paste0("HCR_",h)]]$SSB_SSBMSY["2065",] )
+    ssb=t(as.data.frame(rbind( OM_Plot[[paste0("HCR_",h)]]$SSB_SSBMSY["2065",] , 'iter'=as.numeric(colnames( OM_Plot[[paste0("HCR_",h)]]$SSB_SSBMSY["2065",] )) ) ) )
+    xx = as.data.frame(seq(from=47, to=245, by=2)); colnames(xx)="iter" # DO THIS TO ACCOUNT FOR MISSING ITERATIONS
+    
+    SSB_SSBMSY_2065[,h] = merge(ssb, xx, all.y=T)[,2]
   }
   SSB_SSBMSY_2065 <- as.data.frame(SSB_SSBMSY_2065)
   row.names(SSB_SSBMSY_2065) <- names(OM_Plot$HCR_1$SSB_SSBMSY)
@@ -1986,7 +1997,10 @@ MANIP_RESULTS <- function(OM_Plot, OM_Name, plot=TRUE){
   
   FM_FMMSY_2115 =  matrix(nrow=100, ncol=24) 
   for(h in 1:24){
-    FM_FMMSY_2115[,h] = t( OM_Plot[[paste0("HCR_",h)]]$FM_FMMSY["2115",] )
+    fmsy = t(as.data.frame(rbind( OM_Plot[[paste0("HCR_",h)]]$FM_FMMSY["2115",] , 'iter'=as.numeric(colnames( OM_Plot[[paste0("HCR_",h)]]$FM_FMMSY["2115",] )) ) ) )
+    xx = as.data.frame(seq(from=47, to=245, by=2)); colnames(xx)="iter" # DO THIS TO ACCOUNT FOR MISSING ITERATIONS
+    
+    FM_FMMSY_2115[,h] = merge(fmsy, xx, all.y=T)[,2]
   }
   FM_FMMSY_2115 <- as.data.frame(FM_FMMSY_2115)
   row.names(FM_FMMSY_2115) <- names(OM_Plot$HCR_1$FM_FMMSY)
@@ -1998,7 +2012,10 @@ MANIP_RESULTS <- function(OM_Plot, OM_Name, plot=TRUE){
   
   FM_FMMSY_2065 =  matrix(nrow=100, ncol=24) 
   for(h in 1:24){
-    FM_FMMSY_2065[,h] = t( OM_Plot[[paste0("HCR_",h)]]$FM_FMMSY["2065",] )
+    fmsy = t(as.data.frame(rbind( OM_Plot[[paste0("HCR_",h)]]$FM_FMMSY["2065",] , 'iter'=as.numeric(colnames( OM_Plot[[paste0("HCR_",h)]]$FM_FMMSY["2065",] )) ) ) )
+  xx = as.data.frame(seq(from=47, to=245, by=2)); colnames(xx)="iter" # DO THIS TO ACCOUNT FOR MISSING ITERATIONS
+  
+    FM_FMMSY_2065[,h] = merge(fmsy, xx, all.y=T)[,2]
   }
   FM_FMMSY_2065 <- as.data.frame(FM_FMMSY_2065)
   row.names(FM_FMMSY_2065) <- names(OM_Plot$HCR_1$FM_FMMSY)
@@ -2010,7 +2027,11 @@ MANIP_RESULTS <- function(OM_Plot, OM_Name, plot=TRUE){
   
   Com_Catch_cumulative =  matrix(nrow=100, ncol=24) 
   for(h in 1:24){
-    Com_Catch_cumulative[,h] = t( apply(OM_Plot[[paste0("HCR_",h)]]$Com_catch[as.character(2016:2115),] , 2, sum) )
+    CCC = t(as.data.frame(rbind( apply(OM_Plot[[paste0("HCR_",h)]]$Com_catch[as.character(2016:2115),] , 2, sum) , 'iter'=as.numeric(names( apply(OM_Plot[[paste0("HCR_",h)]]$Com_catch[as.character(2016:2115),] , 2, sum) )) ) ) )
+    xx = as.data.frame(seq(from=47, to=245, by=2)); colnames(xx)="iter" # DO THIS TO ACCOUNT FOR MISSING ITERATIONS
+    
+    
+    Com_Catch_cumulative[,h] = merge(CCC, xx, all.y=T)[,2]
   }
   Com_Catch_cumulative <- as.data.frame(Com_Catch_cumulative)
   row.names(Com_Catch_cumulative) <- names(OM_Plot$HCR_1$Com_catch)
@@ -2023,7 +2044,10 @@ MANIP_RESULTS <- function(OM_Plot, OM_Name, plot=TRUE){
   
  Tot_Catch_cumulative =  matrix(nrow=100, ncol=24) 
   for(h in 1:24){
-    Tot_Catch_cumulative[,h] = t( apply(OM_Plot[[paste0("HCR_",h)]]$Tot_catch[as.character(2016:2115),] , 2, sum) )
+    TCC =  t(as.data.frame(rbind( apply(OM_Plot[[paste0("HCR_",h)]]$Tot_catch[as.character(2016:2115),] , 2, sum) , 'iter'=as.numeric(names( apply(OM_Plot[[paste0("HCR_",h)]]$Tot_catch[as.character(2016:2115),] , 2, sum) )) ) ) )
+    xx = as.data.frame(seq(from=47, to=245, by=2)); colnames(xx)="iter" # DO THIS TO ACCOUNT FOR MISSING ITERATIONS
+    
+    Tot_Catch_cumulative[,h] = merge(TCC, xx, all.y=T)[,2]
   }
  Tot_Catch_cumulative <- as.data.frame(Tot_Catch_cumulative)
   row.names(Tot_Catch_cumulative) <- names(OM_Plot$HCR_1$Tot_catch)
@@ -2036,7 +2060,10 @@ MANIP_RESULTS <- function(OM_Plot, OM_Name, plot=TRUE){
   
   Com_Catch_2115 =  matrix(nrow=100, ncol=24) 
   for(h in 1:24){
-    Com_Catch_2115[,h] = t( apply(OM_Plot[[paste0("HCR_",h)]]$Com_catch[as.character(2106:2115),] , 2, mean) )
+    CC =  t(as.data.frame(rbind( apply(OM_Plot[[paste0("HCR_",h)]]$Com_catch[as.character(2106:2115),] , 2, mean) , 'iter'=as.numeric(names( apply(OM_Plot[[paste0("HCR_",h)]]$Com_catch[as.character(2106:2115),] , 2, mean) )) ) ) )
+    xx = as.data.frame(seq(from=47, to=245, by=2)); colnames(xx)="iter" # DO THIS TO ACCOUNT FOR MISSING ITERATIONS
+    
+    Com_Catch_2115[,h] = merge(CC, xx, all.y=T)[,2]
   }
   Com_Catch_2115 <- as.data.frame(Com_Catch_2115)
   row.names(Com_Catch_2115) <- names(OM_Plot$HCR_1$Com_catch)
@@ -2047,7 +2074,10 @@ MANIP_RESULTS <- function(OM_Plot, OM_Name, plot=TRUE){
   
   Com_Catch_2065 =  matrix(nrow=100, ncol=24) 
   for(h in 1:24){
-    Com_Catch_2065[,h] = t( apply(OM_Plot[[paste0("HCR_",h)]]$Com_catch[as.character(2056:2065),] , 2, mean) )
+    CC =  t(as.data.frame(rbind( apply(OM_Plot[[paste0("HCR_",h)]]$Com_catch[as.character(2056:2065),] , 2, mean) , 'iter'=as.numeric(names( apply(OM_Plot[[paste0("HCR_",h)]]$Com_catch[as.character(2056:2065),] , 2, mean) )) ) ) )
+    xx = as.data.frame(seq(from=47, to=245, by=2)); colnames(xx)="iter" # DO THIS TO ACCOUNT FOR MISSING ITERATIONS
+    
+    Com_Catch_2065[,h] = merge(CC, xx, all.y=T)[,2]
   }
   Com_Catch_2065 <- as.data.frame(Com_Catch_2065)
   row.names(Com_Catch_2065) <- names(OM_Plot$HCR_1$Com_catch)
@@ -2061,7 +2091,11 @@ MANIP_RESULTS <- function(OM_Plot, OM_Name, plot=TRUE){
   
   AvgLen_F_2115 =  matrix(nrow=100, ncol=24) 
   for(h in 1:24){
-    AvgLen_F_2115[,h] = t( OM_Plot[[paste0("HCR_",h)]]$AvgLen_F["2115",] )
+    AL = t(as.data.frame(rbind( OM_Plot[[paste0("HCR_",h)]]$AvgLen_F["2115",] , 'iter'=as.numeric(colnames( OM_Plot[[paste0("HCR_",h)]]$AvgLen_F["2115",] )) ) ) )
+    xx = as.data.frame(seq(from=47, to=245, by=2)); colnames(xx)="iter" # DO THIS TO ACCOUNT FOR MISSING ITERATIONS
+    
+    
+    AvgLen_F_2115[,h] = merge(AL, xx, all.y=T)[,2]
   }
   AvgLen_F_2115 <- as.data.frame(AvgLen_F_2115)
   row.names(AvgLen_F_2115) <- names(OM_Plot$HCR_1$AvgLen_F)
@@ -2073,7 +2107,10 @@ MANIP_RESULTS <- function(OM_Plot, OM_Name, plot=TRUE){
   
   AvgLen_F_2065 =  matrix(nrow=100, ncol=24) 
   for(h in 1:24){
-    AvgLen_F_2065[,h] = t( OM_Plot[[paste0("HCR_",h)]]$AvgLen_F["2065",] )
+    AL = t(as.data.frame(rbind( OM_Plot[[paste0("HCR_",h)]]$AvgLen_F["2065",] , 'iter'=as.numeric(colnames( OM_Plot[[paste0("HCR_",h)]]$AvgLen_F["2065",] )) ) ) )
+    xx = as.data.frame(seq(from=47, to=245, by=2)); colnames(xx)="iter" # DO THIS TO ACCOUNT FOR MISSING ITERATIONS
+    
+    AvgLen_F_2065[,h] = merge(AL, xx, all.y=T)[,2]
   }
   AvgLen_F_2065 <- as.data.frame(AvgLen_F_2065)
   row.names(AvgLen_F_2065) <- names(OM_Plot$HCR_1$AvgLen_F)
@@ -2159,18 +2196,20 @@ MANIP_RESULTS <- function(OM_Plot, OM_Name, plot=TRUE){
       abline(h=1)
       for(h in hlist){
         for(i in 1:length(iters)){
-          lines(years, OM_Plot[[paste0("HCR_",h)]]$SSB_SSBMSY[,i], col=col_lista[h])
-        }
-      }
+          if(i <= ncol(OM_Plot[[paste0("HCR_",h)]]$SSB_SSBMSY) ){                     # to skip over missing iterations
+            lines(years, OM_Plot[[paste0("HCR_",h)]]$SSB_SSBMSY[,i], col=col_lista[h])
+          } # end if
+        } # end for i
+      } # end for h
       for(h in hlist){
         lines(years, apply(OM_Plot[[paste0("HCR_",h)]]$SSB_SSBMSY, 1, median), type='l', lwd=2, col=col_list2a[h], lty=lty_lista[h])
       }
-    }
+    } # end k loop
     mtext(OM_Name, outer = TRUE, cex = 1.5, line=-0.2)
     mtext(expression("SSB/SSB"["MSY"])  , side=2, outer = TRUE, cex = 1.5, line=-0.5)
     dev.off()
     
-    
+   
     
     # F/FMSY
     png(filename=paste0("D:\\MSE_Run\\MSE_Results\\Plots\\",OM_Name,"_WORM_FFMSY.png"),
@@ -2197,9 +2236,11 @@ MANIP_RESULTS <- function(OM_Plot, OM_Name, plot=TRUE){
                         col=col_list2, lty=lty_list, cex=0.7, bty='n') }
       for(h in hlist){
         for(i in 1:length(iters)){
+          if(i <= ncol(OM_Plot[[paste0("HCR_",h)]]$FM_FMMSY) ){                     # to skip over missing iterations
           lines(years, OM_Plot[[paste0("HCR_",h)]]$FM_FMMSY[,i], col=col_lista[h])
-        }
-      }
+          } # end if
+        }# end for i
+      }# end for h
       abline(h=1)
       for(h in hlist){
         lines(years, apply(OM_Plot[[paste0("HCR_",h)]]$FM_FMMSY, 1, median), type='l', lwd=2, col=col_list2a[h], lty=lty_lista[h])
@@ -2236,9 +2277,11 @@ MANIP_RESULTS <- function(OM_Plot, OM_Name, plot=TRUE){
                         col=col_list2, lty=lty_list, cex=0.7, bty='n') }
       for(h in hlist){
         for(i in 1:length(iters)){
+          if(i <= ncol(OM_Plot[[paste0("HCR_",h)]]$Com_catch) ){                     # to skip over missing iterations
           lines(years, OM_Plot[[paste0("HCR_",h)]]$Com_catch[,i], col=col_lista[h])
-        }
-      }
+          } # end if
+        }# end for i
+      }# end for h
       for(h in hlist){
         lines(years, apply(OM_Plot[[paste0("HCR_",h)]]$Com_catch, 1, median), type='l', lwd=2, col=col_list2a[h], lty=lty_lista[h])
       }
@@ -2274,9 +2317,11 @@ MANIP_RESULTS <- function(OM_Plot, OM_Name, plot=TRUE){
                         col=col_list2, lty=lty_list, cex=0.7, bty='n') }
       for(h in hlist){
         for(i in 1:length(iters)){
+          if(i <= ncol(OM_Plot[[paste0("HCR_",h)]]$MEX_Rec_catch) ){                     # to skip over missing iterations
           lines(years, OM_Plot[[paste0("HCR_",h)]]$MEX_Rec_catch[,i], col=col_lista[h])
-        }
-      }
+          } # end if
+        }# end for i
+      }# end for h
       for(h in hlist){
         lines(years, apply(OM_Plot[[paste0("HCR_",h)]]$MEX_Rec_catch, 1, median), type='l', lwd=2, col=col_list2a[h], lty=lty_lista[h])
       }
@@ -2312,9 +2357,11 @@ MANIP_RESULTS <- function(OM_Plot, OM_Name, plot=TRUE){
                         col=col_list2, lty=lty_list, cex=0.7, bty='n') }
       for(h in hlist){
         for(i in 1:length(iters)){
+          if(i <= ncol(OM_Plot[[paste0("HCR_",h)]]$Tot_catch) ){                     # to skip over missing iterations
           lines(years, OM_Plot[[paste0("HCR_",h)]]$Tot_catch[,i], col=col_lista[h])
-        }
-      }
+          } #end if
+        }# end for i
+      }# end for h
       for(h in hlist){
         lines(years, apply(OM_Plot[[paste0("HCR_",h)]]$Tot_catch, 1, median), type='l', lwd=2, col=col_list2a[h], lty=lty_lista[h])
       }
@@ -2349,9 +2396,11 @@ MANIP_RESULTS <- function(OM_Plot, OM_Name, plot=TRUE){
                         col=col_list2, lty=lty_list, cex=0.7, bty='n') }
       for(h in hlist){
         for(i in 1:length(iters)){
+          if(i <= ncol(OM_Plot[[paste0("HCR_",h)]]$SSB_SSB0) ){                     # to skip over missing iterations
           lines(years, OM_Plot[[paste0("HCR_",h)]]$SSB_SSB0[,i], col=col_lista[h])
-        }
-      }
+          }#end if
+        }# end for i
+      }# end for h
       for(h in hlist){
         lines(years, apply(OM_Plot[[paste0("HCR_",h)]]$SSB_SSB0, 1, median), type='l', lwd=2, col=col_list2a[h], lty=lty_lista[h])
       }
@@ -2387,9 +2436,11 @@ MANIP_RESULTS <- function(OM_Plot, OM_Name, plot=TRUE){
                         col=col_list2, lty=lty_list, cex=0.7, bty='n') }
       for(h in hlist){
         for(i in 1:length(iters)){
+          if(i <= ncol(OM_Plot[[paste0("HCR_",h)]]$AvgLen_F) ){                     # to skip over missing iterations
           lines(years, OM_Plot[[paste0("HCR_",h)]]$AvgLen_F[,i], col=col_lista[h])
-        }
-      }
+          }#end if
+        }# end for i
+      }# end for h
       for(h in hlist){
         lines(years, apply(OM_Plot[[paste0("HCR_",h)]]$AvgLen_F, 1, median), type='l', lwd=2, col=col_list2a[h], lty=lty_lista[h])
       }
