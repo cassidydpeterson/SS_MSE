@@ -6,6 +6,7 @@
 # library(r4ss)
 # 
 # # EM_SSdir = "N:\\Documents\\DFA_Simulation\\SB\\SimpleSim_MSE\\SS_mod_SS330_EM"
+# EMdir="C:\\Users\\Cassidy.Peterson\\Desktop\\RUN_MSE\\OM_BH\\HCR1\\EM"
 # EMdir = "R:\\Management Strategy Evaluation\\SB\\TEST_Base\\HCR1\\EM" # EM directory
 # 
 # Btarg="BMSY"

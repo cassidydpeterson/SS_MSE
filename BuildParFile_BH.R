@@ -22,7 +22,7 @@ BuildParFile = function(MCMCdir, mcmc, i, OMdirs=list()){
   
   
   ## read-in par file #
-  parf = readLines(paste(MCMCdir,"\\ss.par",sep="")) # take par file from mcmc and save as newpar; edit newpar and save in OM 
+  parf = readLines(file.path(MCMCdir,"ss.par")) # take par file from mcmc and save as newpar; edit newpar and save in OM 
   newpar = parf
   
   
@@ -350,9 +350,8 @@ BuildParFile = function(MCMCdir, mcmc, i, OMdirs=list()){
   #... add other parameters as necessary for each example. 
   
   
-  
   for(OMD in OMdirs){
-    writeLines(newpar, paste(OMD,"\\ss.par",sep=""))
+    writeLines(newpar, file.path(OMD,"ss.par") )
   }
   
   

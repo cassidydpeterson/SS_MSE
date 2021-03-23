@@ -19,10 +19,10 @@ UpdateEM = function(EMdir, OMdir, FRQ=5, tt, ...) {
   # get data files
   ####----------------------------------------------------------------------------------------------------------
   
-  EMdat = SS_readdat(file=paste(EMdir,"\\SB.dat", sep=""), version="3.30")
+  EMdat = SS_readdat(file=file.path(EMdir,"SB.dat"), version="3.30")
   
-  OMboot_dat = SS_readdat(file=paste(OMdir,"\\data.ss_new", sep=""), section=3, version="3.30") 
-  OMdat = SS_readdat(file=paste(OMdir,"\\SB.dat", sep=""), section=1, version="3.30") 
+  OMboot_dat = SS_readdat(file=file.path(OMdir,"data.ss_new"), section=3, version="3.30") 
+  OMdat = SS_readdat(file=file.path(OMdir,"SB.dat"), section=1, version="3.30") 
   
   # get new EM data
   NewEMdat = EMdat
@@ -121,7 +121,7 @@ UpdateEM = function(EMdir, OMdir, FRQ=5, tt, ...) {
   ####----------------------------------------------------------------------------------------------------------
   # re-write new EM data file
   ####----------------------------------------------------------------------------------------------------------
-  SS_writedat(NewEMdat, outfile=paste(EMdir,"\\SB.dat", sep=""), version="3.30", overwrite=T)
+  SS_writedat(NewEMdat, outfile=file.path(EMdir,"SB.dat"), version="3.30", overwrite=T)
   
 } # end UpdateEM function
 
@@ -129,13 +129,13 @@ UpdateEM = function(EMdir, OMdir, FRQ=5, tt, ...) {
 
 UpdateOM <- function(OMdir, tt, FRQ, ...){
   # re-write new OM data file with historical expected values
-  OMexpect_dat = SS_readdat(file=paste(OMdir,"\\data.ss_new", sep=""), section=2, version="3.30") 
-  OMdat = SS_readdat(file=paste(OMdir,"\\data.ss_new", sep=""), section=1, version="3.30") 
+  OMexpect_dat = SS_readdat(file=file.path(OMdir,"data.ss_new"), section=2, version="3.30") 
+  OMdat = SS_readdat(file=file.path(OMdir,"data.ss_new"), section=1, version="3.30") 
   
   OMdat$CPUE[OMdat$CPUE$year>=tt-FRQ & OMdat$CPUE$year<tt,] <- OMexpect_dat$CPUE[OMexpect_dat$CPUE$year>=tt-FRQ & OMexpect_dat$CPUE$year<tt,]
   OMdat$CPUE<-round(OMdat$CPUE, digits=5)
   OMdat$CPUE$obs <- ifelse(OMdat$CPUE$obs==0, 0.00001, OMdat$CPUE$obs)
   
-  SS_writedat(OMdat, outfile=paste(OMdir,"\\SB.dat", sep=""), version="3.30", overwrite=T)
+  SS_writedat(OMdat, outfile=file.path(OMdir,"SB.dat"), version="3.30", overwrite=T)
 } # end UpdateOM function
 

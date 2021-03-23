@@ -163,7 +163,7 @@ implementHCR = function(hcr, tt, FRQ, modEM, OMdir, i, seed=430, MaxCatch=NA, ..
   #-------------------------------------------------------------------------------------------------------------
   # Put future catches into OM
   
-  OMdat = SS_readdat(file=paste0(OMdir,"\\SB.dat"), version="3.30") 
+  OMdat = SS_readdat(file=file.path(OMdir,"SB.dat"), version="3.30") 
   newOMdat = OMdat
   endyr = tt-1
   for(y in (endyr+1):(endyr+FRQ)){
@@ -201,7 +201,7 @@ implementHCR = function(hcr, tt, FRQ, modEM, OMdir, i, seed=430, MaxCatch=NA, ..
   
   
   # Re-write OM data file with additional FRQ years of data. 
-  SS_writedat(newOMdat, outfile=paste0(OMdir,"\\SB.dat"), version="3.30", overwrite=T)
+  SS_writedat(newOMdat, outfile=file.path(OMdir,"SB.dat"), version="3.30", overwrite=T)
   
   
   # return(MSEResults = MSEResults)

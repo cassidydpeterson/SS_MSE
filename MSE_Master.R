@@ -117,7 +117,7 @@ MSE_func = function(MCMCdir, OMdir, EMdir, StoreResults, FRQ=5,
   MSEResults <<- list()     # empty list to store MSE results
   # SSgetMCMC(dir="D:\\MSE_Run\\RUN_MCMC\\sandbar_330_OM_BH_MCMC", writecsv=F)
   mcmc = SSgetMCMC(dir=MCMCdir, writecsv=FALSE) # get mcmc file
-  OMdat = SS_readdat(file=paste0(OMdir,"\\SB.dat"), version="3.30")
+  OMdat = SS_readdat(file=file.path(OMdir,"\\SB.dat"), version="3.30")
   # modEM = SS_output(EMdir)
   
   StartYear = OMdat$styr
@@ -196,16 +196,16 @@ MSE_func = function(MCMCdir, OMdir, EMdir, StoreResults, FRQ=5,
     
     # save files to StoreResults
     # file.copy(from=paste0(OMdir,"\\data.ss_new"),to=paste0(StoreResults,"\\OMdata_",i,".ss_new"))
-    file.copy(from=paste0(OMdir,"\\Report.sso"),to=paste0(StoreResults,"\\OMReport_",i,".sso"), overwrite=T)
+    file.copy(from=file.path(OMdir,"Report.sso"),to=file.path(StoreResults,paste0("OMReport_",i,".sso")), overwrite=T)
     # file.copy(from=paste0(EMdir,"\\data.ss_new"),to=paste0(StoreResults,"\\EMdata_",i,".ss_new"))
-    file.copy(from=paste0(EMdir,"\\Report.sso"),to=paste0(StoreResults,"\\EMReport_",i,".sso"), overwrite=T)
+    file.copy(from=file.path(EMdir,"Report.sso"),to=file.path(StoreResults,paste0("EMReport_",i,".sso")), overwrite=T)
     # OM = SS_output(OMdir)
     # EM = SS_output(EMdir)
     # MSEResults[[paste0("OM_",i)]] <- OM
     # MSEResults[[paste0("EM_",i)]] <- EM
     assign("MSEResults",MSEResults, envir=globalenv())
     # Save MSEResults data in store results
-    save(MSEResults, file=paste0(StoreResults,"\\MSEResults.RData"))
+    save(MSEResults, file=file.path(StoreResults,"MSEResults.RData"))
     
     #convert data files to starter version. 
     file.copy(from=file.path(OMdir,"SB_START.dat"),to=file.path(OMdir,"SB.dat"), overwrite=T)

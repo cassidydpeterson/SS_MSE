@@ -15,8 +15,8 @@ BuildEM = function(EMdir, OMdir, tt, ...) {
   # Get EM data file and add results from MSE_Step2
   ### NOTE: Make data Corrections for variance adjustment!!!
   
-  EMdat = SS_readdat(file=paste(EMdir,"\\SB.dat", sep=""), version="3.30")
-  OMboot_dat = SS_readdat(file=paste(OMdir,"\\data.ss_new", sep=""), section=3, version="3.30") 
+  EMdat = SS_readdat(file=file.path(EMdir,"SB.dat"), version="3.30")
+  OMboot_dat = SS_readdat(file=file.path(OMdir,"data.ss_new"), section=3, version="3.30") 
   
   
   # get new EM data
@@ -45,7 +45,7 @@ BuildEM = function(EMdir, OMdir, tt, ...) {
   NewEMdat$lencomp = newlen
   
   # re-write new EM data file with bootstrapped historical data
-  SS_writedat(NewEMdat, outfile=paste0(EMdir,"\\SB.dat"), version="3.30", overwrite=T)
+  SS_writedat(NewEMdat, outfile=file.path(EMdir,"SB.dat"), version="3.30", overwrite=T)
   
 } # end BuildEM function
 
@@ -53,8 +53,8 @@ BuildEM = function(EMdir, OMdir, tt, ...) {
 
 BuildOM = function(OMdir, tt, ...){
   # re-write new OM data file with historical expected values
-  OMexpect_dat = SS_readdat(file=paste0(OMdir,"\\data.ss_new"), section=2, version="3.30")
-  OMdat = SS_readdat(file=paste0(OMdir,"\\data.ss_new"), section=1, version="3.30")
+  OMexpect_dat = SS_readdat(file=file.path(OMdir,"data.ss_new"), section=2, version="3.30")
+  OMdat = SS_readdat(file=file.path(OMdir,"data.ss_new"), section=1, version="3.30")
   newdat = OMdat
   
   # Update Data
@@ -65,7 +65,7 @@ BuildOM = function(OMdir, tt, ...){
   newdat$lencomp[newdat$lencomp$Yr>0 & newdat$lencomp$Yr<tt,] = OMexpect_dat$lencomp[OMexpect_dat$lencomp$Yr<tt,]
   newdat$lencomp<-round(newdat$lencomp, digits=4)
   
-  SS_writedat(newdat, outfile=paste(OMdir,"\\SB.dat", sep=""), version="3.30", overwrite=T)
+  SS_writedat(newdat, outfile=file.path(OMdir,"SB.dat"), version="3.30", overwrite=T)
   
 } # END BuildOM function
 
