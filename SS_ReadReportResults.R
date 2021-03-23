@@ -11,6 +11,7 @@ library(fmsb)
 library(vioplot)
 
 #### Build Results functions -----------------------------------------------------------------------------------------------------------
+### NOTE: THIS IS A MODIFIED VARIANT OF SS_output from r4ss (Ian Taylor et al.https://github.com/r4ss/r4ss)
 SS_output_Report <-
   function(dir="C:/myfiles/mymodels/myrun/", dir.mcmc=NULL,
            repfile="Report.sso", #compfile="CompReport.sso",covarfile="covar.sso",
