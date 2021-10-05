@@ -12,6 +12,13 @@ col_list2a = rep(col_list2, (24/4))
 lty_lista = rep(lty_list, (24/4))
 
 
+plot(0, xaxt = 'n', yaxt = 'n', bty = 'n', pch = '', ylab = '', xlab = '')
+legend("center",c(expression("a=0, b=B"["MSY"]), expression("a=0, b=0.8B"["MSY"]),
+                    expression("a=0.3B"[0]*", b=B"["MSY"]), expression("a=0.3B"[0]*", b=0.8B"["MSY"])),
+       col=col_list2, lty=lty_list, lwd=3, cex=1.5, bty='n')
+
+#####
+
 
 ######################### HiMexRec ################################
 
@@ -67,7 +74,6 @@ mtext("HiMexRec", side=3, outer = TRUE, cex = 1, line=1)
 
 #####
 dev.off()
-
 
 
 
@@ -221,8 +227,8 @@ mtext("HiMexRec", side=3, outer = TRUE, cex = 1, line=1)
 dev.off()
 
 
-# SSB/SSBMSY 2065#
-png(filename="D:\\MSE_Run\\MSE_Results\\Plots\\ALL_HiMexRec_VIOPLOT_SSBMSY2065.png",
+# SSB/SSBMSY 2070#
+png(filename="D:\\MSE_Run\\MSE_Results\\Plots\\ALL_HiMexRec_VIOPLOT_SSBMSY2070.png",
     type="cairo",
     units="mm",
     width=300,
@@ -240,7 +246,7 @@ for(o in 1:6){
   if(o==5) { Results=Results_lnR0_HiMexRec }
   if(o==6) { Results=Results_M_BH_HiMexRec } 
   for(r in seq(1, 24, by=4)){
-    vioplot(Results$SSB_SSBMSY_2065[,r], Results$SSB_SSBMSY_2065[,(r+1)], Results$SSB_SSBMSY_2065[,(r+2)], Results$SSB_SSBMSY_2065[,(r+3)], 
+    vioplot(Results$SSB_SSBMSY_2070[,r], Results$SSB_SSBMSY_2070[,(r+1)], Results$SSB_SSBMSY_2070[,(r+2)], Results$SSB_SSBMSY_2070[,(r+3)], 
             col=c("dimgrey","deepskyblue3","forestgreen","darkorchid"), ylim=c(0, 1.5), names=c(rep("", 4)) )
     abline(h=1)
     if(r==1) { mtext(OM_labs[o], side=2, line=1, cex=0.8) }
@@ -256,7 +262,7 @@ for(o in 1:6){
   } # end r loop
   # mtext(OM_Name, outer = TRUE, cex = 1.5, line=0)
 } # end o loop
-mtext(expression("SSB"[2065]*"/SSB"["MSY"])  , side=2, outer = TRUE, cex = 1, line=0.8)
+mtext(expression("SSB"[2070]*"/SSB"["MSY"])  , side=2, outer = TRUE, cex = 1, line=0.8)
 mtext("HiMexRec", side=3, outer = TRUE, cex = 1, line=1)
 #####
 dev.off()
@@ -306,8 +312,8 @@ dev.off()
 
 
 
-# F/FMSY 2065 #
-png(filename="D:\\MSE_Run\\MSE_Results\\Plots\\ALL_HiMexRec_VIOPLOT_FMSY2065.png",
+# F/FMSY 2070 #
+png(filename="D:\\MSE_Run\\MSE_Results\\Plots\\ALL_HiMexRec_VIOPLOT_FMSY2070.png",
     type="cairo",
     units="mm",
     width=300,
@@ -325,7 +331,7 @@ for(o in 1:6){
   if(o==5) { Results=Results_lnR0_HiMexRec }
   if(o==6) { Results=Results_M_BH_HiMexRec } 
   for(r in seq(1, 24, by=4)){
-    vioplot(Results$FM_FMMSY_2065[,r], Results$FM_FMMSY_2065[,(r+1)], Results$FM_FMMSY_2065[,(r+2)], Results$FM_FMMSY_2065[,(r+3)], 
+    vioplot(Results$FM_FMMSY_2070[,r], Results$FM_FMMSY_2070[,(r+1)], Results$FM_FMMSY_2070[,(r+2)], Results$FM_FMMSY_2070[,(r+3)], 
             col=c("dimgrey","deepskyblue3","forestgreen","darkorchid"), ylim=c(0, 4), names=c(rep("", 4)) )
     abline(h=1)
     if(r==1) { mtext(OM_labs[o], side=2, line=1, cex=0.8) }
@@ -341,7 +347,7 @@ for(o in 1:6){
   } # end r loop
   # mtext(OM_Name, outer = TRUE, cex = 1.5, line=0)
 } # end o loop
-mtext(expression("F"[2065]*"/F"["MSY"])  , side=2, outer = TRUE, cex = 1, line=0.8)
+mtext(expression("F"[2070]*"/F"["MSY"])  , side=2, outer = TRUE, cex = 1, line=0.8)
 mtext("HiMexRec", side=3, outer = TRUE, cex = 1, line=1)
 #####
 dev.off()
@@ -647,8 +653,8 @@ mtext("LoMexRec", side=3, outer = TRUE, cex = 1, line=1)
 dev.off()
 
 
-# SSB/SSBMSY 2065#
-png(filename="D:\\MSE_Run\\MSE_Results\\Plots\\ALL_LoMexRec_VIOPLOT_SSBMSY2065.png",
+# SSB/SSBMSY 2070#
+png(filename="D:\\MSE_Run\\MSE_Results\\Plots\\ALL_LoMexRec_VIOPLOT_SSBMSY2070.png",
     type="cairo",
     units="mm",
     width=300,
@@ -666,7 +672,7 @@ for(o in 1:6){
   if(o==5) { Results=Results_lnR0_LoMexRec }
   if(o==6) { Results=Results_M_BH_LoMexRec } 
   for(r in seq(1, 24, by=4)){
-    vioplot(Results$SSB_SSBMSY_2065[,r], Results$SSB_SSBMSY_2065[,(r+1)], Results$SSB_SSBMSY_2065[,(r+2)], Results$SSB_SSBMSY_2065[,(r+3)], 
+    vioplot(Results$SSB_SSBMSY_2070[,r], Results$SSB_SSBMSY_2070[,(r+1)], Results$SSB_SSBMSY_2070[,(r+2)], Results$SSB_SSBMSY_2070[,(r+3)], 
             col=c("dimgrey","deepskyblue3","forestgreen","darkorchid"), ylim=c(0, 1.5), names=c(rep("", 4)) )
     abline(h=1)
     if(r==1) { mtext(OM_labs[o], side=2, line=1, cex=0.8) }
@@ -682,7 +688,7 @@ for(o in 1:6){
   } # end r loop
   # mtext(OM_Name, outer = TRUE, cex = 1.5, line=0)
 } # end o loop
-mtext(expression("SSB"[2065]*"/SSB"["MSY"])  , side=2, outer = TRUE, cex = 1, line=0.8)
+mtext(expression("SSB"[2070]*"/SSB"["MSY"])  , side=2, outer = TRUE, cex = 1, line=0.8)
 mtext("LoMexRec", side=3, outer = TRUE, cex = 1, line=1)
 #####
 dev.off()
@@ -732,8 +738,8 @@ dev.off()
 
 
 
-# F/FMSY 2065 #
-png(filename="D:\\MSE_Run\\MSE_Results\\Plots\\ALL_LoMexRec_VIOPLOT_FMSY2065.png",
+# F/FMSY 2070 #
+png(filename="D:\\MSE_Run\\MSE_Results\\Plots\\ALL_LoMexRec_VIOPLOT_FMSY2070.png",
     type="cairo",
     units="mm",
     width=300,
@@ -751,7 +757,7 @@ for(o in 1:6){
   if(o==5) { Results=Results_lnR0_LoMexRec }
   if(o==6) { Results=Results_M_BH_LoMexRec } 
   for(r in seq(1, 24, by=4)){
-    vioplot(Results$FM_FMMSY_2065[,r], Results$FM_FMMSY_2065[,(r+1)], Results$FM_FMMSY_2065[,(r+2)], Results$FM_FMMSY_2065[,(r+3)], 
+    vioplot(Results$FM_FMMSY_2070[,r], Results$FM_FMMSY_2070[,(r+1)], Results$FM_FMMSY_2070[,(r+2)], Results$FM_FMMSY_2070[,(r+3)], 
             col=c("dimgrey","deepskyblue3","forestgreen","darkorchid"), ylim=c(0, 4), names=c(rep("", 4)) )
     abline(h=1)
     if(r==1) { mtext(OM_labs[o], side=2, line=1, cex=0.8) }
@@ -767,7 +773,7 @@ for(o in 1:6){
   } # end r loop
   # mtext(OM_Name, outer = TRUE, cex = 1.5, line=0)
 } # end o loop
-mtext(expression("F"[2065]*"/F"["MSY"])  , side=2, outer = TRUE, cex = 1, line=0.8)
+mtext(expression("F"[2070]*"/F"["MSY"])  , side=2, outer = TRUE, cex = 1, line=0.8)
 mtext("LoMexRec", side=3, outer = TRUE, cex = 1, line=1)
 #####
 dev.off()
@@ -1074,8 +1080,8 @@ mtext("Conceptual", side=3, outer = TRUE, cex = 1, line=1)
 dev.off()
 
 
-# SSB/SSBMSY 2065#
-png(filename="D:\\MSE_Run\\MSE_Results\\Plots\\ALL_Conceptual_VIOPLOT_SSBMSY2065.png",
+# SSB/SSBMSY 2070#
+png(filename="D:\\MSE_Run\\MSE_Results\\Plots\\ALL_Conceptual_VIOPLOT_SSBMSY2070.png",
     type="cairo",
     units="mm",
     width=300,
@@ -1093,7 +1099,7 @@ for(o in 1:6){
   if(o==5) { Results=Results_lnR0_Concept }
   if(o==6) { Results=Results_M_BH_Concept } 
   for(r in seq(1, 24, by=4)){
-    vioplot(Results$SSB_SSBMSY_2065[,r], Results$SSB_SSBMSY_2065[,(r+1)], Results$SSB_SSBMSY_2065[,(r+2)], Results$SSB_SSBMSY_2065[,(r+3)], 
+    vioplot(Results$SSB_SSBMSY_2070[,r], Results$SSB_SSBMSY_2070[,(r+1)], Results$SSB_SSBMSY_2070[,(r+2)], Results$SSB_SSBMSY_2070[,(r+3)], 
             col=c("dimgrey","deepskyblue3","forestgreen","darkorchid"), ylim=c(0, 1.5), names=c(rep("", 4)) )
     abline(h=1)
     if(r==1) { mtext(OM_labs[o], side=2, line=1, cex=0.8) }
@@ -1109,7 +1115,7 @@ for(o in 1:6){
   } # end r loop
   # mtext(OM_Name, outer = TRUE, cex = 1.5, line=0)
 } # end o loop
-mtext(expression("SSB"[2065]*"/SSB"["MSY"])  , side=2, outer = TRUE, cex = 1, line=0.8)
+mtext(expression("SSB"[2070]*"/SSB"["MSY"])  , side=2, outer = TRUE, cex = 1, line=0.8)
 mtext("Conceptual", side=3, outer = TRUE, cex = 1, line=1)
 #####
 dev.off()
@@ -1159,8 +1165,8 @@ dev.off()
 
 
 
-# F/FMSY 2065 #
-png(filename="D:\\MSE_Run\\MSE_Results\\Plots\\ALL_Conceptual_VIOPLOT_FMSY2065.png",
+# F/FMSY 2070 #
+png(filename="D:\\MSE_Run\\MSE_Results\\Plots\\ALL_Conceptual_VIOPLOT_FMSY2070.png",
     type="cairo",
     units="mm",
     width=300,
@@ -1178,7 +1184,7 @@ for(o in 1:6){
   if(o==5) { Results=Results_lnR0_Concept }
   if(o==6) { Results=Results_M_BH_Concept } 
   for(r in seq(1, 24, by=4)){
-    vioplot(Results$FM_FMMSY_2065[,r], Results$FM_FMMSY_2065[,(r+1)], Results$FM_FMMSY_2065[,(r+2)], Results$FM_FMMSY_2065[,(r+3)], 
+    vioplot(Results$FM_FMMSY_2070[,r], Results$FM_FMMSY_2070[,(r+1)], Results$FM_FMMSY_2070[,(r+2)], Results$FM_FMMSY_2070[,(r+3)], 
             col=c("dimgrey","deepskyblue3","forestgreen","darkorchid"), ylim=c(0, 4), names=c(rep("", 4)) )
     abline(h=1)
     if(r==1) { mtext(OM_labs[o], side=2, line=1, cex=0.8) }
@@ -1194,7 +1200,7 @@ for(o in 1:6){
   } # end r loop
   # mtext(OM_Name, outer = TRUE, cex = 1.5, line=0)
 } # end o loop
-mtext(expression("F"[2065]*"/F"["MSY"])  , side=2, outer = TRUE, cex = 1, line=0.8)
+mtext(expression("F"[2070]*"/F"["MSY"])  , side=2, outer = TRUE, cex = 1, line=0.8)
 mtext("Conceptual", side=3, outer = TRUE, cex = 1, line=1)
 #####
 dev.off()
@@ -1385,7 +1391,7 @@ for(i in 1:24){
          code=3, angle=90, length=0, col=cols2[i])
 }
 mtext("Conceptual", side=3, line=-1, cex=1)
-mtext(expression("SSB"["2115"]*"SSB"["MSY"]), side=2, line=1, cex=1)
+mtext(expression("SSB"["2115"]*" / SSB"["MSY"]), side=2, line=1, cex=1)
 
 legend("right", c(expression("a=0, b=B"["MSY"]), expression("a=0, b=0.8B"["MSY"]), 
                   expression("a=0.3B"["0"]*"b=B"["MSY"]),expression("a=0.3B"["0"]*"b=0.8B"["MSY"]),
@@ -1416,7 +1422,7 @@ for(i in 1:24){
          code=3, angle=90, length=0, col=cols2[i])
 }
 mtext("LoMexRec", side=3, line=-1, cex=1)
-mtext(expression("SSB"["2115"]*"SSB"["MSY"]), side=2, line=1, cex=1)
+mtext(expression("SSB"["2115"]*" / SSB"["MSY"]), side=2, line=1, cex=1)
 # mtext("Cumulative US Commercial Catch", side=1, line=1, cex=1)
 
 Results = Results_Base_HiMexRec
@@ -1439,8 +1445,111 @@ for(i in 1:24){
          code=3, angle=90, length=0, col=cols2[i])
 }
 mtext("HiMexRec", side=3, line=-1, cex=1)
-mtext(expression("SSB"["2115"]*"SSB"["MSY"]), side=2, line=1, cex=1)
-mtext("Cumulative US Commercial Catch", side=1, line=1, cex=1)
+mtext(expression("SSB"["2115"]*" / SSB"["MSY"]), side=2, line=1, cex=1)
+mtext("Cumulative US Commercial Catch (mt)", side=1, line=1, cex=1)
+
+
+
+
+#####
+dev.off()
+
+
+
+tiff(filename="D:\\MSE_Run\\MSE_Results\\Plots\\ALL_tradeoff_Base_ComCatch.tiff",
+    type="cairo",
+    units="mm",
+    width=200,
+    height=250,
+    pointsize=18,
+    res=300)
+#####
+
+
+par(mfrow=c(3,1), mar=c(0.3, 2.1, 0.3, 0.3),tcl = -0.1, mgp = c(0.8, 0.1, 0), oma = c(2.1, 0.3, 0.3, 0.3), cex=1)
+
+cols=c("black",'deepskyblue','purple','darkolivegreen')
+pchs=c(15, 15, 15, 15, 16, 16, 16, 16, 17, 17, 17, 17, 18, 18, 18, 25, 25, 25, 25, 8, 8, 8, 8)
+cols2=rep(cols, 6)
+
+Results = Results_Base_Concept
+
+plot(Results$SSB_SSBMSY_2115[,1]~Results$Com_Catch_cumulative[,1], col='white', ylim=c(0, 2), xlim=c(0,15500), ylab="", xlab="", axes=F)
+axis(1, labels=F)
+axis(2)
+box()
+# for(i in 1:4){
+#   points(Results$SSB_SSBMSY_2115[,i]~Results$Com_Catch_cumulative[,i], col=cols[i])
+# }
+Results = Results_Base_Concept
+for(i in 1:24){
+  points(median(Results$SSB_SSBMSY_2115[,i])~median(Results$Com_Catch_cumulative[,i]), col=cols2[i],pch=pchs[i])
+  arrows(x0=median(Results$Com_Catch_cumulative[,i]), 
+         y0=median(Results$SSB_SSBMSY_2115[,i]) - sd(Results$SSB_SSBMSY_2115[,i]),
+         y1=median(Results$SSB_SSBMSY_2115[,i]) + sd(Results$SSB_SSBMSY_2115[,i]),
+         code=3, angle=90, length=0, col=cols2[i])
+  arrows(y0=median(Results$SSB_SSBMSY_2115[,i]), 
+         x0=median(Results$Com_Catch_cumulative[,i]) - sd(Results$Com_Catch_cumulative[,i]),
+         x1=median(Results$Com_Catch_cumulative[,i]) + sd(Results$Com_Catch_cumulative[,i]),
+         code=3, angle=90, length=0, col=cols2[i])
+}
+mtext("Conceptual", side=3, line=-1, cex=1)
+mtext(expression("SSB"["2115"]*" / SSB"["MSY"]), side=2, line=1, cex=1)
+
+legend("right", c(expression("a=0, b=B"["MSY"]), expression("a=0, b=0.8B"["MSY"]), 
+                  expression("a=0.3B"["0"]*"b=B"["MSY"]),expression("a=0.3B"["0"]*"b=0.8B"["MSY"]),
+                  expression("F"["lim"]*"=F"["MSY"]), expression("F"["lim"]*"=M"), 
+                  expression("F"["lim"]*"=0.8M"), expression("F"["lim"]*"=0.6M"), 
+                  expression("F"["lim"]*"=0.4M"), expression("F"["lim"]*"=0.2M") ),
+       col=c("black",'deepskyblue','purple','darkolivegreen','grey','grey','grey','grey','grey','grey'),
+       pch=c(3,3,3,3,15, 16, 17, 18, 25, 8),
+       bty='n',cex=0.75, pt.cex=1, ncol=1)
+
+Results = Results_Base_LoMexRec
+plot(Results$SSB_SSBMSY_2115[,1]~Results$Com_Catch_cumulative[,1], col='white', ylim=c(0, 2), xlim=c(0,15500), ylab="", xlab="", axes=F)
+axis(1, labels=F)
+axis(2)
+box()
+# for(i in 1:4){
+#   points(Results$SSB_SSBMSY_2115[,i]~Results$Com_Catch_cumulative[,i], col=cols[i])
+# }
+for(i in 1:24){
+  points(median(Results$SSB_SSBMSY_2115[,i])~median(Results$Com_Catch_cumulative[,i]), col=cols2[i],pch=pchs[i])
+  arrows(x0=median(Results$Com_Catch_cumulative[,i]), 
+         y0=median(Results$SSB_SSBMSY_2115[,i]) - sd(Results$SSB_SSBMSY_2115[,i]),
+         y1=median(Results$SSB_SSBMSY_2115[,i]) + sd(Results$SSB_SSBMSY_2115[,i]),
+         code=3, angle=90, length=0, col=cols2[i])
+  arrows(y0=median(Results$SSB_SSBMSY_2115[,i]), 
+         x0=median(Results$Com_Catch_cumulative[,i]) - sd(Results$Com_Catch_cumulative[,i]),
+         x1=median(Results$Com_Catch_cumulative[,i]) + sd(Results$Com_Catch_cumulative[,i]),
+         code=3, angle=90, length=0, col=cols2[i])
+}
+mtext("LoMexRec", side=3, line=-1, cex=1)
+mtext(expression("SSB"["2115"]*" / SSB"["MSY"]), side=2, line=1, cex=1)
+# mtext("Cumulative US Commercial Catch", side=1, line=1, cex=1)
+
+Results = Results_Base_HiMexRec
+plot(Results$SSB_SSBMSY_2115[,1]~Results$Com_Catch_cumulative[,1], col='white', ylim=c(0, 2), xlim=c(0,15500), ylab="", xlab="", axes=F)
+axis(1)
+axis(2)
+box()
+# for(i in 1:4){
+#   points(Results$SSB_SSBMSY_2115[,i]~Results$Com_Catch_cumulative[,i], col=cols[i])
+# }
+for(i in 1:24){
+  points(median(Results$SSB_SSBMSY_2115[,i])~median(Results$Com_Catch_cumulative[,i]), col=cols2[i],pch=pchs[i])
+  arrows(x0=median(Results$Com_Catch_cumulative[,i]), 
+         y0=median(Results$SSB_SSBMSY_2115[,i]) - sd(Results$SSB_SSBMSY_2115[,i]),
+         y1=median(Results$SSB_SSBMSY_2115[,i]) + sd(Results$SSB_SSBMSY_2115[,i]),
+         code=3, angle=90, length=0, col=cols2[i])
+  arrows(y0=median(Results$SSB_SSBMSY_2115[,i]), 
+         x0=median(Results$Com_Catch_cumulative[,i]) - sd(Results$Com_Catch_cumulative[,i]),
+         x1=median(Results$Com_Catch_cumulative[,i]) + sd(Results$Com_Catch_cumulative[,i]),
+         code=3, angle=90, length=0, col=cols2[i])
+}
+mtext("HiMexRec", side=3, line=-1, cex=1)
+mtext(expression("SSB"["2115"]*" / SSB"["MSY"]), side=2, line=1, cex=1)
+mtext("Cumulative US Commercial Catch (mt)", side=1, line=1, cex=1)
 
 
 
@@ -1457,7 +1566,7 @@ png(filename="D:\\MSE_Run\\MSE_Results\\Plots\\ALL_tradeoff_Base_TotCatch.png",
     width=200,
     height=250,
     pointsize=18,
-    res=300)
+    res=600)
 #####
 # l1 = lm(apply(Results_Base_Concept$SSB_SSBMSY_2115,2,median)~apply(Results_Base_Concept$Tot_Catch_cumulative,2,median) )
 # l2 = lm(apply(Results_Base_LoMexRec$SSB_SSBMSY_2115,2,median)~apply(Results_Base_LoMexRec$Tot_Catch_cumulative,2,median) )
@@ -1494,7 +1603,7 @@ for(i in 1:24){
 # abline(l2)
 # abline(l3)
 mtext("Conceptual", side=3, line=-1, cex=1)
-mtext(expression("SSB"["2115"]*"SSB"["MSY"]), side=2, line=1, cex=1)
+mtext(expression("SSB"["2115"]*" / SSB"["MSY"]), side=2, line=1, cex=1)
 legend("right", c(expression("a=0, b=B"["MSY"]), expression("a=0, b=0.8B"["MSY"]), 
                   expression("a=0.3B"["0"]*"b=B"["MSY"]),expression("a=0.3B"["0"]*"b=0.8B"["MSY"]),
                   expression("F"["lim"]*"=F"["MSY"]), expression("F"["lim"]*"=M"), 
@@ -1524,7 +1633,7 @@ for(i in 1:24){
          code=3, angle=90, length=0, col=cols2[i])
 }
 mtext("LoMexRec", side=3, line=-1, cex=1)
-mtext(expression("SSB"["2115"]*"SSB"["MSY"]), side=2, line=1, cex=1)
+mtext(expression("SSB"["2115"]*" / SSB"["MSY"]), side=2, line=1, cex=1)
 # mtext("Cumulative US Commercial Catch", side=1, line=1, cex=1)
 
 Results = Results_Base_HiMexRec
@@ -1547,8 +1656,8 @@ for(i in 1:24){
          code=3, angle=90, length=0, col=cols2[i])
 }
 mtext("HiMexRec", side=3, line=-1, cex=1)
-mtext(expression("SSB"["2115"]*"SSB"["MSY"]), side=2, line=1, cex=1)
-mtext("Cumulative Total Catch", side=1, line=1, cex=1)
+mtext(expression("SSB"["2115"]*" / SSB"["MSY"]), side=2, line=1, cex=1)
+mtext("Cumulative Total Catch (mt)", side=1, line=1, cex=1)
 
 
 
