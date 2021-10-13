@@ -1766,7 +1766,7 @@ SS_output_Report <-
   } # end function
 
 
-GET_MSE_RESULTS <- function(OM = "Base", hlist = 1:24, iters = seq(47, 245, by = 2), years = 1960:2115, base_dir = "D:\\MSE_Run\\MSE_Results\\") {
+GET_MSE_RESULTS <- function(OM = "Base", hlist = 1:24, iters = seq(47, 245, by = 2), years = 1960:2115, base_dir = "") {
   iters0 <- iters
 
   for (h in hlist) {
@@ -1925,65 +1925,65 @@ OM_List <- c("Base", "BH", "Hih", "lnR0", "Loh", "M_BH")
 ### GET RESULTS ###
 # implementation 1 (real)
 OM_Base_HiMexRec <- GET_MSE_RESULTS(OM = "Base_HiMexRec")
-save(OM_Base_HiMexRec, file = "D:\\MSE_Run\\MSE_Results\\OM_Base_HiMexRec_Results.RData")
+save(OM_Base_HiMexRec, file = "OM_Base_HiMexRec_Results.RData")
 
 OM_BH_HiMexRec <- GET_MSE_RESULTS(OM = "BH_HiMexRec")
-save(OM_BH_HiMexRec, file = "D:\\MSE_Run\\MSE_Results\\OM_BH_HiMexRec_Results.RData")
+save(OM_BH_HiMexRec, file = "OM_BH_HiMexRec_Results.RData")
 
 OM_Hih_HiMexRec <- GET_MSE_RESULTS(OM = "Hih_HiMexRec")
-save(OM_Hih_HiMexRec, file = "D:\\MSE_Run\\MSE_Results\\OM_Hih_HiMexRec_Results.RData")
+save(OM_Hih_HiMexRec, file = "OM_Hih_HiMexRec_Results.RData")
 
 OM_Loh_HiMexRec <- GET_MSE_RESULTS(OM = "Loh_HiMexRec")
-save(OM_Loh_HiMexRec, file = "D:\\MSE_Run\\MSE_Results\\OM_Loh_HiMexRec_Results.RData")
+save(OM_Loh_HiMexRec, file = "OM_Loh_HiMexRec_Results.RData")
 
 OM_lnR0_HiMexRec <- GET_MSE_RESULTS(OM = "lnR0_HiMexRec")
-save(OM_lnR0_HiMexRec, file = "D:\\MSE_Run\\MSE_Results\\OM_lnR0_HiMexRec_Results.RData")
+save(OM_lnR0_HiMexRec, file = "OM_lnR0_HiMexRec_Results.RData")
 
 OM_M_BH_HiMexRec <- GET_MSE_RESULTS(OM = "M_BH_HiMexRec")
-save(OM_M_BH_HiMexRec, file = "D:\\MSE_Run\\MSE_Results\\OM_M_BH_HiMexRec_Results.RData")
+save(OM_M_BH_HiMexRec, file = "OM_M_BH_HiMexRec_Results.RData")
 
 
 
 # implementation 2 (MexRec)
 OM_Base_Concept <- GET_MSE_RESULTS(OM = "Base_Concept")
-save(OM_Base_Concept, file = "D:\\MSE_Run\\MSE_Results\\OM_Base_Concept_Results.RData")
+save(OM_Base_Concept, file = "OM_Base_Concept_Results.RData")
 
 OM_BH_Concept <- GET_MSE_RESULTS(OM = "BH_Concept")
-save(OM_BH_Concept, file = "D:\\MSE_Run\\MSE_Results\\OM_BH_Concept_Results.RData")
+save(OM_BH_Concept, file = "OM_BH_Concept_Results.RData")
 
 OM_Hih_Concept <- GET_MSE_RESULTS(OM = "Hih_Concept")
-save(OM_Hih_Concept, file = "D:\\MSE_Run\\MSE_Results\\OM_Hih_Concept_Results.RData")
+save(OM_Hih_Concept, file = "OM_Hih_Concept_Results.RData")
 
 OM_Loh_Concept <- GET_MSE_RESULTS(OM = "Loh_Concept")
-save(OM_Loh_Concept, file = "D:\\MSE_Run\\MSE_Results\\OM_Loh_Concept_Results.RData")
+save(OM_Loh_Concept, file = "OM_Loh_Concept_Results.RData")
 
 OM_lnR0_Concept <- GET_MSE_RESULTS(OM = "lnR0_Concept")
-save(OM_lnR0_Concept, file = "D:\\MSE_Run\\MSE_Results\\OM_lnR0_Concept_Results.RData")
+save(OM_lnR0_Concept, file = "OM_lnR0_Concept_Results.RData")
 
 OM_M_BH_Concept <- GET_MSE_RESULTS(OM = "M_BH_Concept")
-save(OM_M_BH_Concept, file = "D:\\MSE_Run\\MSE_Results\\OM_M_BH_Concept_Results.RData")
+save(OM_M_BH_Concept, file = "OM_M_BH_Concept_Results.RData")
 
 
 
 
 # implementation 3 (LoMexRec)
 OM_Base_LoMexRec <- GET_MSE_RESULTS(OM = "Base_LoMexRec")
-save(OM_Base_LoMexRec, file = "D:\\MSE_Run\\MSE_Results\\OM_Base_LoMexRec_Results.RData")
+save(OM_Base_LoMexRec, file = "OM_Base_LoMexRec_Results.RData")
 
 OM_BH_LoMexRec <- GET_MSE_RESULTS(OM = "BH_LoMexRec")
-save(OM_BH_LoMexRec, file = "D:\\MSE_Run\\MSE_Results\\OM_BH_LoMexRec_Results.RData")
+save(OM_BH_LoMexRec, file = "OM_BH_LoMexRec_Results.RData")
 
 OM_Hih_LoMexRec <- GET_MSE_RESULTS(OM = "Hih_LoMexRec")
-save(OM_Hih_LoMexRec, file = "D:\\MSE_Run\\MSE_Results\\OM_Hih_LoMexRec_Results.RData")
+save(OM_Hih_LoMexRec, file = "OM_Hih_LoMexRec_Results.RData")
 
 OM_Loh_LoMexRec <- GET_MSE_RESULTS(OM = "Loh_LoMexRec")
-save(OM_Loh_LoMexRec, file = "D:\\MSE_Run\\MSE_Results\\OM_Loh_LoMexRec_Results.RData")
+save(OM_Loh_LoMexRec, file = "OM_Loh_LoMexRec_Results.RData")
 
 OM_lnR0_LoMexRec <- GET_MSE_RESULTS(OM = "lnR0_LoMexRec")
-save(OM_lnR0_LoMexRec, file = "D:\\MSE_Run\\MSE_Results\\OM_lnR0_LoMexRec_Results.RData")
+save(OM_lnR0_LoMexRec, file = "OM_lnR0_LoMexRec_Results.RData")
 
 OM_M_BH_LoMexRec <- GET_MSE_RESULTS(OM = "M_BH_LoMexRec")
-save(OM_M_BH_LoMexRec, file = "D:\\MSE_Run\\MSE_Results\\OM_M_BH_LoMexRec_Results.RData")
+save(OM_M_BH_LoMexRec, file = "OM_M_BH_LoMexRec_Results.RData")
 
 
 
@@ -2003,28 +2003,28 @@ save(MSE_Results_List, file = "")
 
 
 #### LOAD RESULTS ####
-load(file = "D:\\MSE_Run\\MSE_Results\\OM_Base_HiMexRec_Results.RData")
-load(file = "D:\\MSE_Run\\MSE_Results\\OM_BH_HiMexRec_Results.RData")
-load(file = "D:\\MSE_Run\\MSE_Results\\OM_Hih_HiMexRec_Results.RData")
-load(file = "D:\\MSE_Run\\MSE_Results\\OM_Loh_HiMexRec_Results.RData")
-load(file = "D:\\MSE_Run\\MSE_Results\\OM_lnR0_HiMexRec_Results.RData")
-load(file = "D:\\MSE_Run\\MSE_Results\\OM_M_BH_HiMexRec_Results.RData")
+load(file = "OM_Base_HiMexRec_Results.RData")
+load(file = "OM_BH_HiMexRec_Results.RData")
+load(file = "OM_Hih_HiMexRec_Results.RData")
+load(file = "OM_Loh_HiMexRec_Results.RData")
+load(file = "OM_lnR0_HiMexRec_Results.RData")
+load(file = "OM_M_BH_HiMexRec_Results.RData")
 
 
-load(file = "D:\\MSE_Run\\MSE_Results\\OM_Base_Concept_Results.RData")
-load(file = "D:\\MSE_Run\\MSE_Results\\OM_BH_Concept_Results.RData")
-load(file = "D:\\MSE_Run\\MSE_Results\\OM_Hih_Concept_Results.RData")
-load(file = "D:\\MSE_Run\\MSE_Results\\OM_Loh_Concept_Results.RData")
-load(file = "D:\\MSE_Run\\MSE_Results\\OM_lnR0_Concept_Results.RData")
-load(file = "D:\\MSE_Run\\MSE_Results\\OM_M_BH_Concept_Results.RData")
+load(file = "OM_Base_Concept_Results.RData")
+load(file = "OM_BH_Concept_Results.RData")
+load(file = "OM_Hih_Concept_Results.RData")
+load(file = "OM_Loh_Concept_Results.RData")
+load(file = "OM_lnR0_Concept_Results.RData")
+load(file = "OM_M_BH_Concept_Results.RData")
 
 
-load(file = "D:\\MSE_Run\\MSE_Results\\OM_Base_LoMexRec_Results.RData")
-load(file = "D:\\MSE_Run\\MSE_Results\\OM_BH_LoMexRec_Results.RData")
-load(file = "D:\\MSE_Run\\MSE_Results\\OM_Hih_LoMexRec_Results.RData")
-load(file = "D:\\MSE_Run\\MSE_Results\\OM_Loh_LoMexRec_Results.RData")
-load(file = "D:\\MSE_Run\\MSE_Results\\OM_lnR0_LoMexRec_Results.RData")
-load(file = "D:\\MSE_Run\\MSE_Results\\OM_M_BH_LoMexRec_Results.RData")
+load(file = "OM_Base_LoMexRec_Results.RData")
+load(file = "OM_BH_LoMexRec_Results.RData")
+load(file = "OM_Hih_LoMexRec_Results.RData")
+load(file = "OM_Loh_LoMexRec_Results.RData")
+load(file = "OM_lnR0_LoMexRec_Results.RData")
+load(file = "OM_M_BH_LoMexRec_Results.RData")
 OM_Base_LoMexRec <- OM_BASE_LoMexRec
 
 
@@ -2299,7 +2299,7 @@ MANIP_RESULTS <- function(OM_Plot, OM_Name, hlist = 1:24, plot = TRUE) {
 
     # SSB/SSBMSY
     png(
-      filename = paste0("D:\\MSE_Run\\MSE_Results\\Plots\\", OM_Name, "_WORM_SSBSSBMSY.png"),
+      filename = paste0("Plots\\", OM_Name, "_WORM_SSBSSBMSY.png"),
       type = "cairo",
       units = "mm",
       width = 300,
@@ -2360,7 +2360,7 @@ MANIP_RESULTS <- function(OM_Plot, OM_Name, hlist = 1:24, plot = TRUE) {
 
     # F/FMSY
     png(
-      filename = paste0("D:\\MSE_Run\\MSE_Results\\Plots\\", OM_Name, "_WORM_FFMSY.png"),
+      filename = paste0("Plots\\", OM_Name, "_WORM_FFMSY.png"),
       type = "cairo",
       units = "mm",
       width = 300,
@@ -2422,7 +2422,7 @@ MANIP_RESULTS <- function(OM_Plot, OM_Name, hlist = 1:24, plot = TRUE) {
 
     # Commercial Catch
     png(
-      filename = paste0("D:\\MSE_Run\\MSE_Results\\Plots\\", OM_Name, "_WORM_ComCatch.png"),
+      filename = paste0("Plots\\", OM_Name, "_WORM_ComCatch.png"),
       type = "cairo",
       units = "mm",
       width = 300,
@@ -2483,7 +2483,7 @@ MANIP_RESULTS <- function(OM_Plot, OM_Name, hlist = 1:24, plot = TRUE) {
 
     # MEX Catch
     png(
-      filename = paste0("D:\\MSE_Run\\MSE_Results\\Plots\\", OM_Name, "_WORM_MEXRecCatch.png"),
+      filename = paste0("Plots\\", OM_Name, "_WORM_MEXRecCatch.png"),
       type = "cairo",
       units = "mm",
       width = 300,
@@ -2544,7 +2544,7 @@ MANIP_RESULTS <- function(OM_Plot, OM_Name, hlist = 1:24, plot = TRUE) {
 
     # Total Catch
     png(
-      filename = paste0("D:\\MSE_Run\\MSE_Results\\Plots\\", OM_Name, "_WORM_TotalCatch.png"),
+      filename = paste0("Plots\\", OM_Name, "_WORM_TotalCatch.png"),
       type = "cairo",
       units = "mm",
       width = 300,
@@ -2604,7 +2604,7 @@ MANIP_RESULTS <- function(OM_Plot, OM_Name, hlist = 1:24, plot = TRUE) {
 
     # SSB/SSB0
     png(
-      filename = paste0("D:\\MSE_Run\\MSE_Results\\Plots\\", OM_Name, "_WORM_SSBSSB0.png"),
+      filename = paste0("Plots\\", OM_Name, "_WORM_SSBSSB0.png"),
       type = "cairo",
       units = "mm",
       width = 300,
@@ -2665,7 +2665,7 @@ MANIP_RESULTS <- function(OM_Plot, OM_Name, hlist = 1:24, plot = TRUE) {
 
     # avg length
     png(
-      filename = paste0("D:\\MSE_Run\\MSE_Results\\Plots\\", OM_Name, "_WORM_AvgLen.png"),
+      filename = paste0("Plots\\", OM_Name, "_WORM_AvgLen.png"),
       type = "cairo",
       units = "mm",
       width = 300,
@@ -2827,7 +2827,7 @@ MANIP_RESULTS <- function(OM_Plot, OM_Name, hlist = 1:24, plot = TRUE) {
 
     # plot
     png(
-      filename = paste0("D:\\MSE_Run\\MSE_Results\\Plots\\", OM_Name, "_RADAR.png"),
+      filename = paste0("Plots\\", OM_Name, "_RADAR.png"),
       type = "cairo",
       units = "mm",
       width = 400,
@@ -2895,7 +2895,7 @@ MANIP_RESULTS <- function(OM_Plot, OM_Name, hlist = 1:24, plot = TRUE) {
 
     ## Get SSB/SSBMSY 2115 ##
     png(
-      filename = paste0("D:\\MSE_Run\\MSE_Results\\Plots\\", OM_Name, "_VIOLIN_SSBSSBMSY2115.png"),
+      filename = paste0("Plots\\", OM_Name, "_VIOLIN_SSBSSBMSY2115.png"),
       type = "cairo",
       units = "mm",
       width = 300,
@@ -2943,7 +2943,7 @@ MANIP_RESULTS <- function(OM_Plot, OM_Name, hlist = 1:24, plot = TRUE) {
 
     ## Get SSB/SSBMSY 2070 ##
     png(
-      filename = paste0("D:\\MSE_Run\\MSE_Results\\Plots\\", OM_Name, "_VIOLIN_SSBSSBMSY2070.png"),
+      filename = paste0("Plots\\", OM_Name, "_VIOLIN_SSBSSBMSY2070.png"),
       type = "cairo",
       units = "mm",
       width = 300,
@@ -2991,7 +2991,7 @@ MANIP_RESULTS <- function(OM_Plot, OM_Name, hlist = 1:24, plot = TRUE) {
 
     ## Get Get F/FBMSY 2115 ##
     png(
-      filename = paste0("D:\\MSE_Run\\MSE_Results\\Plots\\", OM_Name, "_VIOLIN_FFMSY2115.png"),
+      filename = paste0("Plots\\", OM_Name, "_VIOLIN_FFMSY2115.png"),
       type = "cairo",
       units = "mm",
       width = 300,
@@ -3039,7 +3039,7 @@ MANIP_RESULTS <- function(OM_Plot, OM_Name, hlist = 1:24, plot = TRUE) {
 
     ## Get F/FBMSY 2070 ##
     png(
-      filename = paste0("D:\\MSE_Run\\MSE_Results\\Plots\\", OM_Name, "_VIOLIN_FFMSY2070.png"),
+      filename = paste0("Plots\\", OM_Name, "_VIOLIN_FFMSY2070.png"),
       type = "cairo",
       units = "mm",
       width = 300,
@@ -3089,7 +3089,7 @@ MANIP_RESULTS <- function(OM_Plot, OM_Name, hlist = 1:24, plot = TRUE) {
 
     ## cumulative Catch  ##
     png(
-      filename = paste0("D:\\MSE_Run\\MSE_Results\\Plots\\", OM_Name, "_VIOLIN_ComCatchCum.png"),
+      filename = paste0("Plots\\", OM_Name, "_VIOLIN_ComCatchCum.png"),
       type = "cairo",
       units = "mm",
       width = 300,
@@ -3139,7 +3139,7 @@ MANIP_RESULTS <- function(OM_Plot, OM_Name, hlist = 1:24, plot = TRUE) {
 
     ## Get SSB/SSBMSY 2115 ##
     png(
-      filename = paste0("D:\\MSE_Run\\MSE_Results\\Plots\\", OM_Name, "_VIOLIN_SSBSSBMSY2115.png"),
+      filename = paste0("Plots\\", OM_Name, "_VIOLIN_SSBSSBMSY2115.png"),
       type = "cairo",
       units = "mm",
       width = 300,
@@ -3188,7 +3188,7 @@ MANIP_RESULTS <- function(OM_Plot, OM_Name, hlist = 1:24, plot = TRUE) {
 
     ## Get Avg Catch 2106-2115 ##
     png(
-      filename = paste0("D:\\MSE_Run\\MSE_Results\\Plots\\", OM_Name, "_VIOLIN_ComCatch2115.png"),
+      filename = paste0("Plots\\", OM_Name, "_VIOLIN_ComCatch2115.png"),
       type = "cairo",
       units = "mm",
       width = 300,
@@ -3235,7 +3235,7 @@ MANIP_RESULTS <- function(OM_Plot, OM_Name, hlist = 1:24, plot = TRUE) {
 
     ## Get Avg Catch 2066-2070 ##
     png(
-      filename = paste0("D:\\MSE_Run\\MSE_Results\\Plots\\", OM_Name, "_VIOLIN_ComCatch2070.png"),
+      filename = paste0("Plots\\", OM_Name, "_VIOLIN_ComCatch2070.png"),
       type = "cairo",
       units = "mm",
       width = 300,
@@ -3283,7 +3283,7 @@ MANIP_RESULTS <- function(OM_Plot, OM_Name, hlist = 1:24, plot = TRUE) {
 
     ## Get Avg Catch 2106-2115 ##
     png(
-      filename = paste0("D:\\MSE_Run\\MSE_Results\\Plots\\", OM_Name, "_VIOLIN_ComCatch2115.png"),
+      filename = paste0("Plots\\", OM_Name, "_VIOLIN_ComCatch2115.png"),
       type = "cairo",
       units = "mm",
       width = 300,
@@ -3330,7 +3330,7 @@ MANIP_RESULTS <- function(OM_Plot, OM_Name, hlist = 1:24, plot = TRUE) {
 
     ## AAV ##
     png(
-      filename = paste0("D:\\MSE_Run\\MSE_Results\\Plots\\", OM_Name, "_VIOLIN_AAV.png"),
+      filename = paste0("Plots\\", OM_Name, "_VIOLIN_AAV.png"),
       type = "cairo",
       units = "mm",
       width = 300,
@@ -3379,7 +3379,7 @@ MANIP_RESULTS <- function(OM_Plot, OM_Name, hlist = 1:24, plot = TRUE) {
 
     ## POF ##
     png(
-      filename = paste0("D:\\MSE_Run\\MSE_Results\\Plots\\", OM_Name, "_VIOLIN_POF.png"),
+      filename = paste0("Plots\\", OM_Name, "_VIOLIN_POF.png"),
       type = "cairo",
       units = "mm",
       width = 300,
@@ -3510,48 +3510,48 @@ MANIP_RESULTS(OM_Plot = OM_M_BH_LoMexRec, OM_Name = "M_BH_LoMexRec", plot = F)
 
 
 #### Save Results
-# save(Results_Base, file="D:\\MSE_Run\\MSE_Results\\Results_Base_HiMexRec.RData")
-# save(Results_BH, file="D:\\MSE_Run\\MSE_Results\\Results_BH_HiMexRec.RData")
-# save(Results_Hih, file="D:\\MSE_Run\\MSE_Results\\Results_Hih_HiMexRec.RData")
-# save(Results_lnR0, file="D:\\MSE_Run\\MSE_Results\\Results_lnR0_HiMexRec.RData")
-# save(Results_Loh, file="D:\\MSE_Run\\MSE_Results\\Results_Loh_HiMexRec.RData")
-# save(Results_M_BH, file="D:\\MSE_Run\\MSE_Results\\Results_M_BH_HiMexRec.RData")
+# save(Results_Base, file="Results_Base_HiMexRec.RData")
+# save(Results_BH, file="Results_BH_HiMexRec.RData")
+# save(Results_Hih, file="Results_Hih_HiMexRec.RData")
+# save(Results_lnR0, file="Results_lnR0_HiMexRec.RData")
+# save(Results_Loh, file="Results_Loh_HiMexRec.RData")
+# save(Results_M_BH, file="Results_M_BH_HiMexRec.RData")
 #
-# save(Results_Base_Concept, file="D:\\MSE_Run\\MSE_Results\\Results_Base_Conceptual.RData")
-# save(Results_BH_Concept, file="D:\\MSE_Run\\MSE_Results\\Results_BH_Conceptual.RData")
-# save(Results_Hih_Concept, file="D:\\MSE_Run\\MSE_Results\\Results_Hih_Conceptual.RData")
-# save(Results_lnR0_Concept, file="D:\\MSE_Run\\MSE_Results\\Results_lnR0_Conceptual.RData")
-# save(Results_Loh_Concept, file="D:\\MSE_Run\\MSE_Results\\Results_Loh_Conceptual.RData")
-# save(Results_M_BH_Concept, file="D:\\MSE_Run\\MSE_Results\\Results_M_BH_Conceptual.RData")
+# save(Results_Base_Concept, file="Results_Base_Conceptual.RData")
+# save(Results_BH_Concept, file="Results_BH_Conceptual.RData")
+# save(Results_Hih_Concept, file="Results_Hih_Conceptual.RData")
+# save(Results_lnR0_Concept, file="Results_lnR0_Conceptual.RData")
+# save(Results_Loh_Concept, file="Results_Loh_Conceptual.RData")
+# save(Results_M_BH_Concept, file="Results_M_BH_Conceptual.RData")
 #
-# save(Results_Base_LoMexRec, file="D:\\MSE_Run\\MSE_Results\\Results_Base_LoMexRec.RData")
-# save(Results_BH_LoMexRec, file="D:\\MSE_Run\\MSE_Results\\Results_BH_LoMexRec.RData")
-# save(Results_Hih_LoMexRec, file="D:\\MSE_Run\\MSE_Results\\Results_Hih_LoMexRec.RData")
-# save(Results_lnR0_LoMexRec, file="D:\\MSE_Run\\MSE_Results\\Results_lnR0_LoMexRec.RData")
-# save(Results_Loh_LoMexRec, file="D:\\MSE_Run\\MSE_Results\\Results_Loh_LoMexRec.RData")
-# save(Results_M_BH_LoMexRec, file="D:\\MSE_Run\\MSE_Results\\Results_M_BH_LoMexRec.RData")
+# save(Results_Base_LoMexRec, file="Results_Base_LoMexRec.RData")
+# save(Results_BH_LoMexRec, file="Results_BH_LoMexRec.RData")
+# save(Results_Hih_LoMexRec, file="Results_Hih_LoMexRec.RData")
+# save(Results_lnR0_LoMexRec, file="Results_lnR0_LoMexRec.RData")
+# save(Results_Loh_LoMexRec, file="Results_Loh_LoMexRec.RData")
+# save(Results_M_BH_LoMexRec, file="Results_M_BH_LoMexRec.RData")
 
 #### Load Saved Results
-load(file = "D:\\MSE_Run\\MSE_Results\\Results_Base_HiMexRec.RData")
-load(file = "D:\\MSE_Run\\MSE_Results\\Results_BH_HiMexRec.RData")
-load(file = "D:\\MSE_Run\\MSE_Results\\Results_Hih_HiMexRec.RData")
-load(file = "D:\\MSE_Run\\MSE_Results\\Results_lnR0_HiMexRec.RData")
-load(file = "D:\\MSE_Run\\MSE_Results\\Results_Loh_HiMexRec.RData")
-load(file = "D:\\MSE_Run\\MSE_Results\\Results_M_BH_HiMexRec.RData")
+load(file = "Results_Base_HiMexRec.RData")
+load(file = "Results_BH_HiMexRec.RData")
+load(file = "Results_Hih_HiMexRec.RData")
+load(file = "Results_lnR0_HiMexRec.RData")
+load(file = "Results_Loh_HiMexRec.RData")
+load(file = "Results_M_BH_HiMexRec.RData")
 
-load(file = "D:\\MSE_Run\\MSE_Results\\Results_Base_Conceptual.RData")
-load(file = "D:\\MSE_Run\\MSE_Results\\Results_BH_Conceptual.RData")
-load(file = "D:\\MSE_Run\\MSE_Results\\Results_Hih_Conceptual.RData")
-load(file = "D:\\MSE_Run\\MSE_Results\\Results_lnR0_Conceptual.RData")
-load(file = "D:\\MSE_Run\\MSE_Results\\Results_Loh_Conceptual.RData")
-load(file = "D:\\MSE_Run\\MSE_Results\\Results_M_BH_Conceptual.RData")
+load(file = "Results_Base_Conceptual.RData")
+load(file = "Results_BH_Conceptual.RData")
+load(file = "Results_Hih_Conceptual.RData")
+load(file = "Results_lnR0_Conceptual.RData")
+load(file = "Results_Loh_Conceptual.RData")
+load(file = "Results_M_BH_Conceptual.RData")
 
-load(file = "D:\\MSE_Run\\MSE_Results\\Results_Base_LoMexRec.RData")
-load(file = "D:\\MSE_Run\\MSE_Results\\Results_BH_LoMexRec.RData")
-load(file = "D:\\MSE_Run\\MSE_Results\\Results_Hih_LoMexRec.RData")
-load(file = "D:\\MSE_Run\\MSE_Results\\Results_lnR0_LoMexRec.RData")
-load(file = "D:\\MSE_Run\\MSE_Results\\Results_Loh_LoMexRec.RData")
-load(file = "D:\\MSE_Run\\MSE_Results\\Results_M_BH_LoMexRec.RData")
+load(file = "Results_Base_LoMexRec.RData")
+load(file = "Results_BH_LoMexRec.RData")
+load(file = "Results_Hih_LoMexRec.RData")
+load(file = "Results_lnR0_LoMexRec.RData")
+load(file = "Results_Loh_LoMexRec.RData")
+load(file = "Results_M_BH_LoMexRec.RData")
 
 
 

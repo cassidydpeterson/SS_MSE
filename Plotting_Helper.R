@@ -25,7 +25,7 @@ legend("center",c(expression("a=0, b=B"["MSY"]), expression("a=0, b=0.8B"["MSY"]
 ####### Worm Plots -----
 
 # SSB/SSBMSY
-png(filename="D:\\MSE_Run\\MSE_Results\\Plots\\ALL_HiMexRec_WORM_SSBSSBMSY.png",
+png(filename="ALL_HiMexRec_WORM_SSBSSBMSY.png",
     type="cairo",
     units="mm",
     width=300,
@@ -78,7 +78,7 @@ dev.off()
 
 
 # F/FMSY
-png(filename="D:\\MSE_Run\\MSE_Results\\Plots\\ALL_HiMexRec_WORM_FFMSY.png",
+png(filename="ALL_HiMexRec_WORM_FFMSY.png",
     type="cairo",
     units="mm",
     width=300,
@@ -132,7 +132,7 @@ dev.off()
 
 # Commercial Catch
 # F/FMSY
-png(filename="D:\\MSE_Run\\MSE_Results\\Plots\\ALL_HiMexRec_WORM_ComCatch.png",
+png(filename="ALL_HiMexRec_WORM_ComCatch.png",
     type="cairo",
     units="mm",
     width=300,
@@ -187,7 +187,7 @@ dev.off()
 
 ### VIOLIN PLOTS -----
 # SSB/SSBMSY #
-png(filename="D:\\MSE_Run\\MSE_Results\\Plots\\ALL_HiMexRec_VIOPLOT_SSBMSY2115.png",
+png(filename="ALL_HiMexRec_VIOPLOT_SSBMSY2115.png",
     type="cairo",
     units="mm",
     width=300,
@@ -228,7 +228,7 @@ dev.off()
 
 
 # SSB/SSBMSY 2070#
-png(filename="D:\\MSE_Run\\MSE_Results\\Plots\\ALL_HiMexRec_VIOPLOT_SSBMSY2070.png",
+png(filename="ALL_HiMexRec_VIOPLOT_SSBMSY2070.png",
     type="cairo",
     units="mm",
     width=300,
@@ -270,7 +270,7 @@ dev.off()
 
 
 # F/FMSY 2115 #
-png(filename="D:\\MSE_Run\\MSE_Results\\Plots\\ALL_HiMexRec_VIOPLOT_FMSY2115.png",
+png(filename="ALL_HiMexRec_VIOPLOT_FMSY2115.png",
     type="cairo",
     units="mm",
     width=300,
@@ -313,7 +313,7 @@ dev.off()
 
 
 # F/FMSY 2070 #
-png(filename="D:\\MSE_Run\\MSE_Results\\Plots\\ALL_HiMexRec_VIOPLOT_FMSY2070.png",
+png(filename="ALL_HiMexRec_VIOPLOT_FMSY2070.png",
     type="cairo",
     units="mm",
     width=300,
@@ -358,7 +358,7 @@ dev.off()
 
 
 # POF #
-png(filename="D:\\MSE_Run\\MSE_Results\\Plots\\ALL_HiMexRec_VIOPLOT_POF.png",
+png(filename="ALL_HiMexRec_VIOPLOT_POF.png",
     type="cairo",
     units="mm",
     width=300,
@@ -402,7 +402,7 @@ dev.off()
 
 
 # AAV #
-png(filename="D:\\MSE_Run\\MSE_Results\\Plots\\ALL_HiMexRec_VIOPLOT_AAV.png",
+png(filename="ALL_HiMexRec_VIOPLOT_AAV.png",
     type="cairo",
     units="mm",
     width=300,
@@ -451,7 +451,7 @@ dev.off()
 ####### Worm Plots -----
 
 # SSB/SSBMSY
-png(filename="D:\\MSE_Run\\MSE_Results\\Plots\\ALL_LoMexRec_WORM_SSBSSBMSY.png",
+png(filename="ALL_LoMexRec_WORM_SSBSSBMSY.png",
     type="cairo",
     units="mm",
     width=300,
@@ -504,7 +504,7 @@ dev.off()
 
 
 # F/FMSY
-png(filename="D:\\MSE_Run\\MSE_Results\\Plots\\ALL_LoMexRec_WORM_FFMSY.png",
+png(filename="ALL_LoMexRec_WORM_FFMSY.png",
     type="cairo",
     units="mm",
     width=300,
@@ -558,7 +558,7 @@ dev.off()
 
 # Commercial Catch
 # F/FMSY
-png(filename="D:\\MSE_Run\\MSE_Results\\Plots\\ALL_LoMexRec_WORM_ComCatch.png",
+png(filename="ALL_LoMexRec_WORM_ComCatch.png",
     type="cairo",
     units="mm",
     width=300,
@@ -613,7 +613,7 @@ dev.off()
 
 ### VIOLIN PLOTS -----
 # SSB/SSBMSY #
-png(filename="D:\\MSE_Run\\MSE_Results\\Plots\\ALL_LoMexRec_VIOPLOT_SSBMSY2115.png",
+png(filename="ALL_LoMexRec_VIOPLOT_SSBMSY2115.png",
     type="cairo",
     units="mm",
     width=300,
@@ -654,7 +654,7 @@ dev.off()
 
 
 # SSB/SSBMSY 2070#
-png(filename="D:\\MSE_Run\\MSE_Results\\Plots\\ALL_LoMexRec_VIOPLOT_SSBMSY2070.png",
+png(filename="ALL_LoMexRec_VIOPLOT_SSBMSY2070.png",
     type="cairo",
     units="mm",
     width=300,
@@ -696,7 +696,7 @@ dev.off()
 
 
 # F/FMSY 2115 #
-png(filename="D:\\MSE_Run\\MSE_Results\\Plots\\ALL_LoMexRec_VIOPLOT_FMSY2115.png",
+png(filename="ALL_LoMexRec_VIOPLOT_FMSY2115.png",
     type="cairo",
     units="mm",
     width=300,
@@ -739,7 +739,7 @@ dev.off()
 
 
 # F/FMSY 2070 #
-png(filename="D:\\MSE_Run\\MSE_Results\\Plots\\ALL_LoMexRec_VIOPLOT_FMSY2070.png",
+png(filename="ALL_LoMexRec_VIOPLOT_FMSY2070.png",
     type="cairo",
     units="mm",
     width=300,
@@ -784,7 +784,7 @@ dev.off()
 
 
 # POF #
-png(filename="D:\\MSE_Run\\MSE_Results\\Plots\\ALL_LoMexRec_VIOPLOT_POF.png",
+png(filename="ALL_LoMexRec_VIOPLOT_POF.png",
     type="cairo",
     units="mm",
     width=300,
@@ -828,7 +828,7 @@ dev.off()
 
 
 # AAV #
-png(filename="D:\\MSE_Run\\MSE_Results\\Plots\\ALL_HiMexRec_VIOPLOT_AAV.png",
+png(filename="ALL_HiMexRec_VIOPLOT_AAV.png",
     type="cairo",
     units="mm",
     width=300,
@@ -878,7 +878,7 @@ dev.off()
 ####### Worm Plots -----
 
 # SSB/SSBMSY
-png(filename="D:\\MSE_Run\\MSE_Results\\Plots\\ALL_Conceptual_WORM_SSBSSBMSY.png",
+png(filename="ALL_Conceptual_WORM_SSBSSBMSY.png",
     type="cairo",
     units="mm",
     width=300,
@@ -931,7 +931,7 @@ dev.off()
 
 
 # F/FMSY
-png(filename="D:\\MSE_Run\\MSE_Results\\Plots\\ALL_Conceptual_WORM_FFMSY.png",
+png(filename="ALL_Conceptual_WORM_FFMSY.png",
     type="cairo",
     units="mm",
     width=300,
@@ -985,7 +985,7 @@ dev.off()
 
 # Commercial Catch
 # F/FMSY
-png(filename="D:\\MSE_Run\\MSE_Results\\Plots\\ALL_Conceptual_WORM_ComCatch.png",
+png(filename="ALL_Conceptual_WORM_ComCatch.png",
     type="cairo",
     units="mm",
     width=300,
@@ -1040,7 +1040,7 @@ dev.off()
 
 ### VIOLIN PLOTS -----
 # SSB/SSBMSY #
-png(filename="D:\\MSE_Run\\MSE_Results\\Plots\\ALL_Conceptual_VIOPLOT_SSBMSY2115.png",
+png(filename="ALL_Conceptual_VIOPLOT_SSBMSY2115.png",
     type="cairo",
     units="mm",
     width=300,
@@ -1081,7 +1081,7 @@ dev.off()
 
 
 # SSB/SSBMSY 2070#
-png(filename="D:\\MSE_Run\\MSE_Results\\Plots\\ALL_Conceptual_VIOPLOT_SSBMSY2070.png",
+png(filename="ALL_Conceptual_VIOPLOT_SSBMSY2070.png",
     type="cairo",
     units="mm",
     width=300,
@@ -1123,7 +1123,7 @@ dev.off()
 
 
 # F/FMSY 2115 #
-png(filename="D:\\MSE_Run\\MSE_Results\\Plots\\ALL_Conceptual_VIOPLOT_FMSY2115.png",
+png(filename="ALL_Conceptual_VIOPLOT_FMSY2115.png",
     type="cairo",
     units="mm",
     width=300,
@@ -1166,7 +1166,7 @@ dev.off()
 
 
 # F/FMSY 2070 #
-png(filename="D:\\MSE_Run\\MSE_Results\\Plots\\ALL_Conceptual_VIOPLOT_FMSY2070.png",
+png(filename="ALL_Conceptual_VIOPLOT_FMSY2070.png",
     type="cairo",
     units="mm",
     width=300,
@@ -1211,7 +1211,7 @@ dev.off()
 
 
 # POF #
-png(filename="D:\\MSE_Run\\MSE_Results\\Plots\\ALL_Concept_VIOPLOT_POF.png",
+png(filename="ALL_Concept_VIOPLOT_POF.png",
     type="cairo",
     units="mm",
     width=300,
@@ -1255,7 +1255,7 @@ dev.off()
 
 
 # AAV #
-png(filename="D:\\MSE_Run\\MSE_Results\\Plots\\ALL_Concept_VIOPLOT_AAV.png",
+png(filename="ALL_Concept_VIOPLOT_AAV.png",
     type="cairo",
     units="mm",
     width=300,
@@ -1303,7 +1303,7 @@ dev.off()
 ############# BASE ACROSS IMPLEMENTATION MODELS --------
 
 # SSB/SSBMSY
-png(filename="D:\\MSE_Run\\MSE_Results\\Plots\\BASE_AllIs_WORM_SSBSSBMSY.png",
+png(filename="BASE_AllIs_WORM_SSBSSBMSY.png",
     type="cairo",
     units="mm",
     width=300,
@@ -1353,7 +1353,7 @@ dev.off()
 
 ### Tradeoff plot ###
 
-png(filename="D:\\MSE_Run\\MSE_Results\\Plots\\ALL_tradeoff_Base_ComCatch.png",
+png(filename="ALL_tradeoff_Base_ComCatch.png",
     type="cairo",
     units="mm",
     width=200,
@@ -1456,7 +1456,7 @@ dev.off()
 
 
 
-tiff(filename="D:\\MSE_Run\\MSE_Results\\Plots\\ALL_tradeoff_Base_ComCatch.tiff",
+tiff(filename="ALL_tradeoff_Base_ComCatch.tiff",
     type="cairo",
     units="mm",
     width=200,
@@ -1560,7 +1560,7 @@ dev.off()
 
 
 # TRADEOFF TOT CATCH #
-png(filename="D:\\MSE_Run\\MSE_Results\\Plots\\ALL_tradeoff_Base_TotCatch.png",
+png(filename="ALL_tradeoff_Base_TotCatch.png",
     type="cairo",
     units="mm",
     width=200,
