@@ -13,7 +13,7 @@ This wrapper function serves to modify pre-built SS input files (starter.ss, for
 This protocol was developed using SSv3.30.15. 
 
 
-*Disclaimer: I did not follow best coding formatting guidelines in these scripts. Apologies.*
+[![DOI](https://zenodo.org/badge/238532004.svg)](https://zenodo.org/badge/latestdoi/238532004)
 
 
 ## Functions included:
@@ -22,7 +22,7 @@ This protocol was developed using SSv3.30.15.
 
 `BuildParFile()` takes resampled parameter values from the completed MCMC posterior.sso file and inserts one set of parameter estimates into the ss.par file. This .par file will be read into the OM (with no parameter estimation) to generate a unique state of nature. 
 
-Note that this function is written specifically for this sandbar shark example, and the code is somewhat clunky, as it was written before the `SS_readpar()` update to `r4ss`. There is also a second script labeled BuildParFile_BH.R, which includes the `BuildParFile()` designated for the OMs that specify a Beverton-Holt "BH" stock-recruit relationship. *These should be condensed with an `if` statement into a single function at some point.*
+Note that this function is written specifically for this sandbar shark example, and the code is somewhat clunky, as it was written before the `SS_readpar()` update to `r4ss`. There is also a second script labeled BuildParFile_BH.R, which includes the `BuildParFile()` designated for the OMs that specify a Beverton-Holt "BH" stock-recruit relationship. 
 
 
 ### EditStarterFile
