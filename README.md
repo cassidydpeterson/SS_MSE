@@ -1,6 +1,10 @@
 # SS_MSE
 
-This repository contains wrapper R code for performing a MSE using the Stock Synthesis (SS) framework as applied to sandbar shark. A brief description of the methods follows.
+This repository contains wrapper R code for performing a MSE using the Stock Synthesis (SS) framework as applied to sandbar shark as found in the manuscript: 
+
+>  Peterson CD. Wilberg MJ. Cortes E. Courtney DL. Latour RJ. Effects of unregulated international fishing on recovery potential of the sandbar shark within the southeast United States.
+
+A brief description of the methods follows.
 
 A recent SS assessment model is used as the base of each operating model (OM) and as the estimating model (EM) for an MSE. The OM was subjected to additional complexity. The basic premise for this wrapper function follows Maunder's (2014) application to Pacific bluefin tuna. An MCMC simulation of the SS-based OM is run to generate future OM states of nature, while incorporating process uncertainty (including recruitment deviations, and time-invariant and time-varying parameters). We assume that the MCMC steps are completed in accordance with the SS MSE protocol (Maunder 2014) prior to calling this wrapper function. 
 
